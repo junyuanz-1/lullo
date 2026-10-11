@@ -1,0 +1,19 @@
+// ─────────────────────────────────────────────────────────────
+// Change these before building on your own Apple Developer account.
+// See README.md → "Setup".
+// ─────────────────────────────────────────────────────────────
+
+// Your 10-character Team ID (Xcode → Settings → Accounts, or developer.apple.com → Membership).
+DEVELOPMENT_TEAM =
+
+// Must be unique on the App Store, e.g. com.yourname.InfantTracker
+APP_BUNDLE_ID = com.example.InfantTracker
+
+// Shared container between the app and its widgets. Must start with "group.".
+APP_GROUP_ID = group.$(APP_BUNDLE_ID)
+
+// iCloud container used for sync and sharing. Must start with "iCloud.".
+CLOUDKIT_CONTAINER_ID = iCloud.$(APP_BUNDLE_ID)
+
+MARKETING_VERSION = 1.0.0
+CURRENT_PROJECT_VERSION = 1
