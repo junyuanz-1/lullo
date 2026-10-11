@@ -2,7 +2,7 @@ import BabyCore
 import CoreData
 
 @objc(Baby)
-final class Baby: NSManagedObject {
+final class Baby: NSManagedObject, Identifiable {
     @NSManaged var id: UUID?
     @NSManaged var name: String?
     @NSManaged var birthDate: Date?
@@ -43,7 +43,7 @@ final class Baby: NSManagedObject {
 }
 
 @objc(Event)
-final class Event: NSManagedObject {
+final class Event: NSManagedObject, Identifiable {
     @NSManaged var id: UUID?
     @NSManaged var kind: String?
     @NSManaged var startDate: Date?
