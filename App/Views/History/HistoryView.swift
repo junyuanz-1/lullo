@@ -69,7 +69,7 @@ private struct CategoryFilter: View {
                 .padding(.horizontal, 14)
                 .padding(.vertical, 6)
                 .background(selected ? Color.accentColor : Color(.secondarySystemFill), in: Capsule())
-                .foregroundStyle(selected ? .white : .primary)
+                .foregroundStyle(selected ? Color.white : Color.primary)
         }
         .buttonStyle(.plain)
     }

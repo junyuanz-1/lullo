@@ -54,7 +54,7 @@ final class BackupServiceTests: XCTestCase {
         XCTAssertEqual(second.eventsUpdated, 0)
         XCTAssertEqual(second.eventsSkipped, 3)
         XCTAssertEqual(target.babies().count, 1)
-        XCTAssertEqual(try target.context.count(for: Event.fetchRequest()), 3)
+        XCTAssertEqual(try target.context.count(for: Event.request()), 3)
     }
 
     func testNewerImportedCopyWins() throws {

@@ -20,7 +20,11 @@ struct HomeView: View {
         let since = Calendar.current.date(byAdding: .day, value: -3, to: Calendar.current.startOfDay(for: Date()))!
         _recent = FetchRequest(
             sortDescriptors: [NSSortDescriptor(key: "startDate", ascending: false)],
-            predicate: NSPredicate(format: "baby == %@ AND (startDate >= %@ OR endDate == nil)", baby, since as NSDate),
+            // Recent entries, plus any timer still running from before the window.
+            predicate: NSPredicate(
+                format: "baby == %@ AND (startDate >= %@ OR (endDate == nil AND kind IN %@))",
+                baby, since as NSDate, EventKind.allCases.filter(\.supportsTimer).map(\.rawValue)
+            ),
             animation: .default
         )
     }

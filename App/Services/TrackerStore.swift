@@ -38,14 +38,14 @@ final class TrackerStore: ObservableObject {
     // MARK: - Babies
 
     func babies() -> [Baby] {
-        let request = Baby.fetchRequest()
+        let request = Baby.request()
         request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: true)]
         return (try? context.fetch(request)) ?? []
     }
 
     func baby(id: UUID?) -> Baby? {
         guard let id else { return nil }
-        let request = Baby.fetchRequest()
+        let request = Baby.request()
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
         return try? context.fetch(request).first
@@ -80,14 +80,14 @@ final class TrackerStore: ObservableObject {
     // MARK: - Events
 
     func event(id: UUID) -> Event? {
-        let request = Event.fetchRequest()
+        let request = Event.request()
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
         return try? context.fetch(request).first
     }
 
     func events(for baby: Baby, since: Date? = nil, kinds: [EventKind]? = nil, limit: Int = 0) -> [Event] {
-        let request = Event.fetchRequest()
+        let request = Event.request()
         var predicates = [NSPredicate(format: "baby == %@", baby)]
         if let since { predicates.append(NSPredicate(format: "startDate >= %@", since as NSDate)) }
         if let kinds { predicates.append(NSPredicate(format: "kind IN %@", kinds.map(\.rawValue))) }
@@ -102,7 +102,7 @@ final class TrackerStore: ObservableObject {
     }
 
     func runningTimers(for baby: Baby) -> [Event] {
-        let request = Event.fetchRequest()
+        let request = Event.request()
         request.predicate = NSPredicate(
             format: "baby == %@ AND endDate == nil AND kind IN %@",
             baby, EventKind.allCases.filter(\.supportsTimer).map(\.rawValue)

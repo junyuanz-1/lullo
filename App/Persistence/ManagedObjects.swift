@@ -2,7 +2,7 @@ import BabyCore
 import CoreData
 
 @objc(Baby)
-final class Baby: NSManagedObject, Identifiable {
+final class Baby: NSManagedObject {
     @NSManaged var id: UUID?
     @NSManaged var name: String?
     @NSManaged var birthDate: Date?
@@ -12,7 +12,8 @@ final class Baby: NSManagedObject, Identifiable {
     @NSManaged var updatedAt: Date?
     @NSManaged var events: NSSet?
 
-    @nonobjc class func fetchRequest() -> NSFetchRequest<Baby> {
+    /// Named `request()` to avoid clashing with the inherited `NSManagedObject.fetchRequest()`.
+    @nonobjc class func request() -> NSFetchRequest<Baby> {
         NSFetchRequest<Baby>(entityName: "Baby")
     }
 
@@ -42,7 +43,7 @@ final class Baby: NSManagedObject, Identifiable {
 }
 
 @objc(Event)
-final class Event: NSManagedObject, Identifiable {
+final class Event: NSManagedObject {
     @NSManaged var id: UUID?
     @NSManaged var kind: String?
     @NSManaged var startDate: Date?
@@ -79,7 +80,7 @@ final class Event: NSManagedObject, Identifiable {
     @NSManaged var photoData: Data?
     @NSManaged var baby: Baby?
 
-    @nonobjc class func fetchRequest() -> NSFetchRequest<Event> {
+    @nonobjc class func request() -> NSFetchRequest<Event> {
         NSFetchRequest<Event>(entityName: "Event")
     }
 

@@ -89,7 +89,7 @@ final class TrackerStoreTests: XCTestCase {
         store.logDiaper(.dirty, for: baby)
         store.deleteBaby(baby)
 
-        let request = Event.fetchRequest()
+        let request = Event.request()
         XCTAssertEqual(try store.context.count(for: request), 0)
         XCTAssertNil(store.selectedBabyID)
     }

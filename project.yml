@@ -52,7 +52,8 @@ targets:
         UILaunchScreen:
           UIColorName: AccentColor
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
-        UIApplicationSupportsMultipleScenes: false
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
         UIBackgroundModes: [remote-notification]
         CKSharingSupported: true
         NSSupportsLiveActivities: true

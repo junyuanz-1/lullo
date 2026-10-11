@@ -42,7 +42,10 @@ private struct TrendsContent: View {
         let fetchFrom = calendar.date(byAdding: .day, value: -1, to: from)!
         _events = FetchRequest(
             sortDescriptors: [NSSortDescriptor(key: "startDate", ascending: true)],
-            predicate: NSPredicate(format: "baby == %@ AND (startDate >= %@ OR endDate == nil)", baby, fetchFrom as NSDate)
+            predicate: NSPredicate(
+                format: "baby == %@ AND (startDate >= %@ OR (endDate == nil AND kind IN %@))",
+                baby, fetchFrom as NSDate, EventKind.allCases.filter(\.supportsTimer).map(\.rawValue)
+            )
         )
     }
 
