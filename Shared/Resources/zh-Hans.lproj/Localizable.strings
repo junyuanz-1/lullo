@@ -73,6 +73,7 @@
 "Choose which baby this widget shows." = "选择此小组件显示哪个宝宝。";
 "Classic" = "经典";
 "Consistency" = "性状";
+"Contact Support" = "联系我们";
 "Contents" = "内容";
 "Could not start sharing. Make sure you are signed in to iCloud. (%@)" = "无法开始共享，请确认已登录 iCloud。（%@）";
 "Crib" = "婴儿床";
@@ -125,6 +126,7 @@
 "Head" = "头围";
 "Head %@" = "头围 %@";
 "Health" = "健康";
+"Help & FAQ" = "帮助与常见问题";
 "Helps keep Lullo ad-free." = "帮助摇摇保持无广告。";
 "Imperial (oz, lb, in)" = "英制（盎司、磅、英寸）";
 "Import" = "导入";

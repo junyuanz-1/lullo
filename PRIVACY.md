@@ -40,8 +40,8 @@ information about their children. It does not collect any of that information.
 To remove the iCloud copy, go to **Settings → [your name] → iCloud → Manage
 Account Storage → Lullo** on your iPhone.
 
-**Contact:** questions about this policy can be sent through the support link
-on Lullo's App Store page.
+**Contact:** questions about this policy can be sent to
+[lullo.support@gmail.com](mailto:lullo.support@gmail.com).
 
 ---
 
@@ -67,4 +67,4 @@ on Lullo's App Store page.
 
 **删除数据：** 在 **更多 → 宝宝** 中删除宝宝，或直接删除 App。如需删除 iCloud 中的数据，请在 iPhone 上前往 **设置 → [你的名字] → iCloud → 管理账户储存空间 → 摇摇**。
 
-**联系方式：** 如对本政策有疑问，请通过 App Store 页面上的技术支持链接联系我们。
+**联系方式：** 如对本政策有疑问，请发邮件到 [lullo.support@gmail.com](mailto:lullo.support@gmail.com)。

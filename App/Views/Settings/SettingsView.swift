@@ -289,6 +289,8 @@ struct SettingsView: View {
             Text("Growth charts use the WHO Child Growth Standards.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
+            Link("Help & FAQ", destination: AppLinks.supportPage)
+            Link("Contact Support", destination: AppLinks.supportEmail)
             Link("Privacy Policy", destination: AppLinks.privacyPolicy)
             Link("Terms of Use", destination: AppLinks.termsOfUse)
         }

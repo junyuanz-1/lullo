@@ -73,6 +73,7 @@
 "Choose which baby this widget shows." = "Choose which baby this widget shows.";
 "Classic" = "Classic";
 "Consistency" = "Consistency";
+"Contact Support" = "Contact Support";
 "Contents" = "Contents";
 "Could not start sharing. Make sure you are signed in to iCloud. (%@)" = "Could not start sharing. Make sure you are signed in to iCloud. (%@)";
 "Crib" = "Crib";
@@ -125,6 +126,7 @@
 "Head" = "Head";
 "Head %@" = "Head %@";
 "Health" = "Health";
+"Help & FAQ" = "Help & FAQ";
 "Helps keep Lullo ad-free." = "Helps keep Lullo ad-free.";
 "Imperial (oz, lb, in)" = "Imperial (oz, lb, in)";
 "Import" = "Import";
