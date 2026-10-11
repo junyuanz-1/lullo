@@ -21,6 +21,8 @@ jobs:
         run: swift --version
       - name: Run tests
         run: swift test --package-path Packages/BabyCore
+      - name: Check translations
+        run: python3 scripts/check_localizations.py
 
   ios:
     name: Build and test iOS app

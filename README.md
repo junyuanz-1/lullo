@@ -2,7 +2,7 @@
 
 **Lullo（摇摇）** 是一个类似 Huckleberry 的 iOS 宝宝记录 App：记录睡眠、喂养、尿布、吸奶、生长、健康和日常活动。数据通过 iCloud 同步和备份，可以与家人实时共享，支持锁屏 / 灵动岛实时计时（Live Activity）和桌面小组件。
 
-界面支持 **简体中文** 和 **English**，跟随系统语言。
+界面支持 **9 种语言**：English、简体中文、繁體中文、日本語、한국어、Español、Português (Brasil)、Français、Deutsch，跟随系统语言。
 
 ---
 
@@ -194,7 +194,18 @@ cd Packages/BabyCore && swift test     # 核心逻辑，macOS / Linux 都能跑
 2. **Build and test iOS app**：用 XcodeGen 生成工程，在 iOS 模拟器上不签名编译 app 和小组件，并运行全部测试
 
 ### 本地化
-界面文字以英文作为 key，中文翻译在 `Shared/Resources/zh-Hans.lproj/Localizable.strings`。Siri 短语的翻译在 `App/Resources/zh-Hans.lproj/AppShortcuts.strings`。
+
+界面文字以英文作为 key，各语言的翻译在 `Shared/Resources/<语言>.lproj/Localizable.strings`；App 名称在 `App/Resources/<语言>.lproj/InfoPlist.strings`，Siri 短语在 `AppShortcuts.strings`；订阅和打赏商品的本地化名称在 `Config/Lullo.storekit`（App Store Connect 里也要填写同样的名称）。
+
+新增或修改界面文字后运行：
+
+```bash
+python3 scripts/check_localizations.py
+```
+
+它会列出所有缺少翻译或 `%@` 占位符数量不一致的条目。CI 也会运行这个检查。
+
+> 翻译由 AI 完成，医疗相关的提示（发烧、过敏、便便颜色）建议上架前请母语人士再检查一遍。
 
 ---
 

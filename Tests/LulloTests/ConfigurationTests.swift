@@ -31,6 +31,7 @@ final class ConfigurationTests: XCTestCase {
         let english = try strings(for: "en")
         XCTAssertFalse(english.isEmpty)
         let localizations = Bundle.main.localizations.filter { $0 != "en" && $0 != "Base" }
+        XCTAssertGreaterThanOrEqual(localizations.count, 8, "Expected all shipped languages, found \(localizations)")
         for localization in localizations {
             let translated = try strings(for: localization)
             for (key, _) in english {
