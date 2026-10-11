@@ -5,10 +5,10 @@ import Foundation
 /// The identifiers come from Info.plist, which takes them from Config/Shared.xcconfig.
 enum SharedContainer {
     static let appGroupID: String = Bundle.main.object(forInfoDictionaryKey: "AppGroupIdentifier") as? String
-        ?? "group.com.example.Lullo"
+        ?? "group.com.junyuanzheng.lullo"
 
     static let cloudKitContainerID: String = Bundle.main.object(forInfoDictionaryKey: "CloudKitContainerIdentifier") as? String
-        ?? "iCloud.com.example.Lullo"
+        ?? "iCloud.com.junyuanzheng.lullo"
 
     static let defaults: UserDefaults = UserDefaults(suiteName: appGroupID) ?? .standard
 
