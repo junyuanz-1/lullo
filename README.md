@@ -93,7 +93,15 @@ open Lullo.xcodeproj
 | `lullo.supporter.monthly` | 1 个月 | $0.99 / ¥1 |
 | `lullo.supporter.yearly` | 1 年 | $9.99 / ¥10 |
 
-订阅需要隐私政策链接：把 `PRIVACY.md` 发布到网上，然后修改 `Config/Shared.xcconfig` 里的 `PRIVACY_POLICY_URL`。App 内的使用条款链接用的是苹果标准 EULA。
+订阅需要隐私政策链接。官网在 [junyuanz1/lullo-site](https://github.com/junyuanz1/lullo-site)（GitHub Pages），App Store Connect 里填写：
+
+| 字段 | 网址 |
+|---|---|
+| 营销网址 | https://junyuanz1.github.io/lullo-site/ |
+| 隐私政策网址 | https://junyuanz1.github.io/lullo-site/privacy/ |
+| 技术支持网址 | https://junyuanz1.github.io/lullo-site/support/ |
+
+App 内的隐私政策链接来自 `Config/Shared.xcconfig` 里的 `PRIVACY_POLICY_URL`；使用条款链接用的是苹果标准 EULA。
 
 **打赏**：在 **App 内购买项目** 中创建 3 个 **消耗型** 项目，产品 ID 必须和代码一致：
 
@@ -192,7 +200,7 @@ cd Packages/BabyCore && swift test     # 核心逻辑，macOS / Linux 都能跑
 
 ## 隐私
 
-- `PRIVACY.md`：中英文隐私政策。App Store 要求提供一个隐私政策网址，可以把这个文件发布到网页上（例如 GitHub Pages 或个人网站），再把链接填到 App Store Connect。
+- `PRIVACY.md`：中英文隐私政策，已发布在 https://junyuanz1.github.io/lullo-site/privacy/ 。修改时请同步更新网站。
 - `App/PrivacyInfo.xcprivacy`、`Widgets/PrivacyInfo.xcprivacy`：苹果要求的隐私清单。声明 App 不追踪用户、不收集数据，只因为保存设置而使用 UserDefaults。
 - 在 App Store Connect 的 **App 隐私** 问卷中，可以选择"不收集数据"。
 
