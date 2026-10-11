@@ -27,18 +27,21 @@ final class ConfigurationTests: XCTestCase {
         XCTAssertTrue(NSEntityDescription.insertNewObject(forEntityName: "Event", into: context) is Event)
     }
 
-    func testChineseTranslationsAreComplete() throws {
+    func testTranslationsAreComplete() throws {
         let english = try strings(for: "en")
-        let chinese = try strings(for: "zh-Hans")
         XCTAssertFalse(english.isEmpty)
-        for (key, _) in english {
-            let translated = try XCTUnwrap(chinese[key], "Missing zh-Hans translation for \"\(key)\"")
-            XCTAssertEqual(
-                key.components(separatedBy: "%@").count,
-                translated.components(separatedBy: "%@").count,
-                "Placeholder count differs for \"\(key)\""
-            )
+        let localizations = Bundle.main.localizations.filter { $0 != "en" && $0 != "Base" }
+        for localization in localizations {
+            let translated = try strings(for: localization)
+            for (key, _) in english {
+                let value = try XCTUnwrap(translated[key], "Missing \(localization) translation for \"\(key)\"")
+                XCTAssertEqual(placeholderCount(key), placeholderCount(value), "Placeholder count differs for \"\(key)\" in \(localization)")
+            }
         }
+    }
+
+    private func placeholderCount(_ string: String) -> Int {
+        string.matches(of: #/%(\d+\$)?@/#).count
     }
 
     private func strings(for localization: String) throws -> [String: String] {
