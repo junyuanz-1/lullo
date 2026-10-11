@@ -100,6 +100,19 @@ targets:
       properties:
         com.apple.security.application-groups: [$(APP_GROUP_ID)]
 
+  InfantTrackerTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests/InfantTrackerTests
+    dependencies:
+      - target: InfantTracker
+      - package: BabyCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID).Tests
+        GENERATE_INFOPLIST_FILE: YES
+
 schemes:
   InfantTracker:
     build:
@@ -110,7 +123,11 @@ schemes:
       config: Debug
     test:
       config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - InfantTracker
       targets:
+        - InfantTrackerTests
         - package: BabyCore/BabyCoreTests
     archive:
       config: Release

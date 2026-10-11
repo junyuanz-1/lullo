@@ -12,7 +12,12 @@ import OSLog
 /// Sharing a baby moves its record (and its events) into a CloudKit share zone
 /// that invited caregivers can read and write.
 final class PersistenceController: @unchecked Sendable {
-    static let shared = PersistenceController()
+    /// Unit tests run inside the app, so use a throwaway in-memory store there.
+    static let shared = PersistenceController(inMemory: isRunningTests)
+
+    static var isRunningTests: Bool {
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    }
 
     let container: NSPersistentCloudKitContainer
     let inMemory: Bool

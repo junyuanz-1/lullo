@@ -131,6 +131,8 @@ App/
   └─ Views/                 首页、记录、趋势、生长、设置、编辑器
 Shared/                     App 与小组件共用：App Group、显示名称、格式化、Live Activity 属性、App Intents、本地化
 Widgets/                    主屏幕 / 锁屏小组件、Live Activity 界面
+Tests/InfantTrackerTests/   App 层单元测试
+.github/workflows/ci.yml    CI
 ```
 
 ### 架构要点
@@ -138,13 +140,24 @@ Widgets/                    主屏幕 / 锁屏小组件、Live Activity 界面
 - 所有写操作都经过 `TrackerStore`。每次修改后会重新计算 `WidgetSnapshot`，写入 App Group，然后由它刷新小组件、Live Activity 和提醒通知。
 - 小组件和 Live Activity 上的按钮使用 `LiveActivityIntent`，系统会在 **App 进程** 中执行这些操作，所以数据库写入和 iCloud 同步都只发生在 App 里，小组件本身只读快照。
 
-### 运行测试
+### 测试
+
+| 测试 | 内容 |
+|---|---|
+| `Packages/BabyCore/Tests` | 核心逻辑：亲喂计时、每日统计、24 小时作息、WHO 百分位（与官方数值核对）、小睡预测、备份格式与合并、CSV、Widget 快照、单位换算 |
+| `Tests/InfantTrackerTests` | App 层（内存 Core Data）：TrackerStore 计时器 / 亲喂换边 / 保存 / 删除级联、备份导出→导入往返和去重、Core Data 模型的 CloudKit 兼容性、中英文翻译完整性 |
 
 ```bash
-cd Packages/BabyCore && swift test
+cd Packages/BabyCore && swift test     # 核心逻辑，macOS / Linux 都能跑
 ```
 
-也可以在 Xcode 中按 ⌘U（scheme 已经包含 BabyCoreTests）。
+在 Xcode 中按 ⌘U 会运行全部测试。
+
+### CI
+
+`.github/workflows/ci.yml` 会在每次 push 到 `main` 和每个 PR 时运行：
+1. **BabyCore unit tests**：`swift test`
+2. **Build and test iOS app**：用 XcodeGen 生成工程，在 iOS 模拟器上不签名编译 app 和小组件，并运行全部测试
 
 ### 本地化
 界面文字以英文作为 key，中文翻译在 `Shared/Resources/zh-Hans.lproj/Localizable.strings`。Siri 短语的翻译在 `App/Resources/zh-Hans.lproj/AppShortcuts.strings`。

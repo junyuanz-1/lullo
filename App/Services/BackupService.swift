@@ -84,7 +84,7 @@ enum BackupService {
         }
         summary.eventsSkipped += eventPlan.skipped
         store.commit()
-        if store.selectedBabyID == nil { store.selectedBabyID = store.babies().first?.id }
+        if store.baby(id: store.selectedBabyID) == nil { store.selectedBabyID = store.babies().first?.id }
         return summary
     }
 
