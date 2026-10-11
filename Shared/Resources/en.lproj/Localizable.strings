@@ -12,6 +12,9 @@
 "30 days" = "30 days";
 "7 days" = "7 days";
 "A backup file contains all babies and entries. Save it to Files or iCloud Drive, or AirDrop it to another phone and import it there, including a phone that uses a different Apple ID." = "A backup file contains all babies and entries. Save it to Files or iCloud Drive, or AirDrop it to another phone and import it there, including a phone that uses a different Apple ID.";
+"A cup of coffee" = "A cup of coffee";
+"A nice lunch" = "A nice lunch";
+"A slice of cake" = "A slice of cake";
 "A temperature of 38 °C (100.4 °F) or higher in a baby under 3 months needs prompt medical attention. Call your doctor now." = "A temperature of 38 °C (100.4 °F) or higher in a baby under 3 months needs prompt medical attention. Call your doctor now.";
 "About" = "About";
 "Activity" = "Activity";
@@ -88,6 +91,7 @@
 "Edit" = "Edit";
 "Edit Baby" = "Edit Baby";
 "End" = "End";
+"Enjoying Lullo?" = "Enjoying Lullo?";
 "Entries you log will appear here." = "Entries you log will appear here.";
 "Event ID" = "Event ID";
 "Export Backup File" = "Export Backup File";
@@ -98,8 +102,10 @@
 "Feeding reminder" = "Feeding reminder";
 "Feeds" = "Feeds";
 "Food" = "Food";
+"For the 3 a.m. feeds." = "For the 3 a.m. feeds.";
 "Formed" = "Formed";
 "Formula" = "Formula";
+"Funds new features for every family." = "Funds new features for every family.";
 "Girl" = "Girl";
 "Green" = "Green";
 "Growth" = "Growth";
@@ -108,6 +114,7 @@
 "Head" = "Head";
 "Head %@" = "Head %@";
 "Health" = "Health";
+"Helps keep Lullo ad-free." = "Helps keep Lullo ad-free.";
 "Imperial (oz, lb, in)" = "Imperial (oz, lb, in)";
 "Import" = "Import";
 "Import Backup File" = "Import Backup File";
@@ -135,6 +142,7 @@
 "Logged by" = "Logged by";
 "Logs a diaper change now." = "Logs a diaper change now.";
 "Loved it" = "Loved it";
+"Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going.";
 "Manage sharing for %@" = "Manage sharing for %@";
 "Massage" = "Massage";
 "Measurement" = "Measurement";
@@ -181,6 +189,7 @@
 "OK" = "OK";
 "Off" = "Off";
 "Open the app to add your baby." = "Open the app to add your baby.";
+"Optional tips help keep Lullo independent and ad-free." = "Optional tips help keep Lullo independent and ad-free.";
 "Orange" = "Orange";
 "Other" = "Other";
 "Outdoor" = "Outdoor";
@@ -250,6 +259,7 @@
 "Stroller" = "Stroller";
 "Suggested" = "Suggested";
 "Suggested bedtime" = "Suggested bedtime";
+"Support Lullo" = "Support Lullo";
 "Sweet spot: %@ – %@" = "Sweet spot: %@ – %@";
 "Switch Side" = "Switch Side";
 "Switch baby" = "Switch baby";
@@ -258,7 +268,9 @@
 "Syncing…" = "Syncing…";
 "Temperature" = "Temperature";
 "Temporarily unavailable" = "Temporarily unavailable";
+"Thank you!" = "Thank you!";
 "The file contains %@ babies and %@ entries. Entries you already have are kept; newer copies replace older ones." = "The file contains %@ babies and %@ entries. Entries you already have are kept; newer copies replace older ones.";
+"The purchase could not be verified." = "The purchase could not be verified.";
 "The timer keeps running on your Lock Screen and Dynamic Island." = "The timer keeps running on your Lock Screen and Dynamic Island.";
 "This backup was made by a newer version of the app. Please update first." = "This backup was made by a newer version of the app. Please update first.";
 "This file is not a valid backup." = "This file is not a valid backup.";
@@ -267,12 +279,15 @@
 "Time since the last feed, diaper and sleep, with quick logging buttons." = "Time since the last feed, diaper and sleep, with quick logging buttons.";
 "Time to feed %@?" = "Time to feed %@?";
 "Timer" = "Timer";
+"Tips are not available right now." = "Tips are not available right now.";
+"Tips are optional one-time purchases. They don't unlock anything: every feature stays free for everyone." = "Tips are optional one-time purchases. They don't unlock anything: every feature stays free for everyone.";
 "Today" = "Today";
 "Total" = "Total";
 "Total %@" = "Total %@";
 "Total sleep" = "Total sleep";
 "Track sleep, feeds, diapers and growth. Everything syncs privately through your iCloud and can be shared with family." = "Track sleep, feeds, diapers and growth. Everything syncs privately through your iCloud and can be shared with family.";
 "Trends" = "Trends";
+"Try Again" = "Try Again";
 "Tummy time" = "Tummy time";
 "Type" = "Type";
 "Units" = "Units";
@@ -293,8 +308,11 @@
 "Woke at %@" = "Woke at %@";
 "Yellow" = "Yellow";
 "Yesterday" = "Yesterday";
+"You've supported Lullo %@ times 💖" = "You've supported Lullo %@ times 💖";
 "Your data is stored in your private iCloud database and backed up automatically. On a new iPhone, sign in with the same Apple ID and install the app: everything downloads automatically." = "Your data is stored in your private iCloud database and backed up automatically. On a new iPhone, sign in with the same Apple ID and install the app: everything downloads automatically.";
 "Your name (shown on entries)" = "Your name (shown on entries)";
+"Your support means a lot. It goes straight into making Lullo better for every tired parent out there." = "Your support means a lot. It goes straight into making Lullo better for every tired parent out there.";
+"Your tip is waiting for approval. Thank you!" = "Your tip is waiting for approval. Thank you!";
 "cm" = "cm";
 "e.g. cough, runny nose, rash" = "e.g. cough, runny nose, rash";
 "hours" = "hours";

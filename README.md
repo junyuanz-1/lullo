@@ -29,6 +29,7 @@
 | **Live Activity** | 睡眠、亲喂、吸奶、活动计时会显示在锁屏和灵动岛上，并可直接 **停止**、**换边**、**暂停 / 继续** |
 | **小组件** | 主屏幕小 / 中 / 大三种尺寸 + 锁屏小组件：距上次喂奶 / 换尿布多久、睡着或醒着多久、下次小睡时间、今日统计；中 / 大尺寸带 **一键开始睡眠、开始亲喂、记录尿布** 按钮 |
 | **提醒** | 喂奶间隔、换尿布间隔、小睡最佳时间、用药 |
+| **打赏（Tip Jar）** | 三档自愿打赏（咖啡 / 蛋糕 / 午餐），通过苹果 App 内购买支付，带感谢页；不解锁任何功能，所有功能对所有人免费 |
 | **Siri / 快捷指令** | "用摇摇开始睡眠""宝宝醒了""开始亲喂""记录尿布" |
 
 ---
@@ -80,7 +81,21 @@ open Lullo.xcodeproj
 
 选择你的 iPhone 运行。第一次添加宝宝后，数据就会开始同步到 iCloud。
 
-### 5. 上架 / TestFlight 前：部署 CloudKit Schema
+### 5. 打赏（App 内购买）
+
+在模拟器里**不需要任何配置**：scheme 已经关联了 `Config/Lullo.storekit`，运行后进入 **更多 → 支持 Lullo** 就能测试购买流程（Xcode → Debug → StoreKit → Manage Transactions 可以查看和退款测试交易）。
+
+上架前，在 App Store Connect → 你的 App → **App 内购买项目** 中创建 3 个 **消耗型** 项目，产品 ID 必须和代码一致：
+
+| 产品 ID | 建议价格 | 英文名 | 中文名 |
+|---|---|---|---|
+| `lullo.tip.small` | $0.99 / ¥6 | A cup of coffee | 请喝一杯咖啡 |
+| `lullo.tip.medium` | $2.99 / ¥18 | A slice of cake | 请吃一块蛋糕 |
+| `lullo.tip.large` | $6.99 / ¥45 | A nice lunch | 请吃一顿午餐 |
+
+第一次提交审核时，需要把这 3 个内购项目和 App 版本一起提交。
+
+### 6. 上架 / TestFlight 前：部署 CloudKit Schema
 
 开发环境（Debug）下，CloudKit 会自动创建数据结构。但 **TestFlight 和 App Store 使用生产环境**，所以发布前必须部署：
 
@@ -115,6 +130,7 @@ open Lullo.xcodeproj
 ```
 project.yml                 XcodeGen 工程定义
 Config/Shared.xcconfig      Team ID、Bundle ID、App Group、iCloud 容器
+Config/Lullo.storekit       本地 StoreKit 测试配置（打赏）
 Packages/BabyCore/          纯 Swift 核心逻辑（无 UI 依赖，有单元测试）
   ├─ Records.swift          BabyRecord / EventRecord 值类型
   ├─ NursingTimer.swift     左右侧亲喂计时逻辑
@@ -163,6 +179,16 @@ cd Packages/BabyCore && swift test     # 核心逻辑，macOS / Linux 都能跑
 界面文字以英文作为 key，中文翻译在 `Shared/Resources/zh-Hans.lproj/Localizable.strings`。Siri 短语的翻译在 `App/Resources/zh-Hans.lproj/AppShortcuts.strings`。
 
 ---
+
+## 隐私
+
+- `PRIVACY.md`：中英文隐私政策。App Store 要求提供一个隐私政策网址，可以把这个文件发布到网页上（例如 GitHub Pages 或个人网站），再把链接填到 App Store Connect。
+- `App/PrivacyInfo.xcprivacy`、`Widgets/PrivacyInfo.xcprivacy`：苹果要求的隐私清单。声明 App 不追踪用户、不收集数据，只因为保存设置而使用 UserDefaults。
+- 在 App Store Connect 的 **App 隐私** 问卷中，可以选择"不收集数据"。
+
+## 许可证
+
+本项目为**专有软件，保留所有权利**，详见 [`LICENSE`](LICENSE)。"Lullo"、"摇摇"及其图标为版权所有者的商标。第三方数据和工具的声明见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
 
 ## 免责声明
 

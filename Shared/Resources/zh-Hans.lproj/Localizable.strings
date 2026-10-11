@@ -12,6 +12,9 @@
 "30 days" = "30 天";
 "7 days" = "7 天";
 "A backup file contains all babies and entries. Save it to Files or iCloud Drive, or AirDrop it to another phone and import it there, including a phone that uses a different Apple ID." = "备份文件包含所有宝宝和记录。可以存到“文件”或 iCloud 云盘，也可以通过隔空投送发到另一部手机再导入（对方用不同的 Apple ID 也可以）。";
+"A cup of coffee" = "请喝一杯咖啡";
+"A nice lunch" = "请吃一顿午餐";
+"A slice of cake" = "请吃一块蛋糕";
 "A temperature of 38 °C (100.4 °F) or higher in a baby under 3 months needs prompt medical attention. Call your doctor now." = "3 个月以下的宝宝体温达到 38 °C（100.4 °F）或更高，需要尽快就医。请立即联系医生。";
 "About" = "关于";
 "Activity" = "活动";
@@ -88,6 +91,7 @@
 "Edit" = "编辑";
 "Edit Baby" = "编辑宝宝";
 "End" = "结束";
+"Enjoying Lullo?" = "喜欢摇摇吗？";
 "Entries you log will appear here." = "你记录的内容会显示在这里。";
 "Event ID" = "记录 ID";
 "Export Backup File" = "导出备份文件";
@@ -98,8 +102,10 @@
 "Feeding reminder" = "喂奶提醒";
 "Feeds" = "喂奶次数";
 "Food" = "食物";
+"For the 3 a.m. feeds." = "为凌晨三点的夜奶加油。";
 "Formed" = "成形";
 "Formula" = "配方奶";
+"Funds new features for every family." = "支持为每个家庭开发新功能。";
 "Girl" = "女孩";
 "Green" = "绿色";
 "Growth" = "生长";
@@ -108,6 +114,7 @@
 "Head" = "头围";
 "Head %@" = "头围 %@";
 "Health" = "健康";
+"Helps keep Lullo ad-free." = "帮助摇摇保持无广告。";
 "Imperial (oz, lb, in)" = "英制（盎司、磅、英寸）";
 "Import" = "导入";
 "Import Backup File" = "导入备份文件";
@@ -135,6 +142,7 @@
 "Logged by" = "记录人";
 "Logs a diaper change now." = "立即记录一次换尿布。";
 "Loved it" = "超喜欢";
+"Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "摇摇是一款独立开发的 App，没有广告，也不追踪你。如果它让你的夜晚轻松了一点，欢迎打赏支持它继续走下去。";
 "Manage sharing for %@" = "管理%@的共享";
 "Massage" = "抚触按摩";
 "Measurement" = "测量项";
@@ -181,6 +189,7 @@
 "OK" = "好";
 "Off" = "关闭";
 "Open the app to add your baby." = "打开 App 添加宝宝。";
+"Optional tips help keep Lullo independent and ad-free." = "自愿打赏帮助摇摇保持独立、无广告。";
 "Orange" = "橙色";
 "Other" = "其他";
 "Outdoor" = "户外";
@@ -250,6 +259,7 @@
 "Stroller" = "婴儿车";
 "Suggested" = "建议";
 "Suggested bedtime" = "建议入睡时间";
+"Support Lullo" = "支持摇摇";
 "Sweet spot: %@ – %@" = "最佳时间：%@ – %@";
 "Switch Side" = "换边";
 "Switch baby" = "切换宝宝";
@@ -258,7 +268,9 @@
 "Syncing…" = "正在同步…";
 "Temperature" = "体温";
 "Temporarily unavailable" = "暂时不可用";
+"Thank you!" = "谢谢你！";
 "The file contains %@ babies and %@ entries. Entries you already have are kept; newer copies replace older ones." = "文件包含 %@ 个宝宝和 %@ 条记录。已有的记录会保留，较新的版本会覆盖较旧的版本。";
+"The purchase could not be verified." = "无法验证这笔购买。";
 "The timer keeps running on your Lock Screen and Dynamic Island." = "计时会在锁屏和灵动岛上持续显示。";
 "This backup was made by a newer version of the app. Please update first." = "此备份由更新版本的 App 创建，请先更新 App。";
 "This file is not a valid backup." = "该文件不是有效的备份。";
@@ -267,12 +279,15 @@
 "Time since the last feed, diaper and sleep, with quick logging buttons." = "显示距上次喂奶、换尿布和睡眠的时间，并提供快捷记录按钮。";
 "Time to feed %@?" = "该给%@喂奶了吗？";
 "Timer" = "计时";
+"Tips are not available right now." = "暂时无法打赏。";
+"Tips are optional one-time purchases. They don't unlock anything: every feature stays free for everyone." = "打赏是自愿的一次性购买，不会解锁任何内容：所有功能对所有人都免费。";
 "Today" = "今天";
 "Total" = "合计";
 "Total %@" = "共 %@";
 "Total sleep" = "总睡眠";
 "Track sleep, feeds, diapers and growth. Everything syncs privately through your iCloud and can be shared with family." = "记录睡眠、喂养、尿布和生长。所有数据通过你的 iCloud 私密同步，并可与家人共享。";
 "Trends" = "趋势";
+"Try Again" = "重试";
 "Tummy time" = "趴卧练习";
 "Type" = "类型";
 "Units" = "单位";
@@ -293,8 +308,11 @@
 "Woke at %@" = "%@ 醒来";
 "Yellow" = "黄色";
 "Yesterday" = "昨天";
+"You've supported Lullo %@ times 💖" = "你已经支持了摇摇 %@ 次 💖";
 "Your data is stored in your private iCloud database and backed up automatically. On a new iPhone, sign in with the same Apple ID and install the app: everything downloads automatically." = "你的数据保存在私人 iCloud 数据库中并自动备份。换新 iPhone 时，登录同一个 Apple ID 并安装本 App，所有数据会自动下载。";
 "Your name (shown on entries)" = "你的名字（显示在记录上）";
+"Your support means a lot. It goes straight into making Lullo better for every tired parent out there." = "你的支持意义重大，它会直接用来把摇摇做得更好，帮到每一位疲惫的爸爸妈妈。";
+"Your tip is waiting for approval. Thank you!" = "你的打赏正在等待批准，谢谢你！";
 "cm" = "厘米";
 "e.g. cough, runny nose, rash" = "如：咳嗽、流鼻涕、皮疹";
 "hours" = "小时";

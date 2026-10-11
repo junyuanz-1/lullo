@@ -42,6 +42,7 @@ struct SettingsView: View {
                 remindersSection
                 iCloudSection
                 dataSection
+                supportSection
                 aboutSection
             }
             .navigationTitle("More")
@@ -233,6 +234,22 @@ struct SettingsView: View {
             Text("Backup & Transfer")
         } footer: {
             Text("A backup file contains all babies and entries. Save it to Files or iCloud Drive, or AirDrop it to another phone and import it there, including a phone that uses a different Apple ID.")
+        }
+    }
+
+    private var supportSection: some View {
+        Section {
+            NavigationLink {
+                TipJarView()
+            } label: {
+                Label {
+                    Text("Support Lullo")
+                } icon: {
+                    Image(systemName: "heart.fill").foregroundStyle(.pink)
+                }
+            }
+        } footer: {
+            Text("Optional tips help keep Lullo independent and ad-free.")
         }
     }
 

@@ -122,6 +122,8 @@ schemes:
         LulloWidgets: all
     run:
       config: Debug
+      # Local StoreKit testing for the tip jar; no App Store Connect setup needed in the simulator.
+      storeKitConfiguration: Config/Lullo.storekit
     test:
       config: Debug
       gatherCoverageData: true
