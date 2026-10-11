@@ -14,9 +14,11 @@ struct HistoryView: View {
                 days += 14
             }
             .navigationTitle("Log")
-            .safeAreaInset(edge: .top) {
+            // Inline title keeps the filter chips right under the toolbar instead of below a large-title gap.
+            .navigationBarTitleDisplayMode(.inline)
+            .safeAreaInset(edge: .top, spacing: 0) {
                 CategoryFilter(selection: $category)
-                    .background(.bar)
+                    .background(Color(.systemGroupedBackground))
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
