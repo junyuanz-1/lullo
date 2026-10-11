@@ -17,7 +17,10 @@ struct LulloApp: App {
                 .environmentObject(store)
                 .environmentObject(syncMonitor)
                 .task { await syncMonitor.refreshAccount() }
-                .task { TipJar.shared.startListening() }
+                .task {
+                    TipJar.shared.startListening()
+                    await Supporter.shared.refresh()
+                }
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { store.appBecameActive() }

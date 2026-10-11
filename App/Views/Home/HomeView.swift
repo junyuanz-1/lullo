@@ -74,6 +74,7 @@ struct HomeView: View {
 
 struct BabyHeader: View {
     @EnvironmentObject private var store: TrackerStore
+    @StateObject private var supporter = Supporter.shared
     @ObservedObject var baby: Baby
 
     var body: some View {
@@ -84,6 +85,12 @@ struct BabyHeader: View {
                 Text(Fmt.age(birthDate: baby.birthDate ?? Date())).foregroundStyle(.secondary)
             }
             Spacer()
+            if supporter.isSupporter {
+                Image(systemName: "heart.circle.fill")
+                    .font(.title2)
+                    .foregroundStyle(.pink)
+                    .accessibilityLabel(Text("Lullo Supporter"))
+            }
             if store.persistence.isShared(baby) {
                 Label("Shared", systemImage: "person.2.fill")
                     .font(.caption)

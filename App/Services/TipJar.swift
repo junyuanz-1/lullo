@@ -66,7 +66,8 @@ final class TipJar: ObservableObject {
     /// Number of tips this device has sent, for a small thank-you note.
     var tipCount: Int { SharedContainer.defaults.integer(forKey: tipCountKey) }
 
-    /// Finishes transactions that complete outside the app (Ask to Buy, interrupted purchases).
+    /// Finishes transactions that complete outside the app (Ask to Buy, interrupted
+    /// purchases, subscription renewals) for both tips and the Supporter subscription.
     func startListening() {
         guard updatesTask == nil else { return }
         updatesTask = Task { [weak self] in
@@ -123,6 +124,9 @@ final class TipJar: ObservableObject {
             recordTip()
         }
         await transaction.finish()
+        if Supporter.productIDs.contains(transaction.productID) {
+            await Supporter.shared.refresh()
+        }
     }
 
     private func recordTip() {

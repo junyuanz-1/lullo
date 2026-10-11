@@ -6,12 +6,18 @@ struct RootView: View {
     @EnvironmentObject private var store: TrackerStore
     @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "createdAt", ascending: true)])
     private var babies: FetchedResults<Baby>
+    @AppStorage(Appearance.themeKey, store: SharedContainer.defaults) private var theme: AppTheme = .lullaby
 
     private var selectedBaby: Baby? {
         babies.first { $0.id == store.selectedBabyID } ?? babies.first
     }
 
     var body: some View {
+        content.tint(theme.color)
+    }
+
+    @ViewBuilder
+    private var content: some View {
         if let baby = selectedBaby {
             TabView {
                 HomeView(baby: baby)

@@ -10,6 +10,8 @@
 "%@th percentile" = "第 %@ 百分位";
 "14 days" = "14 天";
 "30 days" = "30 天";
+"4 alternate app icons" = "4 款替换 App 图标";
+"5 theme colors" = "5 种主题配色";
 "7 days" = "7 天";
 "A backup file contains all babies and entries. Save it to Files or iCloud Drive, or AirDrop it to another phone and import it there, including a phone that uses a different Apple ID." = "备份文件包含所有宝宝和记录。可以存到“文件”或 iCloud 云盘，也可以通过隔空投送发到另一部手机再导入（对方用不同的 Apple ID 也可以）。";
 "A cup of coffee" = "请喝一杯咖啡";
@@ -17,6 +19,7 @@
 "A slice of cake" = "请吃一块蛋糕";
 "A temperature of 38 °C (100.4 °F) or higher in a baby under 3 months needs prompt medical attention. Call your doctor now." = "3 个月以下的宝宝体温达到 38 °C（100.4 °F）或更高，需要尽快就医。请立即联系医生。";
 "About" = "关于";
+"Active" = "已开通";
 "Activity" = "活动";
 "Add Baby" = "添加宝宝";
 "Add Your Baby" = "添加你的宝宝";
@@ -33,6 +36,8 @@
 "All entries for this baby will be deleted from every device and from anyone you shared with. This cannot be undone." = "该宝宝的所有记录将从你的所有设备以及所有共享成员处删除，且无法恢复。";
 "Allergic reaction" = "过敏反应";
 "Amount" = "量";
+"App Icon" = "App 图标";
+"Appearance" = "外观";
 "Asleep for" = "已睡";
 "Awake for" = "已醒";
 "Babies" = "宝宝";
@@ -45,12 +50,14 @@
 "Based on typical wake windows for this age." = "根据该月龄的典型清醒时长推算。";
 "Bassinet" = "摇篮";
 "Bath" = "洗澡";
+"Become a Lullo Supporter" = "成为摇摇支持者";
 "Bed" = "床";
 "Bedtime" = "入睡时间";
 "Bedtime is coming up for %@" = "%@快到睡觉时间了";
 "Birthday" = "出生日期";
 "Black" = "黑色";
 "Black (after the first days), red or pale/white stool can be a sign of a problem. Consider calling your pediatrician." = "（出生头几天后）黑色、红色或灰白色大便可能提示异常，建议联系儿科医生。";
+"Blossom" = "樱花";
 "Bottle" = "奶瓶";
 "Bottle volume" = "奶瓶喂养量";
 "Boy" = "男孩";
@@ -64,6 +71,7 @@
 "Checking…" = "正在检查…";
 "Choose photo" = "选择照片";
 "Choose which baby this widget shows." = "选择此小组件显示哪个宝宝。";
+"Classic" = "经典";
 "Consistency" = "性状";
 "Contents" = "内容";
 "Could not start sharing. Make sure you are signed in to iCloud. (%@)" = "无法开始共享，请确认已登录 iCloud。（%@）";
@@ -94,6 +102,8 @@
 "Enjoying Lullo?" = "喜欢摇摇吗？";
 "Entries you log will appear here." = "你记录的内容会显示在这里。";
 "Event ID" = "记录 ID";
+"Every tracking feature is free. A subscription or tip helps keep Lullo independent and ad-free." = "所有记录功能都免费。订阅或打赏能帮助摇摇保持独立、无广告。";
+"Every tracking feature stays free for everyone. Supporters keep Lullo independent and get a few extras as a thank-you." = "所有记录功能对所有人永久免费。支持者帮助摇摇保持独立，作为感谢，会获得一些额外的小福利。";
 "Export Backup File" = "导出备份文件";
 "Export Spreadsheet (CSV)" = "导出表格（CSV）";
 "Family & Caregivers" = "家人与看护人";
@@ -103,6 +113,7 @@
 "Feeds" = "喂奶次数";
 "Food" = "食物";
 "For the 3 a.m. feeds." = "为凌晨三点的夜奶加油。";
+"Forest" = "森林";
 "Formed" = "成形";
 "Formula" = "配方奶";
 "Funds new features for every family." = "支持为每个家庭开发新功能。";
@@ -131,6 +142,7 @@
 "Last feed was at %@." = "上次喂奶是 %@。";
 "Last side" = "最后一侧";
 "Last synced" = "上次同步";
+"Leave a Tip" = "打赏";
 "Left" = "左侧";
 "Length" = "身长";
 "Liked it" = "喜欢";
@@ -142,7 +154,10 @@
 "Logged by" = "记录人";
 "Logs a diaper change now." = "立即记录一次换尿布。";
 "Loved it" = "超喜欢";
+"Lullaby" = "摇篮曲";
+"Lullo Supporter" = "摇摇支持者";
 "Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "摇摇是一款独立开发的 App，没有广告，也不追踪你。如果它让你的夜晚轻松了一点，欢迎打赏支持它继续走下去。";
+"Manage" = "管理";
 "Manage sharing for %@" = "管理%@的共享";
 "Massage" = "抚触按摩";
 "Measurement" = "测量项";
@@ -151,7 +166,9 @@
 "Medication for %@" = "%@的用药提醒";
 "Medication reminders can be set when logging a dose." = "记录用药时可以设置下次服药提醒。";
 "Metric (ml, kg, cm)" = "公制（毫升、千克、厘米）";
+"Midnight" = "午夜";
 "Milk" = "牛奶";
+"Mint" = "薄荷";
 "Mixed" = "混合";
 "Mode" = "方式";
 "More" = "更多";
@@ -187,9 +204,9 @@
 "Nursing minutes" = "亲喂分钟数";
 "Nursing timer started on the %@ side." = "已开始%@亲喂计时。";
 "OK" = "好";
+"Ocean" = "海洋";
 "Off" = "关闭";
 "Open the app to add your baby." = "打开 App 添加宝宝。";
-"Optional tips help keep Lullo independent and ad-free." = "自愿打赏帮助摇摇保持独立、无广告。";
 "Orange" = "橙色";
 "Other" = "其他";
 "Outdoor" = "户外";
@@ -202,6 +219,7 @@
 "Poop" = "便便";
 "Potty" = "如厕";
 "Preferences" = "偏好设置";
+"Privacy Policy" = "隐私政策";
 "Pumping" = "吸奶";
 "R" = "右";
 "Range" = "范围";
@@ -216,6 +234,7 @@
 "Restricted" = "受限制";
 "Resume" = "继续";
 "Right" = "右侧";
+"Rose" = "玫瑰";
 "Running" = "进行中";
 "Runny" = "水样";
 "Save" = "保存";
@@ -229,6 +248,7 @@
 "Share %@" = "共享%@";
 "Shared" = "已共享";
 "Shared with you" = "他人共享";
+"Shared with your family through Family Sharing" = "通过家人共享，家人也能一起享有";
 "Show earlier entries" = "显示更早的记录";
 "Side" = "侧";
 "Signed in" = "已登录";
@@ -259,7 +279,10 @@
 "Stroller" = "婴儿车";
 "Suggested" = "建议";
 "Suggested bedtime" = "建议入睡时间";
+"Sunrise" = "日出";
+"Sunset" = "日落";
 "Support Lullo" = "支持摇摇";
+"Supporter badge" = "支持者徽章";
 "Sweet spot: %@ – %@" = "最佳时间：%@ – %@";
 "Switch Side" = "换边";
 "Switch baby" = "切换宝宝";
@@ -268,10 +291,12 @@
 "Syncing…" = "正在同步…";
 "Temperature" = "体温";
 "Temporarily unavailable" = "暂时不可用";
+"Terms of Use" = "使用条款";
 "Thank you!" = "谢谢你！";
 "The file contains %@ babies and %@ entries. Entries you already have are kept; newer copies replace older ones." = "文件包含 %@ 个宝宝和 %@ 条记录。已有的记录会保留，较新的版本会覆盖较旧的版本。";
 "The purchase could not be verified." = "无法验证这笔购买。";
 "The timer keeps running on your Lock Screen and Dynamic Island." = "计时会在锁屏和灵动岛上持续显示。";
+"Theme Color" = "主题配色";
 "This backup was made by a newer version of the app. Please update first." = "此备份由更新版本的 App 创建，请先更新 App。";
 "This file is not a valid backup." = "该文件不是有效的备份。";
 "This is a fever. Call your doctor if your baby seems unwell, the fever lasts more than a day, or you are worried." = "宝宝发烧了。如果宝宝精神不好、发烧超过一天，或者你感到担心，请联系医生。";
@@ -291,6 +316,7 @@
 "Tummy time" = "趴卧练习";
 "Type" = "类型";
 "Units" = "单位";
+"Unlock with Lullo Supporter" = "成为摇摇支持者即可解锁";
 "Vaccine" = "疫苗";
 "Vaccine name" = "疫苗名称";
 "Version" = "版本";
@@ -308,6 +334,7 @@
 "Woke at %@" = "%@ 醒来";
 "Yellow" = "黄色";
 "Yesterday" = "昨天";
+"You're a Lullo Supporter" = "你是摇摇支持者";
 "You've supported Lullo %@ times 💖" = "你已经支持了摇摇 %@ 次 💖";
 "Your data is stored in your private iCloud database and backed up automatically. On a new iPhone, sign in with the same Apple ID and install the app: everything downloads automatically." = "你的数据保存在私人 iCloud 数据库中并自动备份。换新 iPhone 时，登录同一个 Apple ID 并安装本 App，所有数据会自动下载。";
 "Your name (shown on entries)" = "你的名字（显示在记录上）";

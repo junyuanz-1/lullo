@@ -29,6 +29,7 @@
 | **Live Activity** | 睡眠、亲喂、吸奶、活动计时会显示在锁屏和灵动岛上，并可直接 **停止**、**换边**、**暂停 / 继续** |
 | **小组件** | 主屏幕小 / 中 / 大三种尺寸 + 锁屏小组件：距上次喂奶 / 换尿布多久、睡着或醒着多久、下次小睡时间、今日统计；中 / 大尺寸带 **一键开始睡眠、开始亲喂、记录尿布** 按钮 |
 | **提醒** | 喂奶间隔、换尿布间隔、小睡最佳时间、用药 |
+| **摇摇支持者（订阅）** | 月付 $0.99（约 ¥1）/ 年付 $9.99，支持家人共享；解锁 4 款替换图标、5 种主题配色和支持者徽章。**所有记录、同步、共享、小组件功能对所有人免费** |
 | **打赏（Tip Jar）** | 三档自愿打赏（咖啡 / 蛋糕 / 午餐），通过苹果 App 内购买支付，带感谢页；不解锁任何功能，所有功能对所有人免费 |
 | **Siri / 快捷指令** | "用摇摇开始睡眠""宝宝醒了""开始亲喂""记录尿布" |
 
@@ -81,11 +82,20 @@ open Lullo.xcodeproj
 
 选择你的 iPhone 运行。第一次添加宝宝后，数据就会开始同步到 iCloud。
 
-### 5. 打赏（App 内购买）
+### 5. 订阅与打赏（App 内购买）
 
-在模拟器里**不需要任何配置**：scheme 已经关联了 `Config/Lullo.storekit`，运行后进入 **更多 → 支持 Lullo** 就能测试购买流程（Xcode → Debug → StoreKit → Manage Transactions 可以查看和退款测试交易）。
+在模拟器里**不需要任何配置**：scheme 已经关联了 `Config/Lullo.storekit`，运行后进入 **更多 → 支持摇摇** 就能测试订阅和打赏（Xcode → Debug → StoreKit → Manage Transactions 可以查看和退款测试交易）。
 
-上架前，在 App Store Connect → 你的 App → **App 内购买项目** 中创建 3 个 **消耗型** 项目，产品 ID 必须和代码一致：
+上架前，**订阅**：在 App Store Connect → 你的 App → **订阅** 中创建订阅组 "Lullo Supporter"，组内放两个同级的自动续期订阅，并开启 **家人共享**：
+
+| 产品 ID | 周期 | 建议价格 |
+|---|---|---|
+| `lullo.supporter.monthly` | 1 个月 | $0.99 / ¥1 |
+| `lullo.supporter.yearly` | 1 年 | $9.99 / ¥10 |
+
+订阅需要隐私政策链接：把 `PRIVACY.md` 发布到网上，然后修改 `Config/Shared.xcconfig` 里的 `PRIVACY_POLICY_URL`。App 内的使用条款链接用的是苹果标准 EULA。
+
+**打赏**：在 **App 内购买项目** 中创建 3 个 **消耗型** 项目，产品 ID 必须和代码一致：
 
 | 产品 ID | 建议价格 | 英文名 | 中文名 |
 |---|---|---|---|
@@ -93,7 +103,7 @@ open Lullo.xcodeproj
 | `lullo.tip.medium` | $2.99 / ¥18 | A slice of cake | 请吃一块蛋糕 |
 | `lullo.tip.large` | $6.99 / ¥45 | A nice lunch | 请吃一顿午餐 |
 
-第一次提交审核时，需要把这 3 个内购项目和 App 版本一起提交。
+第一次提交审核时，需要把这些订阅和内购项目和 App 版本一起提交。
 
 ### 6. 上架 / TestFlight 前：部署 CloudKit Schema
 

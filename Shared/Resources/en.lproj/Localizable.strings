@@ -10,6 +10,8 @@
 "%@th percentile" = "%@th percentile";
 "14 days" = "14 days";
 "30 days" = "30 days";
+"4 alternate app icons" = "4 alternate app icons";
+"5 theme colors" = "5 theme colors";
 "7 days" = "7 days";
 "A backup file contains all babies and entries. Save it to Files or iCloud Drive, or AirDrop it to another phone and import it there, including a phone that uses a different Apple ID." = "A backup file contains all babies and entries. Save it to Files or iCloud Drive, or AirDrop it to another phone and import it there, including a phone that uses a different Apple ID.";
 "A cup of coffee" = "A cup of coffee";
@@ -17,6 +19,7 @@
 "A slice of cake" = "A slice of cake";
 "A temperature of 38 °C (100.4 °F) or higher in a baby under 3 months needs prompt medical attention. Call your doctor now." = "A temperature of 38 °C (100.4 °F) or higher in a baby under 3 months needs prompt medical attention. Call your doctor now.";
 "About" = "About";
+"Active" = "Active";
 "Activity" = "Activity";
 "Add Baby" = "Add Baby";
 "Add Your Baby" = "Add Your Baby";
@@ -33,6 +36,8 @@
 "All entries for this baby will be deleted from every device and from anyone you shared with. This cannot be undone." = "All entries for this baby will be deleted from every device and from anyone you shared with. This cannot be undone.";
 "Allergic reaction" = "Allergic reaction";
 "Amount" = "Amount";
+"App Icon" = "App Icon";
+"Appearance" = "Appearance";
 "Asleep for" = "Asleep for";
 "Awake for" = "Awake for";
 "Babies" = "Babies";
@@ -45,12 +50,14 @@
 "Based on typical wake windows for this age." = "Based on typical wake windows for this age.";
 "Bassinet" = "Bassinet";
 "Bath" = "Bath";
+"Become a Lullo Supporter" = "Become a Lullo Supporter";
 "Bed" = "Bed";
 "Bedtime" = "Bedtime";
 "Bedtime is coming up for %@" = "Bedtime is coming up for %@";
 "Birthday" = "Birthday";
 "Black" = "Black";
 "Black (after the first days), red or pale/white stool can be a sign of a problem. Consider calling your pediatrician." = "Black (after the first days), red or pale/white stool can be a sign of a problem. Consider calling your pediatrician.";
+"Blossom" = "Blossom";
 "Bottle" = "Bottle";
 "Bottle volume" = "Bottle volume";
 "Boy" = "Boy";
@@ -64,6 +71,7 @@
 "Checking…" = "Checking…";
 "Choose photo" = "Choose photo";
 "Choose which baby this widget shows." = "Choose which baby this widget shows.";
+"Classic" = "Classic";
 "Consistency" = "Consistency";
 "Contents" = "Contents";
 "Could not start sharing. Make sure you are signed in to iCloud. (%@)" = "Could not start sharing. Make sure you are signed in to iCloud. (%@)";
@@ -94,6 +102,8 @@
 "Enjoying Lullo?" = "Enjoying Lullo?";
 "Entries you log will appear here." = "Entries you log will appear here.";
 "Event ID" = "Event ID";
+"Every tracking feature is free. A subscription or tip helps keep Lullo independent and ad-free." = "Every tracking feature is free. A subscription or tip helps keep Lullo independent and ad-free.";
+"Every tracking feature stays free for everyone. Supporters keep Lullo independent and get a few extras as a thank-you." = "Every tracking feature stays free for everyone. Supporters keep Lullo independent and get a few extras as a thank-you.";
 "Export Backup File" = "Export Backup File";
 "Export Spreadsheet (CSV)" = "Export Spreadsheet (CSV)";
 "Family & Caregivers" = "Family & Caregivers";
@@ -103,6 +113,7 @@
 "Feeds" = "Feeds";
 "Food" = "Food";
 "For the 3 a.m. feeds." = "For the 3 a.m. feeds.";
+"Forest" = "Forest";
 "Formed" = "Formed";
 "Formula" = "Formula";
 "Funds new features for every family." = "Funds new features for every family.";
@@ -131,6 +142,7 @@
 "Last feed was at %@." = "Last feed was at %@.";
 "Last side" = "Last side";
 "Last synced" = "Last synced";
+"Leave a Tip" = "Leave a Tip";
 "Left" = "Left";
 "Length" = "Length";
 "Liked it" = "Liked it";
@@ -142,7 +154,10 @@
 "Logged by" = "Logged by";
 "Logs a diaper change now." = "Logs a diaper change now.";
 "Loved it" = "Loved it";
+"Lullaby" = "Lullaby";
+"Lullo Supporter" = "Lullo Supporter";
 "Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going.";
+"Manage" = "Manage";
 "Manage sharing for %@" = "Manage sharing for %@";
 "Massage" = "Massage";
 "Measurement" = "Measurement";
@@ -151,7 +166,9 @@
 "Medication for %@" = "Medication for %@";
 "Medication reminders can be set when logging a dose." = "Medication reminders can be set when logging a dose.";
 "Metric (ml, kg, cm)" = "Metric (ml, kg, cm)";
+"Midnight" = "Midnight";
 "Milk" = "Milk";
+"Mint" = "Mint";
 "Mixed" = "Mixed";
 "Mode" = "Mode";
 "More" = "More";
@@ -187,9 +204,9 @@
 "Nursing minutes" = "Nursing minutes";
 "Nursing timer started on the %@ side." = "Nursing timer started on the %@ side.";
 "OK" = "OK";
+"Ocean" = "Ocean";
 "Off" = "Off";
 "Open the app to add your baby." = "Open the app to add your baby.";
-"Optional tips help keep Lullo independent and ad-free." = "Optional tips help keep Lullo independent and ad-free.";
 "Orange" = "Orange";
 "Other" = "Other";
 "Outdoor" = "Outdoor";
@@ -202,6 +219,7 @@
 "Poop" = "Poop";
 "Potty" = "Potty";
 "Preferences" = "Preferences";
+"Privacy Policy" = "Privacy Policy";
 "Pumping" = "Pumping";
 "R" = "R";
 "Range" = "Range";
@@ -216,6 +234,7 @@
 "Restricted" = "Restricted";
 "Resume" = "Resume";
 "Right" = "Right";
+"Rose" = "Rose";
 "Running" = "Running";
 "Runny" = "Runny";
 "Save" = "Save";
@@ -229,6 +248,7 @@
 "Share %@" = "Share %@";
 "Shared" = "Shared";
 "Shared with you" = "Shared with you";
+"Shared with your family through Family Sharing" = "Shared with your family through Family Sharing";
 "Show earlier entries" = "Show earlier entries";
 "Side" = "Side";
 "Signed in" = "Signed in";
@@ -259,7 +279,10 @@
 "Stroller" = "Stroller";
 "Suggested" = "Suggested";
 "Suggested bedtime" = "Suggested bedtime";
+"Sunrise" = "Sunrise";
+"Sunset" = "Sunset";
 "Support Lullo" = "Support Lullo";
+"Supporter badge" = "Supporter badge";
 "Sweet spot: %@ – %@" = "Sweet spot: %@ – %@";
 "Switch Side" = "Switch Side";
 "Switch baby" = "Switch baby";
@@ -268,10 +291,12 @@
 "Syncing…" = "Syncing…";
 "Temperature" = "Temperature";
 "Temporarily unavailable" = "Temporarily unavailable";
+"Terms of Use" = "Terms of Use";
 "Thank you!" = "Thank you!";
 "The file contains %@ babies and %@ entries. Entries you already have are kept; newer copies replace older ones." = "The file contains %@ babies and %@ entries. Entries you already have are kept; newer copies replace older ones.";
 "The purchase could not be verified." = "The purchase could not be verified.";
 "The timer keeps running on your Lock Screen and Dynamic Island." = "The timer keeps running on your Lock Screen and Dynamic Island.";
+"Theme Color" = "Theme Color";
 "This backup was made by a newer version of the app. Please update first." = "This backup was made by a newer version of the app. Please update first.";
 "This file is not a valid backup." = "This file is not a valid backup.";
 "This is a fever. Call your doctor if your baby seems unwell, the fever lasts more than a day, or you are worried." = "This is a fever. Call your doctor if your baby seems unwell, the fever lasts more than a day, or you are worried.";
@@ -291,6 +316,7 @@
 "Tummy time" = "Tummy time";
 "Type" = "Type";
 "Units" = "Units";
+"Unlock with Lullo Supporter" = "Unlock with Lullo Supporter";
 "Vaccine" = "Vaccine";
 "Vaccine name" = "Vaccine name";
 "Version" = "Version";
@@ -308,6 +334,7 @@
 "Woke at %@" = "Woke at %@";
 "Yellow" = "Yellow";
 "Yesterday" = "Yesterday";
+"You're a Lullo Supporter" = "You're a Lullo Supporter";
 "You've supported Lullo %@ times 💖" = "You've supported Lullo %@ times 💖";
 "Your data is stored in your private iCloud database and backed up automatically. On a new iPhone, sign in with the same Apple ID and install the app: everything downloads automatically." = "Your data is stored in your private iCloud database and backed up automatically. On a new iPhone, sign in with the same Apple ID and install the app: everything downloads automatically.";
 "Your name (shown on entries)" = "Your name (shown on entries)";

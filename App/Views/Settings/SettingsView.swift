@@ -7,6 +7,7 @@ import UIKit
 struct SettingsView: View {
     @EnvironmentObject private var store: TrackerStore
     @EnvironmentObject private var sync: SyncMonitor
+    @StateObject private var supporter = Supporter.shared
     @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "createdAt", ascending: true)])
     private var babies: FetchedResults<Baby>
 
@@ -240,16 +241,42 @@ struct SettingsView: View {
     private var supportSection: some View {
         Section {
             NavigationLink {
+                SupporterView()
+            } label: {
+                HStack {
+                    Label {
+                        Text("Lullo Supporter")
+                    } icon: {
+                        Image(systemName: "moon.stars.fill").foregroundStyle(.indigo)
+                    }
+                    Spacer()
+                    if supporter.isSupporter {
+                        Text("Active").font(.caption.bold()).foregroundStyle(.pink)
+                    }
+                }
+            }
+            NavigationLink {
                 TipJarView()
             } label: {
                 Label {
-                    Text("Support Lullo")
+                    Text("Leave a Tip")
                 } icon: {
                     Image(systemName: "heart.fill").foregroundStyle(.pink)
                 }
             }
+            NavigationLink {
+                AppearanceView()
+            } label: {
+                Label {
+                    Text("Appearance")
+                } icon: {
+                    Image(systemName: "paintpalette.fill").foregroundStyle(.orange)
+                }
+            }
+        } header: {
+            Text("Support Lullo")
         } footer: {
-            Text("Optional tips help keep Lullo independent and ad-free.")
+            Text("Every tracking feature is free. A subscription or tip helps keep Lullo independent and ad-free.")
         }
     }
 
@@ -262,6 +289,8 @@ struct SettingsView: View {
             Text("Growth charts use the WHO Child Growth Standards.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
+            Link("Privacy Policy", destination: AppLinks.privacyPolicy)
+            Link("Terms of Use", destination: AppLinks.termsOfUse)
         }
     }
 

@@ -24,6 +24,7 @@
 		447D29071682C85C3368D698 /* TrackerStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B1E3EC43A4D6988537DC27 /* TrackerStoreTests.swift */; };
 		44F2A6EB935C14354B4D30EE /* AppShortcuts.strings in Resources */ = {isa = PBXBuildFile; fileRef = FFFAB465EA63F7EAC37D14C2 /* AppShortcuts.strings */; };
 		45D3879FC6E66ED4D80FAC09 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A9774A10C5A41D81A21C9E /* SettingsView.swift */; };
+		4948579FCF20CE9757486F68 /* SupporterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE41AB7DDE5E31A09EBFD65 /* SupporterView.swift */; };
 		532BC4FAF0B806A0D824FD76 /* DisplayNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15552F1CD07B705BAA7E2DAA /* DisplayNames.swift */; };
 		5689DDFCEDE9B46A2385BEB3 /* TrackerActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79293EEA49F65220CEFBF877 /* TrackerActivityAttributes.swift */; };
 		59123B7717D8B97188B9E08E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 01B739F0BBE776E2C114FF54 /* PrivacyInfo.xcprivacy */; };
@@ -50,6 +51,7 @@
 		C2A72F4EAB55A0E59F1EA051 /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9590443BDB7AB0A9ED13A6D4 /* ConfigurationTests.swift */; };
 		C411B5F1FD5B1154FF71FBD0 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A6B068F3D0CF234B548DE0 /* Components.swift */; };
 		C59FCCD65458A1B56AF2D6B4 /* CloudSharingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079C88FD6158C24134BED12C /* CloudSharingPresenter.swift */; };
+		C9043C3EAB4BD4AE422BA63A /* Supporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBD039E49D17A10E8866D61 /* Supporter.swift */; };
 		C9C82CA6ACB4F1B767A180E9 /* EventEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507AEB3D88C902AE1103BC75 /* EventEditorView.swift */; };
 		CAF9EE164F74BA3DA0BFFE10 /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14687D4BDAD21864254484D /* SharedContainer.swift */; };
 		D0D67B302950F87A942B91C8 /* TrackerIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38990BB42D57FF13CD0CEDA7 /* TrackerIntents.swift */; };
@@ -117,6 +119,7 @@
 		52C5DB640517D938B5BCB1BE /* TipJar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipJar.swift; sourceTree = "<group>"; };
 		557C91EB102096FEAAF25D76 /* StatusWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusWidget.swift; sourceTree = "<group>"; };
 		58700A9B398991955CF600A8 /* ManagedObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObjects.swift; sourceTree = "<group>"; };
+		5BBD039E49D17A10E8866D61 /* Supporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supporter.swift; sourceTree = "<group>"; };
 		5C01ED097E6AD56F38B2B10B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		6D8DE09B13C42882DBD5008D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		6D9BE3845D8BBA0B88231BD4 /* BabyEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyEntity.swift; sourceTree = "<group>"; };
@@ -138,6 +141,7 @@
 		C40BA58EAE2ADC9EA9560239 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C5916FEA98A89DBC2ECB4B6F /* BabyCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BabyCore; path = Packages/BabyCore; sourceTree = SOURCE_ROOT; };
 		CAE3AD954638C5F219C7A9B8 /* TrackerLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerLiveActivity.swift; sourceTree = "<group>"; };
+		CAE41AB7DDE5E31A09EBFD65 /* SupporterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupporterView.swift; sourceTree = "<group>"; };
 		D8131BCA3DD9B64EB6293745 /* GrowthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthView.swift; sourceTree = "<group>"; };
 		DF464DE0D9ED14E9B52117F4 /* TipJarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipJarTests.swift; sourceTree = "<group>"; };
 		DFE4D7D99C113160BCEF7699 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
@@ -232,6 +236,7 @@
 				4D56029F025DFC2C2928500C /* BackupService.swift */,
 				9A48363E7D8B1B4E5D0A7081 /* LiveActivityManager.swift */,
 				E5124B1FEE063E10AC99EFE2 /* NotificationManager.swift */,
+				5BBD039E49D17A10E8866D61 /* Supporter.swift */,
 				E4D6D6EE3735E475E2F34CBA /* SyncMonitor.swift */,
 				52C5DB640517D938B5BCB1BE /* TipJar.swift */,
 				EDDC33921E7DCC0FE2E2E2B1 /* TrackerStore.swift */,
@@ -410,6 +415,7 @@
 				B56F7C78C492300CC337F942 /* BabyFormView.swift */,
 				079C88FD6158C24134BED12C /* CloudSharingPresenter.swift */,
 				37A9774A10C5A41D81A21C9E /* SettingsView.swift */,
+				CAE41AB7DDE5E31A09EBFD65 /* SupporterView.swift */,
 				0C3E618C74B8207DAB037DCE /* TipJarView.swift */,
 			);
 			path = Settings;
@@ -602,6 +608,8 @@
 				276F0E81E79EDEA5EEC99968 /* RootView.swift in Sources */,
 				45D3879FC6E66ED4D80FAC09 /* SettingsView.swift in Sources */,
 				89F192C96B9A4C262E3E0EF4 /* SharedContainer.swift in Sources */,
+				C9043C3EAB4BD4AE422BA63A /* Supporter.swift in Sources */,
+				4948579FCF20CE9757486F68 /* SupporterView.swift in Sources */,
 				6F551640EF984716BC33D058 /* SyncMonitor.swift in Sources */,
 				EE44A683A61BAD1BF2082FB4 /* TipJar.swift in Sources */,
 				B73FF9C68C7B8F2DA7C448AC /* TipJarView.swift in Sources */,
@@ -747,6 +755,7 @@
 		5F82EF8F1DF015CD7537291C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-Midnight AppIcon-Sunrise AppIcon-Mint AppIcon-Blossom";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = App/Lullo.entitlements;
@@ -802,6 +811,7 @@
 		95A51079DB4D40815F533C22 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-Midnight AppIcon-Sunrise AppIcon-Mint AppIcon-Blossom";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = App/Lullo.entitlements;

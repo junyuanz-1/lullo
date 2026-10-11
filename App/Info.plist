@@ -37,6 +37,8 @@
 	<true/>
 	<key>NSSupportsLiveActivitiesFrequentUpdates</key>
 	<false/>
+	<key>PrivacyPolicyURL</key>
+	<string>$(PRIVACY_POLICY_URL)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

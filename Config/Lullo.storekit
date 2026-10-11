@@ -1,83 +1,148 @@
 {
-  "identifier" : "4C1E6E2A",
-  "nonRenewingSubscriptions" : [
-
-  ],
-  "products" : [
+  "identifier": "4C1E6E2A",
+  "nonRenewingSubscriptions": [],
+  "products": [
     {
-      "displayPrice" : "0.99",
-      "familyShareable" : false,
-      "internalID" : "6740000001",
-      "localizations" : [
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "6740000001",
+      "localizations": [
         {
-          "description" : "A small thank-you for the 3 a.m. feeds.",
-          "displayName" : "A cup of coffee",
-          "locale" : "en_US"
+          "description": "A small thank-you for the 3 a.m. feeds.",
+          "displayName": "A cup of coffee",
+          "locale": "en_US"
         },
         {
-          "description" : "为凌晨三点的夜奶加油。",
-          "displayName" : "请喝一杯咖啡",
-          "locale" : "zh_Hans"
+          "description": "为凌晨三点的夜奶加油。",
+          "displayName": "请喝一杯咖啡",
+          "locale": "zh_Hans"
         }
       ],
-      "productID" : "lullo.tip.small",
-      "referenceName" : "Tip - Small",
-      "type" : "Consumable"
+      "productID": "lullo.tip.small",
+      "referenceName": "Tip - Small",
+      "type": "Consumable"
     },
     {
-      "displayPrice" : "2.99",
-      "familyShareable" : false,
-      "internalID" : "6740000002",
-      "localizations" : [
+      "displayPrice": "2.99",
+      "familyShareable": false,
+      "internalID": "6740000002",
+      "localizations": [
         {
-          "description" : "Helps keep Lullo ad-free.",
-          "displayName" : "A slice of cake",
-          "locale" : "en_US"
+          "description": "Helps keep Lullo ad-free.",
+          "displayName": "A slice of cake",
+          "locale": "en_US"
         },
         {
-          "description" : "帮助摇摇保持无广告。",
-          "displayName" : "请吃一块蛋糕",
-          "locale" : "zh_Hans"
+          "description": "帮助摇摇保持无广告。",
+          "displayName": "请吃一块蛋糕",
+          "locale": "zh_Hans"
         }
       ],
-      "productID" : "lullo.tip.medium",
-      "referenceName" : "Tip - Medium",
-      "type" : "Consumable"
+      "productID": "lullo.tip.medium",
+      "referenceName": "Tip - Medium",
+      "type": "Consumable"
     },
     {
-      "displayPrice" : "6.99",
-      "familyShareable" : false,
-      "internalID" : "6740000003",
-      "localizations" : [
+      "displayPrice": "6.99",
+      "familyShareable": false,
+      "internalID": "6740000003",
+      "localizations": [
         {
-          "description" : "Funds new features for every family.",
-          "displayName" : "A nice lunch",
-          "locale" : "en_US"
+          "description": "Funds new features for every family.",
+          "displayName": "A nice lunch",
+          "locale": "en_US"
         },
         {
-          "description" : "支持为每个家庭开发新功能。",
-          "displayName" : "请吃一顿午餐",
-          "locale" : "zh_Hans"
+          "description": "支持为每个家庭开发新功能。",
+          "displayName": "请吃一顿午餐",
+          "locale": "zh_Hans"
         }
       ],
-      "productID" : "lullo.tip.large",
-      "referenceName" : "Tip - Large",
-      "type" : "Consumable"
+      "productID": "lullo.tip.large",
+      "referenceName": "Tip - Large",
+      "type": "Consumable"
     }
   ],
-  "settings" : {
-    "_failTransactionsEnabled" : false,
-    "_locale" : "en_US",
-    "_storefront" : "USA",
-    "_storeKitErrors" : [
-
-    ]
+  "settings": {
+    "_failTransactionsEnabled": false,
+    "_locale": "en_US",
+    "_storefront": "USA",
+    "_storeKitErrors": []
   },
-  "subscriptionGroups" : [
-
+  "subscriptionGroups": [
+    {
+      "id": "21500001",
+      "localizations": [
+        {
+          "description": "",
+          "displayName": "Lullo Supporter",
+          "locale": "en_US"
+        },
+        {
+          "description": "",
+          "displayName": "摇摇支持者",
+          "locale": "zh_Hans"
+        }
+      ],
+      "name": "Lullo Supporter",
+      "subscriptions": [
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "0.99",
+          "familyShareable": true,
+          "groupNumber": 1,
+          "internalID": "6740000011",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "Support Lullo and unlock app icons and themes.",
+              "displayName": "Supporter (Monthly)",
+              "locale": "en_US"
+            },
+            {
+              "description": "支持摇摇，解锁替换图标和主题配色。",
+              "displayName": "支持者（月付）",
+              "locale": "zh_Hans"
+            }
+          ],
+          "productID": "lullo.supporter.monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "Supporter Monthly",
+          "subscriptionGroupID": "21500001",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "9.99",
+          "familyShareable": true,
+          "groupNumber": 1,
+          "internalID": "6740000012",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "Support Lullo for a year and save 16%.",
+              "displayName": "Supporter (Yearly)",
+              "locale": "en_US"
+            },
+            {
+              "description": "支持摇摇一整年，立省 16%。",
+              "displayName": "支持者（年付）",
+              "locale": "zh_Hans"
+            }
+          ],
+          "productID": "lullo.supporter.yearly",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "Supporter Yearly",
+          "subscriptionGroupID": "21500001",
+          "type": "RecurringSubscription"
+        }
+      ]
+    }
   ],
-  "version" : {
-    "major" : 3,
-    "minor" : 0
+  "version": {
+    "major": 3,
+    "minor": 0
   }
 }
