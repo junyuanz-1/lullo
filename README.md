@@ -1,6 +1,6 @@
-# Infant Tracker（宝宝记录）
+# Lullo 摇摇
 
-一个类似 Huckleberry 的 iOS 宝宝记录 App：记录睡眠、喂养、尿布、吸奶、生长、健康和日常活动。数据通过 iCloud 同步和备份，可以与家人实时共享，支持锁屏 / 灵动岛实时计时（Live Activity）和桌面小组件。
+**Lullo（摇摇）** 是一个类似 Huckleberry 的 iOS 宝宝记录 App：记录睡眠、喂养、尿布、吸奶、生长、健康和日常活动。数据通过 iCloud 同步和备份，可以与家人实时共享，支持锁屏 / 灵动岛实时计时（Live Activity）和桌面小组件。
 
 界面支持 **简体中文** 和 **English**，跟随系统语言。
 
@@ -29,7 +29,7 @@
 | **Live Activity** | 睡眠、亲喂、吸奶、活动计时会显示在锁屏和灵动岛上，并可直接 **停止**、**换边**、**暂停 / 继续** |
 | **小组件** | 主屏幕小 / 中 / 大三种尺寸 + 锁屏小组件：距上次喂奶 / 换尿布多久、睡着或醒着多久、下次小睡时间、今日统计；中 / 大尺寸带 **一键开始睡眠、开始亲喂、记录尿布** 按钮 |
 | **提醒** | 喂奶间隔、换尿布间隔、小睡最佳时间、用药 |
-| **Siri / 快捷指令** | "用宝宝记录开始睡眠""宝宝醒了""开始亲喂""记录尿布" |
+| **Siri / 快捷指令** | "用摇摇开始睡眠""宝宝醒了""开始亲喂""记录尿布" |
 
 ---
 
@@ -49,7 +49,7 @@
 
 ```
 DEVELOPMENT_TEAM = ABCDE12345          // 你的 Team ID（developer.apple.com → Membership）
-APP_BUNDLE_ID = com.yourname.InfantTracker
+APP_BUNDLE_ID = com.yourname.Lullo
 ```
 
 App Group（`group.<Bundle ID>`）和 iCloud 容器（`iCloud.<Bundle ID>`）会根据 Bundle ID 自动生成，一般不用改。
@@ -57,7 +57,7 @@ App Group（`group.<Bundle ID>`）和 iCloud 容器（`iCloud.<Bundle ID>`）会
 ### 2. 打开工程
 
 ```bash
-open InfantTracker.xcodeproj
+open Lullo.xcodeproj
 ```
 
 > 工程文件由 [XcodeGen](https://github.com/yonaskolb/XcodeGen) 根据 `project.yml` 生成，并且已经提交到仓库，所以不需要安装 XcodeGen 也能直接打开。
@@ -65,14 +65,14 @@ open InfantTracker.xcodeproj
 
 ### 3. 确认 Capabilities
 
-在 Xcode 中选择 **InfantTracker** target → **Signing & Capabilities**，确认以下几项都在，并且没有红色报错（自动签名会在你的开发者账号下注册这些标识符）：
+在 Xcode 中选择 **Lullo** target → **Signing & Capabilities**，确认以下几项都在，并且没有红色报错（自动签名会在你的开发者账号下注册这些标识符）：
 
 - **iCloud**：勾选 CloudKit，容器为 `iCloud.<你的 Bundle ID>`
 - **App Groups**：`group.<你的 Bundle ID>`
 - **Push Notifications**（CloudKit 静默推送需要）
 - **Background Modes** → Remote notifications
 
-**InfantTrackerWidgets** target 需要同一个 App Group。
+**LulloWidgets** target 需要同一个 App Group。
 
 如果 iCloud 容器显示红色，点刷新按钮，或者在 Capabilities 里取消勾选后再重新勾选。
 
@@ -106,7 +106,7 @@ open InfantTracker.xcodeproj
 
 ### Live Activity 与小组件
 - 开始任何计时后，锁屏和灵动岛会自动显示（可以在 **更多 → 偏好设置 → 实时活动** 中关闭）。
-- 长按主屏幕 → 添加小组件 → 宝宝记录。如果有多个宝宝，长按小组件 → 编辑小组件，选择要显示哪个宝宝。
+- 长按主屏幕 → 添加小组件 → 摇摇。如果有多个宝宝，长按小组件 → 编辑小组件，选择要显示哪个宝宝。
 
 ---
 
@@ -131,7 +131,7 @@ App/
   └─ Views/                 首页、记录、趋势、生长、设置、编辑器
 Shared/                     App 与小组件共用：App Group、显示名称、格式化、Live Activity 属性、App Intents、本地化
 Widgets/                    主屏幕 / 锁屏小组件、Live Activity 界面
-Tests/InfantTrackerTests/   App 层单元测试
+Tests/LulloTests/   App 层单元测试
 .github/workflows/ci.yml    CI
 ```
 
@@ -145,7 +145,7 @@ Tests/InfantTrackerTests/   App 层单元测试
 | 测试 | 内容 |
 |---|---|
 | `Packages/BabyCore/Tests` | 核心逻辑：亲喂计时、每日统计、24 小时作息、WHO 百分位（与官方数值核对）、小睡预测、备份格式与合并、CSV、Widget 快照、单位换算 |
-| `Tests/InfantTrackerTests` | App 层（内存 Core Data）：TrackerStore 计时器 / 亲喂换边 / 保存 / 删除级联、备份导出→导入往返和去重、Core Data 模型的 CloudKit 兼容性、中英文翻译完整性 |
+| `Tests/LulloTests` | App 层（内存 Core Data）：TrackerStore 计时器 / 亲喂换边 / 保存 / 删除级联、备份导出→导入往返和去重、Core Data 模型的 CloudKit 兼容性、中英文翻译完整性 |
 
 ```bash
 cd Packages/BabyCore && swift test     # 核心逻辑，macOS / Linux 都能跑

@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4AE1B62926FEB14F1988E1FB"
-               BuildableName = "InfantTracker.app"
-               BlueprintName = "InfantTracker"
-               ReferencedContainer = "container:InfantTracker.xcodeproj">
+               BlueprintIdentifier = "FB65093E877773E3D806C8D6"
+               BuildableName = "Lullo.app"
+               BlueprintName = "Lullo"
+               ReferencedContainer = "container:Lullo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,10 +29,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "180AB279E567DD0F0C176D02"
-               BuildableName = "InfantTrackerWidgets.appex"
-               BlueprintName = "InfantTrackerWidgets"
-               ReferencedContainer = "container:InfantTracker.xcodeproj">
+               BlueprintIdentifier = "8961A2D60FFA98FC31CA4253"
+               BuildableName = "LulloWidgets.appex"
+               BlueprintName = "LulloWidgets"
+               ReferencedContainer = "container:Lullo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,10 +47,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4AE1B62926FEB14F1988E1FB"
-            BuildableName = "InfantTracker.app"
-            BlueprintName = "InfantTracker"
-            ReferencedContainer = "container:InfantTracker.xcodeproj">
+            BlueprintIdentifier = "FB65093E877773E3D806C8D6"
+            BuildableName = "Lullo.app"
+            BlueprintName = "Lullo"
+            ReferencedContainer = "container:Lullo.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -58,10 +58,10 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DC55B6ABC77E1046E5F91164"
-               BuildableName = "InfantTrackerTests.xctest"
-               BlueprintName = "InfantTrackerTests"
-               ReferencedContainer = "container:InfantTracker.xcodeproj">
+               BlueprintIdentifier = "61775DA7BA648578627107D8"
+               BuildableName = "LulloTests.xctest"
+               BlueprintName = "LulloTests"
+               ReferencedContainer = "container:Lullo.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -80,10 +80,10 @@
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4AE1B62926FEB14F1988E1FB"
-            BuildableName = "InfantTracker.app"
-            BlueprintName = "InfantTracker"
-            ReferencedContainer = "container:InfantTracker.xcodeproj">
+            BlueprintIdentifier = "FB65093E877773E3D806C8D6"
+            BuildableName = "Lullo.app"
+            BlueprintName = "Lullo"
+            ReferencedContainer = "container:Lullo.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
    </TestAction>
@@ -101,10 +101,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4AE1B62926FEB14F1988E1FB"
-            BuildableName = "InfantTracker.app"
-            BlueprintName = "InfantTracker"
-            ReferencedContainer = "container:InfantTracker.xcodeproj">
+            BlueprintIdentifier = "FB65093E877773E3D806C8D6"
+            BuildableName = "Lullo.app"
+            BlueprintName = "Lullo"
+            ReferencedContainer = "container:Lullo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -120,10 +120,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4AE1B62926FEB14F1988E1FB"
-            BuildableName = "InfantTracker.app"
-            BlueprintName = "InfantTracker"
-            ReferencedContainer = "container:InfantTracker.xcodeproj">
+            BlueprintIdentifier = "FB65093E877773E3D806C8D6"
+            BuildableName = "Lullo.app"
+            BlueprintName = "Lullo"
+            ReferencedContainer = "container:Lullo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

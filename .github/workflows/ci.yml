@@ -42,8 +42,8 @@ jobs:
       - name: Generate project
         run: |
           xcodegen generate --spec project.yml
-          if ! git diff --quiet -- InfantTracker.xcodeproj; then
-            echo "::warning::InfantTracker.xcodeproj is out of date with project.yml. Run 'xcodegen generate' and commit the result."
+          if ! git diff --quiet -- Lullo.xcodeproj; then
+            echo "::warning::Lullo.xcodeproj is out of date with project.yml. Run 'xcodegen generate' and commit the result."
           fi
 
       - name: Pick a simulator
@@ -67,8 +67,8 @@ jobs:
         run: |
           set -o pipefail
           xcodebuild test \
-            -project InfantTracker.xcodeproj \
-            -scheme InfantTracker \
+            -project Lullo.xcodeproj \
+            -scheme Lullo \
             -destination "id=${{ steps.sim.outputs.udid }}" \
             -resultBundlePath TestResults.xcresult \
             CODE_SIGNING_ALLOWED=NO \

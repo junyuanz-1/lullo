@@ -1,6 +1,6 @@
 import CoreData
 import XCTest
-@testable import InfantTracker
+@testable import Lullo
 
 /// Guards against changes that would break CloudKit sync or translations.
 final class ConfigurationTests: XCTestCase {

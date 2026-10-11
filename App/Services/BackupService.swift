@@ -23,7 +23,7 @@ enum BackupService {
     /// Writes a backup to a temporary file and returns its URL (for the share sheet).
     static func exportBackup(store: TrackerStore) throws -> URL {
         let data = try BackupCodec.encode(makeBackupFile(store: store))
-        let url = temporaryURL(name: "InfantTracker-Backup-\(fileDate()).json")
+        let url = temporaryURL(name: "Lullo-Backup-\(fileDate()).json")
         try data.write(to: url, options: .atomic)
         return url
     }
@@ -31,7 +31,7 @@ enum BackupService {
     static func exportCSV(store: TrackerStore) throws -> URL {
         let file = makeBackupFile(store: store)
         let csv = CSVExporter.csv(events: file.events, babies: file.babies)
-        let url = temporaryURL(name: "InfantTracker-Events-\(fileDate()).csv")
+        let url = temporaryURL(name: "Lullo-Events-\(fileDate()).csv")
         // UTF-8 BOM so Excel opens Chinese text correctly.
         try (Data([0xEF, 0xBB, 0xBF]) + Data(csv.utf8)).write(to: url, options: .atomic)
         return url

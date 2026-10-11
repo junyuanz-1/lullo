@@ -8,7 +8,7 @@ import OSLog
 final class LiveActivityManager {
     static let shared = LiveActivityManager()
 
-    private let logger = Logger(subsystem: "InfantTracker", category: "LiveActivity")
+    private let logger = Logger(subsystem: "Lullo", category: "LiveActivity")
     /// Timers we already started an activity for, so one the user swiped away is not recreated.
     private let startedKey = "liveActivityStartedEventIDs"
 

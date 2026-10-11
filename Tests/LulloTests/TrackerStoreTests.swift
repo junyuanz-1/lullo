@@ -1,7 +1,7 @@
 import BabyCore
 import CoreData
 import XCTest
-@testable import InfantTracker
+@testable import Lullo
 
 @MainActor
 final class TrackerStoreTests: XCTestCase {

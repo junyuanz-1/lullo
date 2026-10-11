@@ -2,7 +2,7 @@ import SwiftUI
 import WidgetKit
 
 @main
-struct InfantTrackerWidgets: WidgetBundle {
+struct LulloWidgets: WidgetBundle {
     var body: some Widget {
         StatusWidget()
         TrackerLiveActivity()

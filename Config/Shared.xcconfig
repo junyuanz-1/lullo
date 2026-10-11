@@ -6,8 +6,8 @@
 // Your 10-character Team ID (Xcode → Settings → Accounts, or developer.apple.com → Membership).
 DEVELOPMENT_TEAM =
 
-// Must be unique on the App Store, e.g. com.yourname.InfantTracker
-APP_BUNDLE_ID = com.example.InfantTracker
+// Must be unique on the App Store, e.g. com.yourname.Lullo
+APP_BUNDLE_ID = com.example.Lullo
 
 // Shared container between the app and its widgets. Must start with "group.".
 APP_GROUP_ID = group.$(APP_BUNDLE_ID)

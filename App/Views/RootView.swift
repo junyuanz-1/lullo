@@ -82,7 +82,7 @@ struct OnboardingView: View {
             Image(systemName: "moon.stars.fill")
                 .font(.system(size: 72))
                 .foregroundStyle(.indigo.gradient)
-            Text("Welcome")
+            Text("Welcome to Lullo")
                 .font(.largeTitle.bold())
             Text("Track sleep, feeds, diapers and growth. Everything syncs privately through your iCloud and can be shared with family.")
                 .multilineTextAlignment(.center)
