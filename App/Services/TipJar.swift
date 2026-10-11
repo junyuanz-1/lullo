@@ -9,9 +9,9 @@ final class TipJar: ObservableObject {
     static let shared = TipJar()
 
     enum Tier: String, CaseIterable, Identifiable {
-        case small = "lullo.tip.small"
-        case medium = "lullo.tip.medium"
-        case large = "lullo.tip.large"
+        case small = "tinytide.tip.small"
+        case medium = "tinytide.tip.medium"
+        case large = "tinytide.tip.large"
 
         var id: String { rawValue }
         var productID: String { rawValue }
@@ -35,7 +35,7 @@ final class TipJar: ObservableObject {
         var blurb: String {
             switch self {
             case .small: return String(localized: "For the 3 a.m. feeds.")
-            case .medium: return String(localized: "Helps keep Lullo ad-free.")
+            case .medium: return String(localized: "Helps keep Tinytide ad-free.")
             case .large: return String(localized: "Funds new features for every family.")
             }
         }
@@ -59,7 +59,7 @@ final class TipJar: ObservableObject {
     @Published private(set) var loadState: LoadState = .idle
     @Published private(set) var purchasing: Tier?
 
-    private let logger = Logger(subsystem: "Lullo", category: "TipJar")
+    private let logger = Logger(subsystem: "Tinytide", category: "TipJar")
     private let tipCountKey = "tipJarTipCount"
     private var updatesTask: Task<Void, Never>?
 

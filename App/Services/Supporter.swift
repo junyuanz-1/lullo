@@ -4,20 +4,20 @@ import StoreKit
 import SwiftUI
 import UIKit
 
-/// "Lullo Supporter" auto-renewable subscription. Every tracking feature stays
+/// "Tinytide Supporter" auto-renewable subscription. Every tracking feature stays
 /// free; supporters get cosmetic perks (alternate app icons, theme colours, a badge).
 @MainActor
 final class Supporter: ObservableObject {
     static let shared = Supporter()
 
-    static let monthlyID = "lullo.supporter.monthly"
-    static let yearlyID = "lullo.supporter.yearly"
+    static let monthlyID = "tinytide.supporter.monthly"
+    static let yearlyID = "tinytide.supporter.yearly"
     static let productIDs = [monthlyID, yearlyID]
 
     @Published private(set) var isSupporter: Bool
 
     private let cacheKey = "supporterActive"
-    private let logger = Logger(subsystem: "Lullo", category: "Supporter")
+    private let logger = Logger(subsystem: "Tinytide", category: "Supporter")
 
     init() {
         // Cached so perks don't flicker off while entitlements load at launch.
@@ -150,7 +150,7 @@ enum AppLinks {
             ?? URL(string: "https://www.apple.com/legal/privacy/")!
     }
 
-    static let supportEmail = URL(string: "mailto:lullo.support@gmail.com?subject=Lullo%20Support")!
+    static let supportEmail = URL(string: "mailto:lullo.support@gmail.com?subject=Tinytide%20Support")!
     static let supportPage = URL(string: "https://junyuanz1.github.io/lullo-site/support/")!
 
     /// Apple's standard licensed application end user license agreement.

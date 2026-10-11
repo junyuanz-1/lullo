@@ -50,7 +50,7 @@
 "Based on typical wake windows for this age." = "根據這個月齡的一般清醒時長推算。";
 "Bassinet" = "搖籃";
 "Bath" = "洗澡";
-"Become a Lullo Supporter" = "成為搖搖支持者";
+"Become a Tinytide Supporter" = "成為搖搖支持者";
 "Bed" = "床";
 "Bedtime" = "就寢時間";
 "Bedtime is coming up for %@" = "%@快到就寢時間了";
@@ -100,11 +100,11 @@
 "Edit" = "編輯";
 "Edit Baby" = "編輯寶寶";
 "End" = "結束";
-"Enjoying Lullo?" = "喜歡搖搖嗎？";
+"Enjoying Tinytide?" = "喜歡搖搖嗎？";
 "Entries you log will appear here." = "你記錄的內容會顯示在這裡。";
 "Event ID" = "紀錄 ID";
-"Every tracking feature is free. A subscription or tip helps keep Lullo independent and ad-free." = "所有記錄功能都免費。訂閱或小額贊助能幫助搖搖維持獨立、沒有廣告。";
-"Every tracking feature stays free for everyone. Supporters keep Lullo independent and get a few extras as a thank-you." = "所有記錄功能永遠對所有人免費。支持者幫助搖搖維持獨立，我們也準備了一些額外的小禮物作為感謝。";
+"Every tracking feature is free. A subscription or tip helps keep Tinytide independent and ad-free." = "所有記錄功能都免費。訂閱或小額贊助能幫助搖搖維持獨立、沒有廣告。";
+"Every tracking feature stays free for everyone. Supporters keep Tinytide independent and get a few extras as a thank-you." = "所有記錄功能永遠對所有人免費。支持者幫助搖搖維持獨立，我們也準備了一些額外的小禮物作為感謝。";
 "Export Backup File" = "匯出備份檔案";
 "Export Spreadsheet (CSV)" = "匯出試算表（CSV）";
 "Family & Caregivers" = "家人與照顧者";
@@ -127,7 +127,7 @@
 "Head %@" = "頭圍 %@";
 "Health" = "健康";
 "Help & FAQ" = "說明與常見問題";
-"Helps keep Lullo ad-free." = "幫助搖搖維持無廣告。";
+"Helps keep Tinytide ad-free." = "幫助搖搖維持無廣告。";
 "Imperial (oz, lb, in)" = "英制（盎司、磅、英寸）";
 "Import" = "匯入";
 "Import Backup File" = "匯入備份檔案";
@@ -157,8 +157,8 @@
 "Logs a diaper change now." = "立即記錄一次換尿布。";
 "Loved it" = "超喜歡";
 "Lullaby" = "搖籃曲";
-"Lullo Supporter" = "搖搖支持者";
-"Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "搖搖是一款獨立開發的 App，沒有廣告，也不會追蹤你。如果它讓你的夜晚輕鬆了一點，歡迎小額贊助，支持它繼續走下去。";
+"Tinytide Supporter" = "搖搖支持者";
+"Tinytide is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "搖搖是一款獨立開發的 App，沒有廣告，也不會追蹤你。如果它讓你的夜晚輕鬆了一點，歡迎小額贊助，支持它繼續走下去。";
 "Manage" = "管理";
 "Manage sharing for %@" = "管理%@的共享";
 "Massage" = "按摩";
@@ -283,7 +283,7 @@
 "Suggested bedtime" = "建議就寢時間";
 "Sunrise" = "日出";
 "Sunset" = "日落";
-"Support Lullo" = "支持搖搖";
+"Support Tinytide" = "支持搖搖";
 "Supporter badge" = "支持者徽章";
 "Sweet spot: %@ – %@" = "最佳時機：%@ – %@";
 "Switch Side" = "換邊";
@@ -318,7 +318,7 @@
 "Tummy time" = "趴姿練習";
 "Type" = "類型";
 "Units" = "單位";
-"Unlock with Lullo Supporter" = "成為搖搖支持者即可解鎖";
+"Unlock with Tinytide Supporter" = "成為搖搖支持者即可解鎖";
 "Vaccine" = "疫苗";
 "Vaccine name" = "疫苗名稱";
 "Version" = "版本";
@@ -327,7 +327,7 @@
 "Wake Up" = "醒了";
 "Watch for hives, swelling, vomiting or trouble breathing. Call emergency services if breathing is affected." = "請留意是否出現蕁麻疹、腫脹、嘔吐或呼吸困難。若影響到呼吸，請立即撥打緊急救護電話。";
 "Weight" = "體重";
-"Welcome to Lullo" = "歡迎使用搖搖";
+"Welcome to Tinytide" = "歡迎使用搖搖";
 "Wet" = "濕";
 "Wet + Dirty" = "濕 + 便便";
 "What did they eat?" = "吃了什麼？";
@@ -336,11 +336,11 @@
 "Woke at %@" = "%@ 醒來";
 "Yellow" = "黃色";
 "Yesterday" = "昨天";
-"You're a Lullo Supporter" = "你是搖搖支持者";
-"You've supported Lullo %@ times 💖" = "你已經支持搖搖 %@ 次了 💖";
+"You're a Tinytide Supporter" = "你是搖搖支持者";
+"You've supported Tinytide %@ times 💖" = "你已經支持搖搖 %@ 次了 💖";
 "Your data is stored in your private iCloud database and backed up automatically. On a new iPhone, sign in with the same Apple ID and install the app: everything downloads automatically." = "你的資料儲存在你私人的 iCloud 資料庫中，並會自動備份。換新 iPhone 時，只要登入同一個 Apple ID 並安裝本 App，所有資料就會自動下載。";
 "Your name (shown on entries)" = "你的名字（會顯示在紀錄上）";
-"Your support means a lot. It goes straight into making Lullo better for every tired parent out there." = "你的支持對我們意義重大，它會直接用來讓搖搖變得更好，幫助每一位辛苦的爸爸媽媽。";
+"Your support means a lot. It goes straight into making Tinytide better for every tired parent out there." = "你的支持對我們意義重大，它會直接用來讓搖搖變得更好，幫助每一位辛苦的爸爸媽媽。";
 "Your tip is waiting for approval. Thank you!" = "你的贊助正在等待核准，謝謝你！";
 "cm" = "公分";
 "e.g. cough, runny nose, rash" = "例如：咳嗽、流鼻水、紅疹";

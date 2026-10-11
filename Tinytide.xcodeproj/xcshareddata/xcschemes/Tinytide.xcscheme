@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FB65093E877773E3D806C8D6"
-               BuildableName = "Lullo.app"
-               BlueprintName = "Lullo"
-               ReferencedContainer = "container:Lullo.xcodeproj">
+               BlueprintIdentifier = "5930F4AA0DFDC1883B8A1100"
+               BuildableName = "Tinytide.app"
+               BlueprintName = "Tinytide"
+               ReferencedContainer = "container:Tinytide.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,10 +29,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8961A2D60FFA98FC31CA4253"
-               BuildableName = "LulloWidgets.appex"
-               BlueprintName = "LulloWidgets"
-               ReferencedContainer = "container:Lullo.xcodeproj">
+               BlueprintIdentifier = "E27B724B0EE822269A3241F4"
+               BuildableName = "TinytideWidgets.appex"
+               BlueprintName = "TinytideWidgets"
+               ReferencedContainer = "container:Tinytide.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,10 +47,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FB65093E877773E3D806C8D6"
-            BuildableName = "Lullo.app"
-            BlueprintName = "Lullo"
-            ReferencedContainer = "container:Lullo.xcodeproj">
+            BlueprintIdentifier = "5930F4AA0DFDC1883B8A1100"
+            BuildableName = "Tinytide.app"
+            BlueprintName = "Tinytide"
+            ReferencedContainer = "container:Tinytide.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -58,10 +58,10 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "61775DA7BA648578627107D8"
-               BuildableName = "LulloTests.xctest"
-               BlueprintName = "LulloTests"
-               ReferencedContainer = "container:Lullo.xcodeproj">
+               BlueprintIdentifier = "7A0C2FB06EED60013524828A"
+               BuildableName = "TinytideTests.xctest"
+               BlueprintName = "TinytideTests"
+               ReferencedContainer = "container:Tinytide.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -80,10 +80,10 @@
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FB65093E877773E3D806C8D6"
-            BuildableName = "Lullo.app"
-            BlueprintName = "Lullo"
-            ReferencedContainer = "container:Lullo.xcodeproj">
+            BlueprintIdentifier = "5930F4AA0DFDC1883B8A1100"
+            BuildableName = "Tinytide.app"
+            BlueprintName = "Tinytide"
+            ReferencedContainer = "container:Tinytide.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
    </TestAction>
@@ -101,16 +101,16 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FB65093E877773E3D806C8D6"
-            BuildableName = "Lullo.app"
-            BlueprintName = "Lullo"
-            ReferencedContainer = "container:Lullo.xcodeproj">
+            BlueprintIdentifier = "5930F4AA0DFDC1883B8A1100"
+            BuildableName = "Tinytide.app"
+            BlueprintName = "Tinytide"
+            ReferencedContainer = "container:Tinytide.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
       </CommandLineArguments>
       <StoreKitConfigurationFileReference
-         identifier = "../../Config/Lullo.storekit">
+         identifier = "../../Config/Tinytide.storekit">
       </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
@@ -123,10 +123,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FB65093E877773E3D806C8D6"
-            BuildableName = "Lullo.app"
-            BlueprintName = "Lullo"
-            ReferencedContainer = "container:Lullo.xcodeproj">
+            BlueprintIdentifier = "5930F4AA0DFDC1883B8A1100"
+            BuildableName = "Tinytide.app"
+            BlueprintName = "Tinytide"
+            ReferencedContainer = "container:Tinytide.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

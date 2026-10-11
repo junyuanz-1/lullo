@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-Lullo includes or is built with the following third-party material.
+Tinytide includes or is built with the following third-party material.
 
 ## WHO Child Growth Standards
 
@@ -22,4 +22,4 @@ Apple Developer Program License Agreement and are not redistributed here.
 
 ## Development tools (not shipped in the app)
 
-- [XcodeGen](https://github.com/yonaskolb/XcodeGen) (MIT License) generates `Lullo.xcodeproj` from `project.yml`.
+- [XcodeGen](https://github.com/yonaskolb/XcodeGen) (MIT License) generates `Tinytide.xcodeproj` from `project.yml`.

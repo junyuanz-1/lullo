@@ -50,7 +50,7 @@
 "Based on typical wake windows for this age." = "이 월령의 일반적인 깨어 있는 시간을 기준으로 해요.";
 "Bassinet" = "요람";
 "Bath" = "목욕";
-"Become a Lullo Supporter" = "Lullo 서포터 되기";
+"Become a Tinytide Supporter" = "Tinytide 서포터 되기";
 "Bed" = "침대";
 "Bedtime" = "취침 시간";
 "Bedtime is coming up for %@" = "%@의 취침 시간이 다가오고 있어요";
@@ -100,11 +100,11 @@
 "Edit" = "편집";
 "Edit Baby" = "아기 정보 편집";
 "End" = "종료";
-"Enjoying Lullo?" = "Lullo가 마음에 드세요?";
+"Enjoying Tinytide?" = "Tinytide가 마음에 드세요?";
 "Entries you log will appear here." = "기록한 내용이 여기에 표시돼요.";
 "Event ID" = "기록 ID";
-"Every tracking feature is free. A subscription or tip helps keep Lullo independent and ad-free." = "모든 기록 기능은 무료예요. 구독이나 팁은 Lullo가 독립적으로, 광고 없이 운영되는 데 도움이 돼요.";
-"Every tracking feature stays free for everyone. Supporters keep Lullo independent and get a few extras as a thank-you." = "모든 기록 기능은 누구에게나 계속 무료예요. 서포터는 Lullo가 독립적으로 운영되도록 도와주고, 감사의 의미로 몇 가지 추가 혜택을 받아요.";
+"Every tracking feature is free. A subscription or tip helps keep Tinytide independent and ad-free." = "모든 기록 기능은 무료예요. 구독이나 팁은 Tinytide가 독립적으로, 광고 없이 운영되는 데 도움이 돼요.";
+"Every tracking feature stays free for everyone. Supporters keep Tinytide independent and get a few extras as a thank-you." = "모든 기록 기능은 누구에게나 계속 무료예요. 서포터는 Tinytide가 독립적으로 운영되도록 도와주고, 감사의 의미로 몇 가지 추가 혜택을 받아요.";
 "Export Backup File" = "백업 파일 내보내기";
 "Export Spreadsheet (CSV)" = "스프레드시트 내보내기(CSV)";
 "Family & Caregivers" = "가족 및 돌보미";
@@ -127,7 +127,7 @@
 "Head %@" = "머리둘레 %@";
 "Health" = "건강";
 "Help & FAQ" = "도움말 및 FAQ";
-"Helps keep Lullo ad-free." = "Lullo가 광고 없이 운영되도록 도와줘요.";
+"Helps keep Tinytide ad-free." = "Tinytide가 광고 없이 운영되도록 도와줘요.";
 "Imperial (oz, lb, in)" = "야드파운드법(oz, lb, in)";
 "Import" = "가져오기";
 "Import Backup File" = "백업 파일 가져오기";
@@ -157,8 +157,8 @@
 "Logs a diaper change now." = "지금 기저귀 교체를 기록해요.";
 "Loved it" = "아주 좋아했어요";
 "Lullaby" = "자장가";
-"Lullo Supporter" = "Lullo 서포터";
-"Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "Lullo는 광고도 추적도 없는 독립 앱이에요. 밤이 조금이라도 편해지셨다면, 팁으로 Lullo가 계속될 수 있도록 도와주세요.";
+"Tinytide Supporter" = "Tinytide 서포터";
+"Tinytide is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "Tinytide는 광고도 추적도 없는 독립 앱이에요. 밤이 조금이라도 편해지셨다면, 팁으로 Tinytide가 계속될 수 있도록 도와주세요.";
 "Manage" = "관리";
 "Manage sharing for %@" = "%@ 공유 관리";
 "Massage" = "마사지";
@@ -283,7 +283,7 @@
 "Suggested bedtime" = "추천 취침 시간";
 "Sunrise" = "해돋이";
 "Sunset" = "노을";
-"Support Lullo" = "Lullo 후원하기";
+"Support Tinytide" = "Tinytide 후원하기";
 "Supporter badge" = "서포터 배지";
 "Sweet spot: %@ – %@" = "최적 시간: %@ – %@";
 "Switch Side" = "쪽 바꾸기";
@@ -318,7 +318,7 @@
 "Tummy time" = "터미 타임";
 "Type" = "종류";
 "Units" = "단위";
-"Unlock with Lullo Supporter" = "Lullo 서포터로 잠금 해제";
+"Unlock with Tinytide Supporter" = "Tinytide 서포터로 잠금 해제";
 "Vaccine" = "예방접종";
 "Vaccine name" = "백신 이름";
 "Version" = "버전";
@@ -327,7 +327,7 @@
 "Wake Up" = "깼어요";
 "Watch for hives, swelling, vomiting or trouble breathing. Call emergency services if breathing is affected." = "두드러기, 부기, 구토, 호흡 곤란이 있는지 잘 살펴보세요. 호흡에 문제가 생기면 즉시 119 등 응급 서비스에 연락하세요.";
 "Weight" = "몸무게";
-"Welcome to Lullo" = "Lullo에 오신 것을 환영해요";
+"Welcome to Tinytide" = "Tinytide에 오신 것을 환영해요";
 "Wet" = "소변";
 "Wet + Dirty" = "소변 + 대변";
 "What did they eat?" = "무엇을 먹었나요?";
@@ -336,11 +336,11 @@
 "Woke at %@" = "%@에 깸";
 "Yellow" = "노란색";
 "Yesterday" = "어제";
-"You're a Lullo Supporter" = "Lullo 서포터가 되셨어요";
-"You've supported Lullo %@ times 💖" = "Lullo를 %@번 후원해 주셨어요 💖";
+"You're a Tinytide Supporter" = "Tinytide 서포터가 되셨어요";
+"You've supported Tinytide %@ times 💖" = "Tinytide를 %@번 후원해 주셨어요 💖";
 "Your data is stored in your private iCloud database and backed up automatically. On a new iPhone, sign in with the same Apple ID and install the app: everything downloads automatically." = "데이터는 비공개 iCloud 데이터베이스에 저장되고 자동으로 백업돼요. 새 iPhone에서 같은 Apple ID로 로그인하고 앱을 설치하면 모든 데이터가 자동으로 다운로드돼요.";
 "Your name (shown on entries)" = "내 이름(기록에 표시됨)";
-"Your support means a lot. It goes straight into making Lullo better for every tired parent out there." = "보내 주신 응원은 정말 큰 힘이 돼요. 지친 모든 부모님을 위해 Lullo를 더 좋게 만드는 데 바로 쓰여요.";
+"Your support means a lot. It goes straight into making Tinytide better for every tired parent out there." = "보내 주신 응원은 정말 큰 힘이 돼요. 지친 모든 부모님을 위해 Tinytide를 더 좋게 만드는 데 바로 쓰여요.";
 "Your tip is waiting for approval. Thank you!" = "팁이 승인을 기다리고 있어요. 감사해요!";
 "cm" = "cm";
 "e.g. cough, runny nose, rash" = "예: 기침, 콧물, 발진";

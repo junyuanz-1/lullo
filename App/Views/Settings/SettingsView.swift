@@ -245,7 +245,7 @@ struct SettingsView: View {
             } label: {
                 HStack {
                     Label {
-                        Text("Lullo Supporter")
+                        Text("Tinytide Supporter")
                     } icon: {
                         Image(systemName: "moon.stars.fill").foregroundStyle(.indigo)
                     }
@@ -274,9 +274,9 @@ struct SettingsView: View {
                 }
             }
         } header: {
-            Text("Support Lullo")
+            Text("Support Tinytide")
         } footer: {
-            Text("Every tracking feature is free. A subscription or tip helps keep Lullo independent and ad-free.")
+            Text("Every tracking feature is free. A subscription or tip helps keep Tinytide independent and ad-free.")
         }
     }
 

@@ -2,7 +2,7 @@ import StoreKit
 import SwiftUI
 import UIKit
 
-/// "Support Lullo": three optional tips and a thank-you page.
+/// "Support Tinytide": three optional tips and a thank-you page.
 struct TipJarView: View {
     @StateObject private var tipJar = TipJar.shared
     @State private var thankedTier: TipJar.Tier?
@@ -54,7 +54,7 @@ struct TipJarView: View {
             .padding()
         }
         .background(Color(.systemGroupedBackground))
-        .navigationTitle("Support Lullo")
+        .navigationTitle("Support Tinytide")
         .navigationBarTitleDisplayMode(.inline)
         .task { if tipJar.loadState == .idle { await tipJar.loadProducts() } }
         .sheet(item: $thankedTier) { tier in
@@ -67,9 +67,9 @@ struct TipJarView: View {
             Image(systemName: "heart.circle.fill")
                 .font(.system(size: 64))
                 .foregroundStyle(.pink.gradient)
-            Text("Enjoying Lullo?")
+            Text("Enjoying Tinytide?")
                 .font(.title2.bold())
-            Text("Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going.")
+            Text("Tinytide is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going.")
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
         }
@@ -160,12 +160,12 @@ struct TipThanksView: View {
 
             Text("Thank you!")
                 .font(.largeTitle.bold())
-            Text("Your support means a lot. It goes straight into making Lullo better for every tired parent out there.")
+            Text("Your support means a lot. It goes straight into making Tinytide better for every tired parent out there.")
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
                 .padding(.horizontal)
             if totalTips > 1 {
-                Label(String(localized: "You've supported Lullo \(String(totalTips)) times 💖"), systemImage: "sparkles")
+                Label(String(localized: "You've supported Tinytide \(String(totalTips)) times 💖"), systemImage: "sparkles")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.pink)
             }

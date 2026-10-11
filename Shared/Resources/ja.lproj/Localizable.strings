@@ -50,7 +50,7 @@
 "Based on typical wake windows for this age." = "この月齢の一般的な活動時間をもとに予測しています。";
 "Bassinet" = "バシネット";
 "Bath" = "お風呂";
-"Become a Lullo Supporter" = "Lulloサポーターになる";
+"Become a Tinytide Supporter" = "Tinytideサポーターになる";
 "Bed" = "ベッド";
 "Bedtime" = "就寝";
 "Bedtime is coming up for %@" = "%@の就寝時間が近づいています";
@@ -100,11 +100,11 @@
 "Edit" = "編集";
 "Edit Baby" = "赤ちゃんを編集";
 "End" = "終了";
-"Enjoying Lullo?" = "Lulloを気に入っていただけましたか？";
+"Enjoying Tinytide?" = "Tinytideを気に入っていただけましたか？";
 "Entries you log will appear here." = "記録した内容がここに表示されます。";
 "Event ID" = "記録ID";
-"Every tracking feature is free. A subscription or tip helps keep Lullo independent and ad-free." = "記録機能はすべて無料です。サブスクリプションやチップは、Lulloが広告なしの独立したAppであり続けるための支えになります。";
-"Every tracking feature stays free for everyone. Supporters keep Lullo independent and get a few extras as a thank-you." = "記録機能はこれからも、すべての方に無料でお使いいただけます。サポーターの皆さまはLulloの独立を支えてくださる存在です。感謝の気持ちとして、ちょっとした特典をご用意しています。";
+"Every tracking feature is free. A subscription or tip helps keep Tinytide independent and ad-free." = "記録機能はすべて無料です。サブスクリプションやチップは、Tinytideが広告なしの独立したAppであり続けるための支えになります。";
+"Every tracking feature stays free for everyone. Supporters keep Tinytide independent and get a few extras as a thank-you." = "記録機能はこれからも、すべての方に無料でお使いいただけます。サポーターの皆さまはTinytideの独立を支えてくださる存在です。感謝の気持ちとして、ちょっとした特典をご用意しています。";
 "Export Backup File" = "バックアップファイルを書き出す";
 "Export Spreadsheet (CSV)" = "表計算ファイルを書き出す（CSV）";
 "Family & Caregivers" = "家族・お世話する人";
@@ -127,7 +127,7 @@
 "Head %@" = "頭囲 %@";
 "Health" = "健康";
 "Help & FAQ" = "ヘルプとよくある質問";
-"Helps keep Lullo ad-free." = "Lulloの広告なし運営を支えます。";
+"Helps keep Tinytide ad-free." = "Tinytideの広告なし運営を支えます。";
 "Imperial (oz, lb, in)" = "ヤード・ポンド法（oz、lb、in）";
 "Import" = "読み込む";
 "Import Backup File" = "バックアップファイルを読み込む";
@@ -157,8 +157,8 @@
 "Logs a diaper change now." = "今のおむつ替えを記録します。";
 "Loved it" = "大好き";
 "Lullaby" = "ララバイ";
-"Lullo Supporter" = "Lulloサポーター";
-"Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "Lulloは広告もトラッキングもない、個人開発のAppです。夜が少しでもラクになったと感じていただけたら、チップで応援していただけるとうれしいです。";
+"Tinytide Supporter" = "Tinytideサポーター";
+"Tinytide is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "Tinytideは広告もトラッキングもない、個人開発のAppです。夜が少しでもラクになったと感じていただけたら、チップで応援していただけるとうれしいです。";
 "Manage" = "管理";
 "Manage sharing for %@" = "%@の共有を管理";
 "Massage" = "ベビーマッサージ";
@@ -283,7 +283,7 @@
 "Suggested bedtime" = "おすすめの就寝時刻";
 "Sunrise" = "サンライズ";
 "Sunset" = "サンセット";
-"Support Lullo" = "Lulloを応援";
+"Support Tinytide" = "Tinytideを応援";
 "Supporter badge" = "サポーターバッジ";
 "Sweet spot: %@ – %@" = "ベストタイミング：%@〜%@";
 "Switch Side" = "左右を切り替え";
@@ -318,7 +318,7 @@
 "Tummy time" = "うつ伏せ遊び";
 "Type" = "種類";
 "Units" = "単位";
-"Unlock with Lullo Supporter" = "Lulloサポーターになると使えます";
+"Unlock with Tinytide Supporter" = "Tinytideサポーターになると使えます";
 "Vaccine" = "予防接種";
 "Vaccine name" = "ワクチン名";
 "Version" = "バージョン";
@@ -327,7 +327,7 @@
 "Wake Up" = "起きた";
 "Watch for hives, swelling, vomiting or trouble breathing. Call emergency services if breathing is affected." = "じんましん、腫れ、嘔吐、呼吸が苦しそうな様子がないか注意してください。呼吸に影響がある場合は、すぐに救急車を呼んでください。";
 "Weight" = "体重";
-"Welcome to Lullo" = "Lulloへようこそ";
+"Welcome to Tinytide" = "Tinytideへようこそ";
 "Wet" = "おしっこ";
 "Wet + Dirty" = "おしっこ＋うんち";
 "What did they eat?" = "何を食べましたか？";
@@ -336,11 +336,11 @@
 "Woke at %@" = "%@に起床";
 "Yellow" = "黄色";
 "Yesterday" = "昨日";
-"You're a Lullo Supporter" = "あなたはLulloサポーターです";
-"You've supported Lullo %@ times 💖" = "これまで%@回Lulloを応援していただきました 💖";
+"You're a Tinytide Supporter" = "あなたはTinytideサポーターです";
+"You've supported Tinytide %@ times 💖" = "これまで%@回Tinytideを応援していただきました 💖";
 "Your data is stored in your private iCloud database and backed up automatically. On a new iPhone, sign in with the same Apple ID and install the app: everything downloads automatically." = "データはあなた専用のiCloudデータベースに保存され、自動的にバックアップされます。新しいiPhoneでは、同じApple IDでサインインしてAppをインストールするだけで、すべてのデータが自動的にダウンロードされます。";
 "Your name (shown on entries)" = "あなたの名前（記録に表示されます）";
-"Your support means a lot. It goes straight into making Lullo better for every tired parent out there." = "応援が大きな励みになります。いただいたご支援は、毎日がんばるすべてのパパ・ママのためにLulloをより良くすることに直接使われます。";
+"Your support means a lot. It goes straight into making Tinytide better for every tired parent out there." = "応援が大きな励みになります。いただいたご支援は、毎日がんばるすべてのパパ・ママのためにTinytideをより良くすることに直接使われます。";
 "Your tip is waiting for approval. Thank you!" = "チップは承認待ちです。ありがとうございます！";
 "cm" = "cm";
 "e.g. cough, runny nose, rash" = "例：せき、鼻水、発疹";

@@ -1,11 +1,11 @@
 import UIKit
 import XCTest
-@testable import Lullo
+@testable import Tinytide
 
 final class TipJarTests: XCTestCase {
-    /// Product IDs must match App Store Connect and Config/Lullo.storekit.
+    /// Product IDs must match App Store Connect and Config/Tinytide.storekit.
     func testProductIDsMatchStoreKitConfiguration() throws {
-        XCTAssertEqual(TipJar.Tier.allCases.map(\.productID), ["lullo.tip.small", "lullo.tip.medium", "lullo.tip.large"])
+        XCTAssertEqual(TipJar.Tier.allCases.map(\.productID), ["tinytide.tip.small", "tinytide.tip.medium", "tinytide.tip.large"])
         for tier in TipJar.Tier.allCases {
             XCTAssertFalse(tier.fallbackTitle.isEmpty)
             XCTAssertFalse(tier.blurb.isEmpty)
@@ -15,9 +15,9 @@ final class TipJarTests: XCTestCase {
 }
 
 final class SupporterTests: XCTestCase {
-    /// Product IDs must match App Store Connect and Config/Lullo.storekit.
+    /// Product IDs must match App Store Connect and Config/Tinytide.storekit.
     func testSubscriptionProductIDs() {
-        XCTAssertEqual(Supporter.productIDs, ["lullo.supporter.monthly", "lullo.supporter.yearly"])
+        XCTAssertEqual(Supporter.productIDs, ["tinytide.supporter.monthly", "tinytide.supporter.yearly"])
     }
 
     func testOnlyDefaultsAreFree() {

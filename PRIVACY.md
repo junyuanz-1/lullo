@@ -1,4 +1,4 @@
-# Lullo Privacy Policy / 摇摇隐私政策
+# Tinytide Privacy Policy / 摇摇隐私政策
 
 _Last updated: October 11, 2026_
 
@@ -8,14 +8,14 @@ _Last updated: October 11, 2026_
 
 ## English
 
-Lullo is designed so that **your family's data stays with you**.
+Tinytide is designed so that **your family's data stays with you**.
 
-**What we collect:** nothing. Lullo has no servers, no accounts, no analytics,
+**What we collect:** nothing. Tinytide has no servers, no accounts, no analytics,
 no advertising and no tracking. The developer cannot see anything you log.
 
 **Where your data is stored**
 - On your device, and in **your own private iCloud database** (Apple CloudKit),
-  if you are signed in to iCloud. This is how Lullo backs up your data and syncs
+  if you are signed in to iCloud. This is how Tinytide backs up your data and syncs
   it between your devices. Apple handles this storage under
   [Apple's Privacy Policy](https://www.apple.com/legal/privacy/).
 - Widgets and Live Activities read a small summary stored on your device.
@@ -31,14 +31,14 @@ where you send them.
 **Notifications:** reminders are scheduled locally on your device.
 
 **Tips:** optional tips are processed entirely by Apple through In-App
-Purchase. Lullo never receives your payment details.
+Purchase. Tinytide never receives your payment details.
 
-**Children's privacy:** Lullo is used by parents and caregivers to record
+**Children's privacy:** Tinytide is used by parents and caregivers to record
 information about their children. It does not collect any of that information.
 
 **Deleting your data:** delete a baby in **More → Babies**, or delete the app.
 To remove the iCloud copy, go to **Settings → [your name] → iCloud → Manage
-Account Storage → Lullo** on your iPhone.
+Account Storage → Tinytide** on your iPhone.
 
 **Contact:** questions about this policy can be sent to
 [lullo.support@gmail.com](mailto:lullo.support@gmail.com).
@@ -47,7 +47,7 @@ Account Storage → Lullo** on your iPhone.
 
 ## 简体中文
 
-摇摇（Lullo）的设计原则是：**你家的数据只属于你**。
+摇摇（Tinytide）的设计原则是：**你家的数据只属于你**。
 
 **我们收集什么数据：** 不收集任何数据。摇摇没有服务器、不需要注册账号，没有数据分析，没有广告，也没有任何追踪。开发者看不到你记录的任何内容。
 

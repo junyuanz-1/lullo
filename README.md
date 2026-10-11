@@ -1,6 +1,6 @@
-# Lullo 摇摇
+# Tinytide 摇摇
 
-**Lullo（摇摇）** 是一个类似 Huckleberry 的 iOS 宝宝记录 App：记录睡眠、喂养、尿布、吸奶、生长、健康和日常活动。数据通过 iCloud 同步和备份，可以与家人实时共享，支持锁屏 / 灵动岛实时计时（Live Activity）和桌面小组件。
+**Tinytide（摇摇）** 是一个类似 Huckleberry 的 iOS 宝宝记录 App：记录睡眠、喂养、尿布、吸奶、生长、健康和日常活动。数据通过 iCloud 同步和备份，可以与家人实时共享，支持锁屏 / 灵动岛实时计时（Live Activity）和桌面小组件。
 
 界面支持 **9 种语言**：English、简体中文、繁體中文、日本語、한국어、Español、Português (Brasil)、Français、Deutsch，跟随系统语言。
 
@@ -51,7 +51,7 @@
 
 ```
 DEVELOPMENT_TEAM = ABCDE12345          // 你的 Team ID（developer.apple.com → Membership）
-APP_BUNDLE_ID = com.yourname.Lullo
+APP_BUNDLE_ID = com.yourname.Tinytide
 ```
 
 App Group（`group.<Bundle ID>`）和 iCloud 容器（`iCloud.<Bundle ID>`）会根据 Bundle ID 自动生成，一般不用改。
@@ -59,7 +59,7 @@ App Group（`group.<Bundle ID>`）和 iCloud 容器（`iCloud.<Bundle ID>`）会
 ### 2. 打开工程
 
 ```bash
-open Lullo.xcodeproj
+open Tinytide.xcodeproj
 ```
 
 > 工程文件由 [XcodeGen](https://github.com/yonaskolb/XcodeGen) 根据 `project.yml` 生成，并且已经提交到仓库，所以不需要安装 XcodeGen 也能直接打开。
@@ -67,14 +67,14 @@ open Lullo.xcodeproj
 
 ### 3. 确认 Capabilities
 
-在 Xcode 中选择 **Lullo** target → **Signing & Capabilities**，确认以下几项都在，并且没有红色报错（自动签名会在你的开发者账号下注册这些标识符）：
+在 Xcode 中选择 **Tinytide** target → **Signing & Capabilities**，确认以下几项都在，并且没有红色报错（自动签名会在你的开发者账号下注册这些标识符）：
 
 - **iCloud**：勾选 CloudKit，容器为 `iCloud.<你的 Bundle ID>`
 - **App Groups**：`group.<你的 Bundle ID>`
 - **Push Notifications**（CloudKit 静默推送需要）
 - **Background Modes** → Remote notifications
 
-**LulloWidgets** target 需要同一个 App Group。
+**TinytideWidgets** target 需要同一个 App Group。
 
 如果 iCloud 容器显示红色，点刷新按钮，或者在 Capabilities 里取消勾选后再重新勾选。
 
@@ -84,14 +84,14 @@ open Lullo.xcodeproj
 
 ### 5. 订阅与打赏（App 内购买）
 
-在模拟器里**不需要任何配置**：scheme 已经关联了 `Config/Lullo.storekit`，运行后进入 **更多 → 支持摇摇** 就能测试订阅和打赏（Xcode → Debug → StoreKit → Manage Transactions 可以查看和退款测试交易）。
+在模拟器里**不需要任何配置**：scheme 已经关联了 `Config/Tinytide.storekit`，运行后进入 **更多 → 支持摇摇** 就能测试订阅和打赏（Xcode → Debug → StoreKit → Manage Transactions 可以查看和退款测试交易）。
 
-上架前，**订阅**：在 App Store Connect → 你的 App → **订阅** 中创建订阅组 "Lullo Supporter"，组内放两个同级的自动续期订阅，并开启 **家人共享**：
+上架前，**订阅**：在 App Store Connect → 你的 App → **订阅** 中创建订阅组 "Tinytide Supporter"，组内放两个同级的自动续期订阅，并开启 **家人共享**：
 
 | 产品 ID | 周期 | 建议价格 |
 |---|---|---|
-| `lullo.supporter.monthly` | 1 个月 | $0.99 / ¥1 |
-| `lullo.supporter.yearly` | 1 年 | $9.99 / ¥10 |
+| `tinytide.supporter.monthly` | 1 个月 | $0.99 / ¥1 |
+| `tinytide.supporter.yearly` | 1 年 | $9.99 / ¥10 |
 
 订阅需要隐私政策链接。官网在 [junyuanz1/lullo-site](https://github.com/junyuanz1/lullo-site)（GitHub Pages），App Store Connect 里填写：
 
@@ -107,9 +107,9 @@ App 内的隐私政策链接来自 `Config/Shared.xcconfig` 里的 `PRIVACY_POLI
 
 | 产品 ID | 建议价格 | 英文名 | 中文名 |
 |---|---|---|---|
-| `lullo.tip.small` | $0.99 / ¥6 | A cup of coffee | 请喝一杯咖啡 |
-| `lullo.tip.medium` | $2.99 / ¥18 | A slice of cake | 请吃一块蛋糕 |
-| `lullo.tip.large` | $6.99 / ¥45 | A nice lunch | 请吃一顿午餐 |
+| `tinytide.tip.small` | $0.99 / ¥6 | A cup of coffee | 请喝一杯咖啡 |
+| `tinytide.tip.medium` | $2.99 / ¥18 | A slice of cake | 请吃一块蛋糕 |
+| `tinytide.tip.large` | $6.99 / ¥45 | A nice lunch | 请吃一顿午餐 |
 
 第一次提交审核时，需要把这些订阅和内购项目和 App 版本一起提交。
 
@@ -148,7 +148,7 @@ App 内的隐私政策链接来自 `Config/Shared.xcconfig` 里的 `PRIVACY_POLI
 ```
 project.yml                 XcodeGen 工程定义
 Config/Shared.xcconfig      Team ID、Bundle ID、App Group、iCloud 容器
-Config/Lullo.storekit       本地 StoreKit 测试配置（打赏）
+Config/Tinytide.storekit       本地 StoreKit 测试配置（打赏）
 Packages/BabyCore/          纯 Swift 核心逻辑（无 UI 依赖，有单元测试）
   ├─ Records.swift          BabyRecord / EventRecord 值类型
   ├─ NursingTimer.swift     左右侧亲喂计时逻辑
@@ -165,7 +165,7 @@ App/
   └─ Views/                 首页、记录、趋势、生长、设置、编辑器
 Shared/                     App 与小组件共用：App Group、显示名称、格式化、Live Activity 属性、App Intents、本地化
 Widgets/                    主屏幕 / 锁屏小组件、Live Activity 界面
-Tests/LulloTests/   App 层单元测试
+Tests/TinytideTests/   App 层单元测试
 .github/workflows/ci.yml    CI
 ```
 
@@ -179,7 +179,7 @@ Tests/LulloTests/   App 层单元测试
 | 测试 | 内容 |
 |---|---|
 | `Packages/BabyCore/Tests` | 核心逻辑：亲喂计时、每日统计、24 小时作息、WHO 百分位（与官方数值核对）、小睡预测、备份格式与合并、CSV、Widget 快照、单位换算 |
-| `Tests/LulloTests` | App 层（内存 Core Data）：TrackerStore 计时器 / 亲喂换边 / 保存 / 删除级联、备份导出→导入往返和去重、Core Data 模型的 CloudKit 兼容性、中英文翻译完整性 |
+| `Tests/TinytideTests` | App 层（内存 Core Data）：TrackerStore 计时器 / 亲喂换边 / 保存 / 删除级联、备份导出→导入往返和去重、Core Data 模型的 CloudKit 兼容性、中英文翻译完整性 |
 
 ```bash
 cd Packages/BabyCore && swift test     # 核心逻辑，macOS / Linux 都能跑
@@ -195,7 +195,7 @@ cd Packages/BabyCore && swift test     # 核心逻辑，macOS / Linux 都能跑
 
 ### 本地化
 
-界面文字以英文作为 key，各语言的翻译在 `Shared/Resources/<语言>.lproj/Localizable.strings`；App 名称在 `App/Resources/<语言>.lproj/InfoPlist.strings`，Siri 短语在 `AppShortcuts.strings`；订阅和打赏商品的本地化名称在 `Config/Lullo.storekit`（App Store Connect 里也要填写同样的名称）。
+界面文字以英文作为 key，各语言的翻译在 `Shared/Resources/<语言>.lproj/Localizable.strings`；App 名称在 `App/Resources/<语言>.lproj/InfoPlist.strings`，Siri 短语在 `AppShortcuts.strings`；订阅和打赏商品的本地化名称在 `Config/Tinytide.storekit`（App Store Connect 里也要填写同样的名称）。
 
 新增或修改界面文字后运行：
 
@@ -217,7 +217,7 @@ python3 scripts/check_localizations.py
 
 ## 许可证
 
-本项目为**专有软件，保留所有权利**，详见 [`LICENSE`](LICENSE)。"Lullo"、"摇摇"及其图标为版权所有者的商标。第三方数据和工具的声明见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
+本项目为**专有软件，保留所有权利**，详见 [`LICENSE`](LICENSE)。"Tinytide"、"摇摇"及其图标为版权所有者的商标。第三方数据和工具的声明见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
 
 ## 免责声明
 

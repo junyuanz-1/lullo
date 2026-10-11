@@ -50,7 +50,7 @@
 "Based on typical wake windows for this age." = "Based on typical wake windows for this age.";
 "Bassinet" = "Bassinet";
 "Bath" = "Bath";
-"Become a Lullo Supporter" = "Become a Lullo Supporter";
+"Become a Tinytide Supporter" = "Become a Tinytide Supporter";
 "Bed" = "Bed";
 "Bedtime" = "Bedtime";
 "Bedtime is coming up for %@" = "Bedtime is coming up for %@";
@@ -100,11 +100,11 @@
 "Edit" = "Edit";
 "Edit Baby" = "Edit Baby";
 "End" = "End";
-"Enjoying Lullo?" = "Enjoying Lullo?";
+"Enjoying Tinytide?" = "Enjoying Tinytide?";
 "Entries you log will appear here." = "Entries you log will appear here.";
 "Event ID" = "Event ID";
-"Every tracking feature is free. A subscription or tip helps keep Lullo independent and ad-free." = "Every tracking feature is free. A subscription or tip helps keep Lullo independent and ad-free.";
-"Every tracking feature stays free for everyone. Supporters keep Lullo independent and get a few extras as a thank-you." = "Every tracking feature stays free for everyone. Supporters keep Lullo independent and get a few extras as a thank-you.";
+"Every tracking feature is free. A subscription or tip helps keep Tinytide independent and ad-free." = "Every tracking feature is free. A subscription or tip helps keep Tinytide independent and ad-free.";
+"Every tracking feature stays free for everyone. Supporters keep Tinytide independent and get a few extras as a thank-you." = "Every tracking feature stays free for everyone. Supporters keep Tinytide independent and get a few extras as a thank-you.";
 "Export Backup File" = "Export Backup File";
 "Export Spreadsheet (CSV)" = "Export Spreadsheet (CSV)";
 "Family & Caregivers" = "Family & Caregivers";
@@ -127,7 +127,7 @@
 "Head %@" = "Head %@";
 "Health" = "Health";
 "Help & FAQ" = "Help & FAQ";
-"Helps keep Lullo ad-free." = "Helps keep Lullo ad-free.";
+"Helps keep Tinytide ad-free." = "Helps keep Tinytide ad-free.";
 "Imperial (oz, lb, in)" = "Imperial (oz, lb, in)";
 "Import" = "Import";
 "Import Backup File" = "Import Backup File";
@@ -157,8 +157,8 @@
 "Logs a diaper change now." = "Logs a diaper change now.";
 "Loved it" = "Loved it";
 "Lullaby" = "Lullaby";
-"Lullo Supporter" = "Lullo Supporter";
-"Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going.";
+"Tinytide Supporter" = "Tinytide Supporter";
+"Tinytide is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "Tinytide is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going.";
 "Manage" = "Manage";
 "Manage sharing for %@" = "Manage sharing for %@";
 "Massage" = "Massage";
@@ -283,7 +283,7 @@
 "Suggested bedtime" = "Suggested bedtime";
 "Sunrise" = "Sunrise";
 "Sunset" = "Sunset";
-"Support Lullo" = "Support Lullo";
+"Support Tinytide" = "Support Tinytide";
 "Supporter badge" = "Supporter badge";
 "Sweet spot: %@ – %@" = "Sweet spot: %@ – %@";
 "Switch Side" = "Switch Side";
@@ -318,7 +318,7 @@
 "Tummy time" = "Tummy time";
 "Type" = "Type";
 "Units" = "Units";
-"Unlock with Lullo Supporter" = "Unlock with Lullo Supporter";
+"Unlock with Tinytide Supporter" = "Unlock with Tinytide Supporter";
 "Vaccine" = "Vaccine";
 "Vaccine name" = "Vaccine name";
 "Version" = "Version";
@@ -327,7 +327,7 @@
 "Wake Up" = "Wake Up";
 "Watch for hives, swelling, vomiting or trouble breathing. Call emergency services if breathing is affected." = "Watch for hives, swelling, vomiting or trouble breathing. Call emergency services if breathing is affected.";
 "Weight" = "Weight";
-"Welcome to Lullo" = "Welcome to Lullo";
+"Welcome to Tinytide" = "Welcome to Tinytide";
 "Wet" = "Wet";
 "Wet + Dirty" = "Wet + Dirty";
 "What did they eat?" = "What did they eat?";
@@ -336,11 +336,11 @@
 "Woke at %@" = "Woke at %@";
 "Yellow" = "Yellow";
 "Yesterday" = "Yesterday";
-"You're a Lullo Supporter" = "You're a Lullo Supporter";
-"You've supported Lullo %@ times 💖" = "You've supported Lullo %@ times 💖";
+"You're a Tinytide Supporter" = "You're a Tinytide Supporter";
+"You've supported Tinytide %@ times 💖" = "You've supported Tinytide %@ times 💖";
 "Your data is stored in your private iCloud database and backed up automatically. On a new iPhone, sign in with the same Apple ID and install the app: everything downloads automatically." = "Your data is stored in your private iCloud database and backed up automatically. On a new iPhone, sign in with the same Apple ID and install the app: everything downloads automatically.";
 "Your name (shown on entries)" = "Your name (shown on entries)";
-"Your support means a lot. It goes straight into making Lullo better for every tired parent out there." = "Your support means a lot. It goes straight into making Lullo better for every tired parent out there.";
+"Your support means a lot. It goes straight into making Tinytide better for every tired parent out there." = "Your support means a lot. It goes straight into making Tinytide better for every tired parent out there.";
 "Your tip is waiting for approval. Thank you!" = "Your tip is waiting for approval. Thank you!";
 "cm" = "cm";
 "e.g. cough, runny nose, rash" = "e.g. cough, runny nose, rash";

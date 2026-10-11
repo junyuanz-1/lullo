@@ -53,7 +53,7 @@
           "locale": "de"
         }
       ],
-      "productID": "lullo.tip.small",
+      "productID": "tinytide.tip.small",
       "referenceName": "Tip - Small",
       "type": "Consumable"
     },
@@ -63,7 +63,7 @@
       "internalID": "6740000002",
       "localizations": [
         {
-          "description": "Helps keep Lullo ad-free.",
+          "description": "Helps keep Tinytide ad-free.",
           "displayName": "A slice of cake",
           "locale": "en_US"
         },
@@ -78,37 +78,37 @@
           "locale": "zh_Hant"
         },
         {
-          "description": "Lulloの広告なし運営を支えます。",
+          "description": "Tinytideの広告なし運営を支えます。",
           "displayName": "ケーキひと切れ",
           "locale": "ja"
         },
         {
-          "description": "Lullo가 광고 없이 운영되도록 도와줘요.",
+          "description": "Tinytide가 광고 없이 운영되도록 도와줘요.",
           "displayName": "케이크 한 조각",
           "locale": "ko"
         },
         {
-          "description": "Ayuda a que Lullo siga sin anuncios.",
+          "description": "Ayuda a que Tinytide siga sin anuncios.",
           "displayName": "Un trozo de pastel",
           "locale": "es_ES"
         },
         {
-          "description": "Ajuda a manter o Lullo sem anúncios.",
+          "description": "Ajuda a manter o Tinytide sem anúncios.",
           "displayName": "Uma fatia de bolo",
           "locale": "pt_BR"
         },
         {
-          "description": "Aide Lullo à rester sans publicité.",
+          "description": "Aide Tinytide à rester sans publicité.",
           "displayName": "Une part de gâteau",
           "locale": "fr"
         },
         {
-          "description": "Hilft, Lullo werbefrei zu halten.",
+          "description": "Hilft, Tinytide werbefrei zu halten.",
           "displayName": "Ein Stück Kuchen",
           "locale": "de"
         }
       ],
-      "productID": "lullo.tip.medium",
+      "productID": "tinytide.tip.medium",
       "referenceName": "Tip - Medium",
       "type": "Consumable"
     },
@@ -163,7 +163,7 @@
           "locale": "de"
         }
       ],
-      "productID": "lullo.tip.large",
+      "productID": "tinytide.tip.large",
       "referenceName": "Tip - Large",
       "type": "Consumable"
     }
@@ -180,7 +180,7 @@
       "localizations": [
         {
           "description": "",
-          "displayName": "Lullo Supporter",
+          "displayName": "Tinytide Supporter",
           "locale": "en_US"
         },
         {
@@ -195,36 +195,36 @@
         },
         {
           "description": "",
-          "displayName": "Lulloサポーター",
+          "displayName": "Tinytideサポーター",
           "locale": "ja"
         },
         {
           "description": "",
-          "displayName": "Lullo 서포터",
+          "displayName": "Tinytide 서포터",
           "locale": "ko"
         },
         {
           "description": "",
-          "displayName": "Lullo Supporter",
+          "displayName": "Tinytide Supporter",
           "locale": "es_ES"
         },
         {
           "description": "",
-          "displayName": "Apoiador Lullo",
+          "displayName": "Apoiador Tinytide",
           "locale": "pt_BR"
         },
         {
           "description": "",
-          "displayName": "Soutien Lullo",
+          "displayName": "Soutien Tinytide",
           "locale": "fr"
         },
         {
           "description": "",
-          "displayName": "Lullo-Unterstützer",
+          "displayName": "Tinytide-Unterstützer",
           "locale": "de"
         }
       ],
-      "name": "Lullo Supporter",
+      "name": "Tinytide Supporter",
       "subscriptions": [
         {
           "adHocOffers": [],
@@ -236,7 +236,7 @@
           "introductoryOffer": null,
           "localizations": [
             {
-              "description": "Support Lullo and unlock app icons and themes.",
+              "description": "Support Tinytide and unlock app icons and themes.",
               "displayName": "Supporter (Monthly)",
               "locale": "en_US"
             },
@@ -251,37 +251,37 @@
               "locale": "zh_Hant"
             },
             {
-              "description": "Lulloを応援して、Appアイコンとテーマを解除できます。",
+              "description": "Tinytideを応援して、Appアイコンとテーマを解除できます。",
               "displayName": "サポーター（月額）",
               "locale": "ja"
             },
             {
-              "description": "Lullo를 후원하고 앱 아이콘과 테마를 잠금 해제하세요.",
+              "description": "Tinytide를 후원하고 앱 아이콘과 테마를 잠금 해제하세요.",
               "displayName": "서포터(월간)",
               "locale": "ko"
             },
             {
-              "description": "Apoya a Lullo y desbloquea iconos y temas para la app.",
-              "displayName": "Lullo Supporter (mensual)",
+              "description": "Apoya a Tinytide y desbloquea iconos y temas para la app.",
+              "displayName": "Tinytide Supporter (mensual)",
               "locale": "es_ES"
             },
             {
-              "description": "Apoie o Lullo e desbloqueie ícones do app e temas.",
-              "displayName": "Apoiador Lullo (Mensal)",
+              "description": "Apoie o Tinytide e desbloqueie ícones do app e temas.",
+              "displayName": "Apoiador Tinytide (Mensal)",
               "locale": "pt_BR"
             },
             {
-              "description": "Soutenez Lullo et débloquez icônes et thèmes.",
-              "displayName": "Soutien Lullo (mensuel)",
+              "description": "Soutenez Tinytide et débloquez icônes et thèmes.",
+              "displayName": "Soutien Tinytide (mensuel)",
               "locale": "fr"
             },
             {
-              "description": "Unterstütze Lullo und schalte App-Symbole und Designfarben frei.",
+              "description": "Unterstütze Tinytide und schalte App-Symbole und Designfarben frei.",
               "displayName": "Unterstützer (monatlich)",
               "locale": "de"
             }
           ],
-          "productID": "lullo.supporter.monthly",
+          "productID": "tinytide.supporter.monthly",
           "recurringSubscriptionPeriod": "P1M",
           "referenceName": "Supporter Monthly",
           "subscriptionGroupID": "21500001",
@@ -297,7 +297,7 @@
           "introductoryOffer": null,
           "localizations": [
             {
-              "description": "Support Lullo for a year and save 16%.",
+              "description": "Support Tinytide for a year and save 16%.",
               "displayName": "Supporter (Yearly)",
               "locale": "en_US"
             },
@@ -312,37 +312,37 @@
               "locale": "zh_Hant"
             },
             {
-              "description": "Lulloを1年間応援。16%おトクです。",
+              "description": "Tinytideを1年間応援。16%おトクです。",
               "displayName": "サポーター（年額）",
               "locale": "ja"
             },
             {
-              "description": "1년 동안 Lullo를 후원하고 16% 절약하세요.",
+              "description": "1년 동안 Tinytide를 후원하고 16% 절약하세요.",
               "displayName": "서포터(연간)",
               "locale": "ko"
             },
             {
-              "description": "Apoya a Lullo durante un año y ahorra un 16%.",
-              "displayName": "Lullo Supporter (anual)",
+              "description": "Apoya a Tinytide durante un año y ahorra un 16%.",
+              "displayName": "Tinytide Supporter (anual)",
               "locale": "es_ES"
             },
             {
-              "description": "Apoie o Lullo por um ano e economize 16%.",
-              "displayName": "Apoiador Lullo (Anual)",
+              "description": "Apoie o Tinytide por um ano e economize 16%.",
+              "displayName": "Apoiador Tinytide (Anual)",
               "locale": "pt_BR"
             },
             {
-              "description": "Soutenez Lullo pendant un an et économisez 16 %.",
-              "displayName": "Soutien Lullo (annuel)",
+              "description": "Soutenez Tinytide pendant un an et économisez 16 %.",
+              "displayName": "Soutien Tinytide (annuel)",
               "locale": "fr"
             },
             {
-              "description": "Unterstütze Lullo ein Jahr lang und spare 16 %.",
+              "description": "Unterstütze Tinytide ein Jahr lang und spare 16 %.",
               "displayName": "Unterstützer (jährlich)",
               "locale": "de"
             }
           ],
-          "productID": "lullo.supporter.yearly",
+          "productID": "tinytide.supporter.yearly",
           "recurringSubscriptionPeriod": "P1Y",
           "referenceName": "Supporter Yearly",
           "subscriptionGroupID": "21500001",

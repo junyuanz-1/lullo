@@ -50,7 +50,7 @@
 "Based on typical wake windows for this age." = "Según las ventanas de vigilia habituales para esta edad.";
 "Bassinet" = "Moisés";
 "Bath" = "Baño";
-"Become a Lullo Supporter" = "Hazte Lullo Supporter";
+"Become a Tinytide Supporter" = "Hazte Tinytide Supporter";
 "Bed" = "Cama";
 "Bedtime" = "Hora de dormir";
 "Bedtime is coming up for %@" = "Se acerca la hora de dormir de %@";
@@ -100,11 +100,11 @@
 "Edit" = "Editar";
 "Edit Baby" = "Editar bebé";
 "End" = "Fin";
-"Enjoying Lullo?" = "¿Te gusta Lullo?";
+"Enjoying Tinytide?" = "¿Te gusta Tinytide?";
 "Entries you log will appear here." = "Los registros que hagas aparecerán aquí.";
 "Event ID" = "ID del registro";
-"Every tracking feature is free. A subscription or tip helps keep Lullo independent and ad-free." = "Todas las funciones de registro son gratis. Una suscripción o una propina ayuda a que Lullo siga siendo independiente y sin anuncios.";
-"Every tracking feature stays free for everyone. Supporters keep Lullo independent and get a few extras as a thank-you." = "Todas las funciones de registro siguen siendo gratis para todos. Quienes apoyan a Lullo lo mantienen independiente y reciben algunos extras como agradecimiento.";
+"Every tracking feature is free. A subscription or tip helps keep Tinytide independent and ad-free." = "Todas las funciones de registro son gratis. Una suscripción o una propina ayuda a que Tinytide siga siendo independiente y sin anuncios.";
+"Every tracking feature stays free for everyone. Supporters keep Tinytide independent and get a few extras as a thank-you." = "Todas las funciones de registro siguen siendo gratis para todos. Quienes apoyan a Tinytide lo mantienen independiente y reciben algunos extras como agradecimiento.";
 "Export Backup File" = "Exportar copia de seguridad";
 "Export Spreadsheet (CSV)" = "Exportar hoja de cálculo (CSV)";
 "Family & Caregivers" = "Familia y cuidadores";
@@ -127,7 +127,7 @@
 "Head %@" = "Cabeza %@";
 "Health" = "Salud";
 "Help & FAQ" = "Ayuda y preguntas frecuentes";
-"Helps keep Lullo ad-free." = "Ayuda a que Lullo siga sin anuncios.";
+"Helps keep Tinytide ad-free." = "Ayuda a que Tinytide siga sin anuncios.";
 "Imperial (oz, lb, in)" = "Imperial (oz, lb, in)";
 "Import" = "Importar";
 "Import Backup File" = "Importar copia de seguridad";
@@ -157,8 +157,8 @@
 "Logs a diaper change now." = "Registra un cambio de pañal ahora.";
 "Loved it" = "Le encantó";
 "Lullaby" = "Arrullo";
-"Lullo Supporter" = "Lullo Supporter";
-"Lullo is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "Lullo es una app independiente, sin anuncios ni rastreo. Si te ha hecho las noches un poco más fáciles, una propina ayuda a que siga adelante.";
+"Tinytide Supporter" = "Tinytide Supporter";
+"Tinytide is an independent app with no ads and no tracking. If it has made your nights a little easier, a tip helps keep it going." = "Tinytide es una app independiente, sin anuncios ni rastreo. Si te ha hecho las noches un poco más fáciles, una propina ayuda a que siga adelante.";
 "Manage" = "Administrar";
 "Manage sharing for %@" = "Administrar el uso compartido de %@";
 "Massage" = "Masaje";
@@ -283,7 +283,7 @@
 "Suggested bedtime" = "Hora sugerida para dormir";
 "Sunrise" = "Amanecer";
 "Sunset" = "Atardecer";
-"Support Lullo" = "Apoya a Lullo";
+"Support Tinytide" = "Apoya a Tinytide";
 "Supporter badge" = "Insignia de Supporter";
 "Sweet spot: %@ – %@" = "Momento ideal: %@ – %@";
 "Switch Side" = "Cambiar de lado";
@@ -318,7 +318,7 @@
 "Tummy time" = "Tiempo boca abajo";
 "Type" = "Tipo";
 "Units" = "Unidades";
-"Unlock with Lullo Supporter" = "Desbloquéalo con Lullo Supporter";
+"Unlock with Tinytide Supporter" = "Desbloquéalo con Tinytide Supporter";
 "Vaccine" = "Vacuna";
 "Vaccine name" = "Nombre de la vacuna";
 "Version" = "Versión";
@@ -327,7 +327,7 @@
 "Wake Up" = "Despertó";
 "Watch for hives, swelling, vomiting or trouble breathing. Call emergency services if breathing is affected." = "Vigila si aparecen ronchas (urticaria), hinchazón, vómitos o dificultad para respirar. Si afecta a la respiración, llama a emergencias.";
 "Weight" = "Peso";
-"Welcome to Lullo" = "Te damos la bienvenida a Lullo";
+"Welcome to Tinytide" = "Te damos la bienvenida a Tinytide";
 "Wet" = "Mojado";
 "Wet + Dirty" = "Mojado + sucio";
 "What did they eat?" = "¿Qué comió?";
@@ -336,11 +336,11 @@
 "Woke at %@" = "Despertó: %@";
 "Yellow" = "Amarillo";
 "Yesterday" = "Ayer";
-"You're a Lullo Supporter" = "Eres Lullo Supporter";
-"You've supported Lullo %@ times 💖" = "Has apoyado a Lullo %@ veces 💖";
+"You're a Tinytide Supporter" = "Eres Tinytide Supporter";
+"You've supported Tinytide %@ times 💖" = "Has apoyado a Tinytide %@ veces 💖";
 "Your data is stored in your private iCloud database and backed up automatically. On a new iPhone, sign in with the same Apple ID and install the app: everything downloads automatically." = "Tus datos se guardan en tu base de datos privada de iCloud y se respaldan automáticamente. En un iPhone nuevo, inicia sesión con el mismo Apple ID e instala la app: todo se descarga automáticamente.";
 "Your name (shown on entries)" = "Tu nombre (aparece en los registros)";
-"Your support means a lot. It goes straight into making Lullo better for every tired parent out there." = "Tu apoyo significa mucho. Va directo a mejorar Lullo para todas las madres y padres cansados.";
+"Your support means a lot. It goes straight into making Tinytide better for every tired parent out there." = "Tu apoyo significa mucho. Va directo a mejorar Tinytide para todas las madres y padres cansados.";
 "Your tip is waiting for approval. Thank you!" = "Tu propina está pendiente de aprobación. ¡Gracias!";
 "cm" = "cm";
 "e.g. cough, runny nose, rash" = "p. ej., tos, mocos, sarpullido";

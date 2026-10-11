@@ -6,8 +6,8 @@
 // Your 10-character Team ID (Xcode → Settings → Accounts, or developer.apple.com → Membership).
 DEVELOPMENT_TEAM = RN7VL4B86Q
 
-// Must be unique on the App Store, e.g. com.yourname.Lullo
-APP_BUNDLE_ID = com.junyuanzheng.lullo
+// Must be unique on the App Store, e.g. com.yourname.Tinytide
+APP_BUNDLE_ID = app.tinytide.ios
 
 // Shared container between the app and its widgets. Must start with "group.".
 APP_GROUP_ID = group.$(APP_BUNDLE_ID)

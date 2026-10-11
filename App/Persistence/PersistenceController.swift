@@ -25,7 +25,7 @@ final class PersistenceController: @unchecked Sendable {
     private(set) var sharedStore: NSPersistentStore?
     private(set) var loadError: Error?
 
-    private let logger = Logger(subsystem: "Lullo", category: "Persistence")
+    private let logger = Logger(subsystem: "Tinytide", category: "Persistence")
 
     var viewContext: NSManagedObjectContext { container.viewContext }
 
@@ -33,7 +33,7 @@ final class PersistenceController: @unchecked Sendable {
 
     init(inMemory: Bool = false) {
         self.inMemory = inMemory
-        container = NSPersistentCloudKitContainer(name: "Lullo", managedObjectModel: ManagedModel.shared)
+        container = NSPersistentCloudKitContainer(name: "Tinytide", managedObjectModel: ManagedModel.shared)
 
         let privateDescription: NSPersistentStoreDescription
         let sharedDescription: NSPersistentStoreDescription

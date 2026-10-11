@@ -1,7 +1,7 @@
 import BabyCore
 import CoreData
 import XCTest
-@testable import Lullo
+@testable import Tinytide
 
 @MainActor
 final class BackupServiceTests: XCTestCase {

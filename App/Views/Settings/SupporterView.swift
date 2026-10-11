@@ -1,7 +1,7 @@
 import StoreKit
 import SwiftUI
 
-/// Subscription page for "Lullo Supporter", built on Apple's SubscriptionStoreView
+/// Subscription page for "Tinytide Supporter", built on Apple's SubscriptionStoreView
 /// (which shows prices, renewal terms, restore and policy links as App Review expects).
 struct SupporterView: View {
     @StateObject private var supporter = Supporter.shared
@@ -14,11 +14,11 @@ struct SupporterView: View {
                     .font(.system(size: 64))
                     .foregroundStyle(.pink.gradient)
                 Text(supporter.isSupporter
-                     ? String(localized: "You're a Lullo Supporter")
-                     : String(localized: "Become a Lullo Supporter"))
+                     ? String(localized: "You're a Tinytide Supporter")
+                     : String(localized: "Become a Tinytide Supporter"))
                     .font(.title2.bold())
                     .multilineTextAlignment(.center)
-                Text("Every tracking feature stays free for everyone. Supporters keep Lullo independent and get a few extras as a thank-you.")
+                Text("Every tracking feature stays free for everyone. Supporters keep Tinytide independent and get a few extras as a thank-you.")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
                 VStack(alignment: .leading, spacing: 10) {
@@ -50,7 +50,7 @@ struct SupporterView: View {
             }
         }
         .manageSubscriptionsSheet(isPresented: $managingSubscription)
-        .navigationTitle("Lullo Supporter")
+        .navigationTitle("Tinytide Supporter")
         .navigationBarTitleDisplayMode(.inline)
         .task { await supporter.refresh() }
     }
@@ -80,7 +80,7 @@ struct AppearanceView: View {
                     Button {
                         showingSupporter = true
                     } label: {
-                        Label("Unlock with Lullo Supporter", systemImage: "lock.open.fill")
+                        Label("Unlock with Tinytide Supporter", systemImage: "lock.open.fill")
                     }
                 }
             }

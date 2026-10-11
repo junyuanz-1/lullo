@@ -1,4 +1,4 @@
-name: Lullo
+name: Tinytide
 
 options:
   bundleIdPrefix: com.example
@@ -25,7 +25,7 @@ packages:
     path: Packages/BabyCore
 
 targets:
-  Lullo:
+  Tinytide:
     type: application
     platform: iOS
     sources:
@@ -33,19 +33,19 @@ targets:
       - path: Shared
     dependencies:
       - package: BabyCore
-      - target: LulloWidgets
+      - target: TinytideWidgets
         embed: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID)
-        PRODUCT_NAME: Lullo
+        PRODUCT_NAME: Tinytide
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: AppIcon-Midnight AppIcon-Sunrise AppIcon-Mint AppIcon-Blossom
     info:
       path: App/Info.plist
       properties:
-        CFBundleDisplayName: Lullo
+        CFBundleDisplayName: Tinytide
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDevelopmentRegion: en
@@ -64,14 +64,14 @@ targets:
         CloudKitContainerIdentifier: $(CLOUDKIT_CONTAINER_ID)
         PrivacyPolicyURL: $(PRIVACY_POLICY_URL)
     entitlements:
-      path: App/Lullo.entitlements
+      path: App/Tinytide.entitlements
       properties:
         aps-environment: development
         com.apple.developer.icloud-container-identifiers: [$(CLOUDKIT_CONTAINER_ID)]
         com.apple.developer.icloud-services: [CloudKit]
         com.apple.security.application-groups: [$(APP_GROUP_ID)]
 
-  LulloWidgets:
+  TinytideWidgets:
     type: app-extension
     platform: iOS
     sources:
@@ -84,13 +84,13 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID).Widgets
-        PRODUCT_NAME: LulloWidgets
+        PRODUCT_NAME: TinytideWidgets
         SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) WIDGET_EXTENSION
         SKIP_INSTALL: YES
     info:
       path: Widgets/Info.plist
       properties:
-        CFBundleDisplayName: Lullo Widgets
+        CFBundleDisplayName: Tinytide Widgets
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDevelopmentRegion: en
@@ -99,17 +99,17 @@ targets:
         AppGroupIdentifier: $(APP_GROUP_ID)
         CloudKitContainerIdentifier: $(CLOUDKIT_CONTAINER_ID)
     entitlements:
-      path: Widgets/LulloWidgets.entitlements
+      path: Widgets/TinytideWidgets.entitlements
       properties:
         com.apple.security.application-groups: [$(APP_GROUP_ID)]
 
-  LulloTests:
+  TinytideTests:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - path: Tests/LulloTests
+      - path: Tests/TinytideTests
     dependencies:
-      - target: Lullo
+      - target: Tinytide
       - package: BabyCore
     settings:
       base:
@@ -117,22 +117,22 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
 
 schemes:
-  Lullo:
+  Tinytide:
     build:
       targets:
-        Lullo: all
-        LulloWidgets: all
+        Tinytide: all
+        TinytideWidgets: all
     run:
       config: Debug
       # Local StoreKit testing for the tip jar; no App Store Connect setup needed in the simulator.
-      storeKitConfiguration: Config/Lullo.storekit
+      storeKitConfiguration: Config/Tinytide.storekit
     test:
       config: Debug
       gatherCoverageData: true
       coverageTargets:
-        - Lullo
+        - Tinytide
       targets:
-        - LulloTests
+        - TinytideTests
         - package: BabyCore/BabyCoreTests
     archive:
       config: Release

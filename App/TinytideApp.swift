@@ -4,7 +4,7 @@ import UIKit
 import UserNotifications
 
 @main
-struct LulloApp: App {
+struct TinytideApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var store = TrackerStore.shared
     @StateObject private var syncMonitor = SyncMonitor()

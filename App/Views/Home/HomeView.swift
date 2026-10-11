@@ -89,7 +89,7 @@ struct BabyHeader: View {
                 Image(systemName: "heart.circle.fill")
                     .font(.title2)
                     .foregroundStyle(.pink)
-                    .accessibilityLabel(Text("Lullo Supporter"))
+                    .accessibilityLabel(Text("Tinytide Supporter"))
             }
             if store.persistence.isShared(baby) {
                 Label("Shared", systemImage: "person.2.fill")
