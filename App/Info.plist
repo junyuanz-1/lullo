@@ -40,6 +40,8 @@
 	<string>$(CLOUDKIT_CONTAINER_ID)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSAlarmKitUsageDescription</key>
+	<string>Tinytide rings when a feeding, nap or activity countdown you set is up.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>NSSupportsLiveActivitiesFrequentUpdates</key>

@@ -58,6 +58,65 @@
           }
         }
       }
+    },
+    "NSAlarmKitUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tinytide klingelt, wenn ein von dir gestellter Countdown für Stillen, Nickerchen oder Aktivität abgelaufen ist."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tinytide rings when a feeding, nap or activity countdown you set is up."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tinytide suena cuando termina una cuenta atrás de toma, siesta o actividad que hayas puesto."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tinytide sonne à la fin d’un compte à rebours de tétée, de sieste ou d’activité que vous avez choisi."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定した授乳・お昼寝・アクティビティのカウントダウンが終わると、Tinytide がアラームでお知らせします。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정한 수유, 낮잠, 활동 카운트다운이 끝나면 Tinytide가 알람으로 알려줘요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Tinytide toca quando termina uma contagem regressiva de mamada, soneca ou atividade que você definiu."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当你设置的喂奶、小睡或活动倒计时结束时，摇摇会响铃提醒。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "當你設定的餵奶、小睡或活動倒數結束時，搖搖會響鈴提醒。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
