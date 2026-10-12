@@ -209,15 +209,21 @@ public enum Statistics {
         for (i, day) in days.enumerated() { index[day] = i }
 
         for event in events {
-            // A bottle timed for at least a minute is drawn as a block; a bottle
-            // logged without a duration stays a tick.
-            let timedBottle = event.kind == .bottle && event.duration(at: now) >= 60
-            // Likewise a fussy spell with an end time is a block, a moment a tick.
-            let timedFussy = event.kind == .fussy && event.duration(at: now) >= 60
+            let drawnAsBlock: Bool
             switch event.kind {
-            case .sleep, .nursing, .pumping,
-                 .bottle where timedBottle,
-                 .fussy where timedFussy:
+            case .sleep, .nursing, .pumping:
+                drawnAsBlock = true
+            case .bottle, .fussy:
+                // A bottle timed for at least a minute is drawn as a block, one
+                // logged without a duration as a tick; likewise a fussy spell
+                // with an end time and a fussy moment.
+                drawnAsBlock = event.duration(at: now) >= 60
+            case .solids, .diaper, .medication:
+                drawnAsBlock = false
+            default:
+                continue
+            }
+            if drawnAsBlock {
                 // Nursing is drawn from its start for its summed duration; good enough for a schedule view.
                 let end = event.kind == .nursing
                     ? event.startDate.addingTimeInterval(max(event.nursingTotal(at: now), 60))
@@ -229,12 +235,10 @@ public enum Statistics {
                     let e = min(rows[i].dayLength, end.timeIntervalSince(dayStart))
                     if e > s { rows[i].blocks.append(.init(start: s, end: e, kind: event.kind)) }
                 }
-            case .bottle, .solids, .diaper, .medication, .fussy:
+            } else {
                 let day = calendar.startOfDay(for: event.startDate)
                 guard let i = index[day] else { continue }
                 rows[i].marks.append(.init(offset: event.startDate.timeIntervalSince(day), kind: event.kind))
-            default:
-                continue
             }
         }
         return rows
