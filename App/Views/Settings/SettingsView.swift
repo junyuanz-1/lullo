@@ -262,6 +262,7 @@ struct SettingsView: View {
                 label: \.title,
                 systemImage: { _ in "speaker.wave.2.fill" }
             )
+            NavigationLink("Alarm Choices") { AlarmChoicesView() }
         } header: {
             Text("Timer Alarm")
         } footer: {
@@ -531,5 +532,69 @@ struct FeatureGuideView: View {
         }
         .padding(.vertical, 4)
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// Settings → Timer Alarm → Alarm Choices: the countdown pills offered for
+/// each kind when a timer starts, and in the bell menu on the timer card.
+struct AlarmChoicesView: View {
+    @ObservedObject private var alarms = TimerAlarms.shared
+    @State private var addingTo: EventKind?
+    /// Text rather than a number field: a formatted field only updates its value
+    /// on Return, which the number pad doesn't have.
+    @State private var newMinutes = ""
+
+    var body: some View {
+        Form {
+            Section {
+            } footer: {
+                Text("The times offered when you start a timer. Swipe left to remove one.")
+            }
+            ForEach(TimerAlarm.supportedKinds, id: \.self) { kind in
+                kindSection(kind)
+            }
+        }
+        .navigationTitle("Alarm Choices")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { EditButton() }
+        .alert("Add Time", isPresented: Binding(get: { addingTo != nil }, set: { if !$0 { addingTo = nil } })) {
+            TextField("min", text: $newMinutes)
+                .keyboardType(.numberPad)
+            Button("Add") {
+                if let kind = addingTo, let minutes = Int(newMinutes.trimmingCharacters(in: .whitespaces)) {
+                    alarms.setPresetMinutes(alarms.presetMinutes(for: kind) + [TimerAlarm.clampedMinutes(minutes)], for: kind)
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("From 1 to \(TimerAlarm.maxMinutes) minutes.")
+        }
+    }
+
+    private func kindSection(_ kind: EventKind) -> some View {
+        let presets = alarms.presetMinutes(for: kind)
+        return Section {
+            ForEach(presets, id: \.self) { minutes in
+                Label(Fmt.duration(TimeInterval(minutes * 60), style: .short), systemImage: "bell.fill")
+            }
+            .onDelete { offsets in
+                var remaining = presets
+                remaining.remove(atOffsets: offsets)
+                alarms.setPresetMinutes(remaining, for: kind)
+            }
+            if presets.count < TimerAlarm.maxPresets {
+                Button {
+                    newMinutes = ""
+                    addingTo = kind
+                } label: {
+                    Label("Add Time", systemImage: "plus")
+                }
+            }
+            if alarms.hasCustomPresets(for: kind) {
+                Button("Restore Defaults") { alarms.setPresetMinutes(nil, for: kind) }
+            }
+        } header: {
+            Label(kind.title, systemImage: kind.systemImage)
+        }
     }
 }

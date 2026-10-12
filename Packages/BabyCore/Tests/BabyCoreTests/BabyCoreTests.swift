@@ -517,6 +517,21 @@ final class TimerAlarmTests: XCTestCase {
         feed.pauseNursing(at: t.addingTimeInterval(1000))
         XCTAssertNil(TimerAlarm.fireDate(for: feed, after: 600, now: t.addingTimeInterval(1000)), "Paused")
     }
+
+    func testCustomPresetsAreTidied() {
+        XCTAssertEqual(TimerAlarm.normalizedPresets([10, 2, 10, 0, -5, 999, 7]), [2, 7, 10])
+        XCTAssertEqual(TimerAlarm.normalizedPresets(Array(1...20)).count, TimerAlarm.maxPresets)
+        XCTAssertEqual(TimerAlarm.normalizedPresets([]), [])
+    }
+
+    func testFineTunedCountdownGetsItsOwnPill() {
+        let presets = TimerAlarm.presetMinutes(for: .activity)
+        XCTAssertEqual(TimerAlarm.choices(presets: presets, selected: 2), [2, 3, 5, 10, 15, 30])
+        XCTAssertEqual(TimerAlarm.choices(presets: presets, selected: 5), presets, "Already a pill")
+        XCTAssertEqual(TimerAlarm.choices(presets: presets, selected: nil), presets)
+        XCTAssertEqual(TimerAlarm.clampedMinutes(0), 1)
+        XCTAssertEqual(TimerAlarm.clampedMinutes(1000), TimerAlarm.maxMinutes)
+    }
 }
 
 final class DemoDataTests: XCTestCase {

@@ -5,7 +5,15 @@ import SwiftUI
 /// Create or edit any kind of entry. Timer kinds can either start a live timer
 /// or be logged after the fact.
 struct EventEditorView: View {
-    enum Mode: Hashable { case timer, manual }
+    enum Mode: String, Hashable { case timer, manual }
+
+    /// The Timer / Log Past choice last made for `kind` on this phone, offered
+    /// again when the form opens without asking for one (the Bottle tile).
+    static func rememberedMode(for kind: EventKind) -> Mode? {
+        SharedContainer.defaults.string(forKey: modeKey(kind)).flatMap(Mode.init(rawValue:))
+    }
+
+    private static func modeKey(_ kind: EventKind) -> String { "editorMode.\(kind.rawValue)" }
 
     @EnvironmentObject private var store: TrackerStore
     @Environment(\.dismiss) private var dismiss
@@ -89,6 +97,10 @@ struct EventEditorView: View {
             }
         }
         .listSectionSpacing(.compact)
+        // Only a tap on the switch changes it; the starting mode is not a choice.
+        .onChange(of: mode) { _, newMode in
+            SharedContainer.defaults.set(newMode.rawValue, forKey: Self.modeKey(kind))
+        }
         .confirmationDialog("Delete this entry?", isPresented: $confirmingDelete, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
                 closing = true
@@ -116,8 +128,7 @@ struct EventEditorView: View {
                         .init(value: Mode.timer, title: String(localized: "Timer"), systemImage: "timer"),
                         .init(value: Mode.manual, title: String(localized: "Log Past"), systemImage: "clock.arrow.circlepath"),
                     ],
-                    selection: $mode,
-                    tint: kind.color
+                    selection: $mode
                 )
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
@@ -186,7 +197,7 @@ struct EventEditorView: View {
             Section {
                 alarmPicker(selection: $newTimerAlarm)
             } footer: {
-                Text("Rings with a gentle sound. Choose the sound in Settings → Timer Alarm.")
+                Text("Rings with a gentle sound. Change the sound and these choices in Settings → Timer Alarm.")
             }
         }
         // The start buttons get their own section with no card behind them, so
@@ -209,8 +220,8 @@ struct EventEditorView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 18)
-                            .background(side == suggested ? Color.pink : Color.pink.opacity(0.15), in: RoundedRectangle(cornerRadius: 14))
-                            .foregroundStyle(side == suggested ? .white : .pink)
+                            .background(side == suggested ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.opacity(0.15)), in: RoundedRectangle(cornerRadius: 14))
+                            .foregroundStyle(side == suggested ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
                         }
                         .buttonStyle(.plain)
                     }
@@ -226,7 +237,6 @@ struct EventEditorView: View {
                         .padding(.vertical, 8)
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(kind.color)
             }
         } footer: {
             if AppSettings.liveActivitiesEnabled {
@@ -242,7 +252,7 @@ struct EventEditorView: View {
         let selection = Binding<EventKind>(get: { draft.kind }, set: { switchKind(to: $0) })
         let label: (EventKind) -> String = { $0.title }
         let image: (EventKind) -> String = { $0.systemImage }
-        return ChipPicker(title: nil, options: choices, value: selection, tint: kind.color, label: label, systemImage: image)
+        return ChipPicker(title: nil, options: choices, value: selection, label: label, systemImage: image)
     }
 
     /// "She fell asleep 10 minutes ago" in one tap instead of the time wheel.
@@ -261,15 +271,17 @@ struct EventEditorView: View {
         let label: (Int) -> String = { minutes in
             minutes == 0 ? String(localized: "Now") : String(localized: "\(Fmt.duration(TimeInterval(minutes * 60), style: .short)) ago")
         }
-        return ChipPicker(title: nil, options: options, selection: selected, allowsDeselect: false, tint: kind.color, label: label)
+        return ChipPicker(title: nil, options: options, selection: selected, allowsDeselect: false, label: label)
     }
 
     /// Countdown choices ("ring after 10 min"), with Off as a choice of its own
-    /// like the bell menu on the timer card. Nursing counts each side separately.
+    /// like the bell menu on the timer card, and − / + to fine-tune the chosen
+    /// one (3 min nudged down to 2). Nursing counts each side separately.
+    @ViewBuilder
     private func alarmPicker(selection: Binding<Int?>) -> some View {
         // 0 stands for Off.
         let title: String = kind == .nursing ? String(localized: "Alarm per Side") : String(localized: "Alarm")
-        let options: [Int] = [0] + TimerAlarm.presetMinutes(for: kind)
+        let options: [Int] = [0] + TimerAlarm.choices(presets: alarms.presetMinutes(for: kind), selected: selection.wrappedValue)
         let minutes = Binding<Int>(
             get: { selection.wrappedValue ?? 0 },
             set: { selection.wrappedValue = $0 == 0 ? nil : $0 }
@@ -278,7 +290,16 @@ struct EventEditorView: View {
             minutes == 0 ? String(localized: "Off") : Fmt.duration(TimeInterval(minutes * 60), style: .short)
         }
         let image: (Int) -> String = { minutes in minutes == 0 ? "bell.slash" : "bell.fill" }
-        return ChipPicker(title: title, options: options, value: minutes, tint: kind.color, label: label, systemImage: image)
+        ChipPicker(title: title, options: options, value: minutes, label: label, systemImage: image)
+        if let chosen = selection.wrappedValue {
+            Stepper(value: Binding(
+                get: { chosen },
+                set: { selection.wrappedValue = TimerAlarm.clampedMinutes($0) }
+            ), in: 1...TimerAlarm.maxMinutes) {
+                Text("Rings after \(Fmt.duration(TimeInterval(chosen * 60), style: .short))")
+                    .monospacedDigit()
+            }
+        }
     }
 
     @ViewBuilder
@@ -303,7 +324,7 @@ struct EventEditorView: View {
                 minutesField(BreastSide.right.title, value: $draft.rightDuration)
                 // Which side to suggest next only needs asking when both were used.
                 if draft.leftDuration > 0 && draft.rightDuration > 0 {
-                    ChipPicker(title: String(localized: "Ended On"), options: BreastSide.allCases, selection: $draft.lastSide, tint: .pink, label: \.title)
+                    ChipPicker(title: String(localized: "Ended On"), options: BreastSide.allCases, selection: $draft.lastSide, label: \.title)
                 }
             } else {
                 DatePicker(draft.hasTimeRange ? String(localized: "Start") : String(localized: "Time"), selection: $draft.startDate)
@@ -398,7 +419,7 @@ struct EventEditorView: View {
         switch kind {
         case .sleep:
             Section("Details") {
-                ChipPicker(title: String(localized: "Where"), options: SleepLocation.allCases, selection: $draft.sleepLocation, tint: .indigo, label: \.title)
+                ChipPicker(title: String(localized: "Where"), options: SleepLocation.allCases, selection: $draft.sleepLocation, label: \.title)
             }
         case .nursing:
             EmptyView()
@@ -406,13 +427,13 @@ struct EventEditorView: View {
             Section {
                 MeasurementField(title: String(localized: "Amount"), metricValue: $draft.amountML, quantity: .volume)
                 VolumePresets(metricValue: $draft.amountML)
-                ChipPicker(title: String(localized: "Contents"), options: BottleContent.allCases, selection: $draft.bottleContent, tint: .orange, label: \.title)
+                ChipPicker(title: String(localized: "Contents"), options: BottleContent.allCases, selection: $draft.bottleContent, label: \.title)
             }
         case .solids:
             Section("Food") {
                 TextField("What did they eat?", text: optionalText($draft.foodName))
                 MeasurementField(title: String(localized: "Amount"), metricValue: $draft.amountML, quantity: .volume)
-                ChipPicker(title: String(localized: "Reaction"), options: FoodReaction.allCases, selection: $draft.foodReaction, tint: EventKind.solids.color) {
+                ChipPicker(title: String(localized: "Reaction"), options: FoodReaction.allCases, selection: $draft.foodReaction) {
                     "\($0.emoji) \($0.title)"
                 }
             }
@@ -443,8 +464,7 @@ struct EventEditorView: View {
                     ChipPicker(
                         title: String(localized: "Remind Next Dose"),
                         options: [0.0, 4, 6, 8, 12, 24],
-                        value: $medicationReminderHours,
-                        tint: EventKind.medication.color
+                        value: $medicationReminderHours
                     ) { hours in
                         hours == 0 ? String(localized: "Off") : String(localized: "In \(Fmt.duration(hours * 3600, style: .full))")
                     }
@@ -482,9 +502,9 @@ struct EventEditorView: View {
             }
         case .fussy:
             Section("Details") {
-                ChipPicker(title: String(localized: "How Fussy"), options: FussIntensity.allCases, selection: $draft.fussIntensity, tint: EventKind.fussy.color, label: \.title)
-                MultiChipPicker(title: String(localized: "Possible Cause"), options: FussCause.allCases, selection: $draft.fussCauses, tint: EventKind.fussy.color, label: \.title)
-                MultiChipPicker(title: String(localized: "Soothing"), options: SoothingMethod.allCases, selection: $draft.soothingMethods, tint: EventKind.fussy.color, label: \.title)
+                ChipPicker(title: String(localized: "How Fussy"), options: FussIntensity.allCases, selection: $draft.fussIntensity, label: \.title)
+                MultiChipPicker(title: String(localized: "Possible Cause"), options: FussCause.allCases, selection: $draft.fussCauses, label: \.title)
+                MultiChipPicker(title: String(localized: "Soothing"), options: SoothingMethod.allCases, selection: $draft.soothingMethods, label: \.title)
             }
         case .note:
             EmptyView()
@@ -497,7 +517,6 @@ struct EventEditorView: View {
             options: ActivityType.allCases,
             selection: $draft.activityType,
             allowsDeselect: false,
-            tint: EventKind.activity.color,
             label: \.title,
             systemImage: { $0.systemImage }
         )
@@ -518,8 +537,8 @@ struct EventEditorView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
-                        .background(selected ? Color.teal : Color.teal.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
-                        .foregroundStyle(selected ? .white : .teal)
+                        .background(selected ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.opacity(0.12)), in: RoundedRectangle(cornerRadius: 12))
+                        .foregroundStyle(selected ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
                     }
                     .buttonStyle(.plain)
                 }
@@ -528,7 +547,7 @@ struct EventEditorView: View {
         }
         if draft.diaperType?.isWet == true {
             Section("Pee Amount") {
-                ChipPicker(title: nil, options: PeeAmount.allCases, selection: $draft.peeAmount, tint: .teal, label: \.title)
+                ChipPicker(title: nil, options: PeeAmount.allCases, selection: $draft.peeAmount, label: \.title)
             }
         }
         if draft.diaperType?.isDirty == true {
@@ -543,7 +562,7 @@ struct EventEditorView: View {
                                     Circle()
                                         .fill(color.swatch)
                                         .frame(width: 30, height: 30)
-                                        .overlay(Circle().stroke(draft.poopColor == color ? Color.accentColor : .secondary.opacity(0.3), lineWidth: draft.poopColor == color ? 3 : 1))
+                                        .overlay(Circle().stroke(draft.poopColor == color ? AnyShapeStyle(.tint) : AnyShapeStyle(Color.secondary.opacity(0.3)), lineWidth: draft.poopColor == color ? 3 : 1))
                                     Text(color.title).font(.caption2)
                                 }
                             }
@@ -552,7 +571,7 @@ struct EventEditorView: View {
                     }
                     .padding(.vertical, 4)
                 }
-                ChipPicker(title: String(localized: "Consistency"), options: PoopConsistency.allCases, selection: $draft.poopConsistency, tint: .brown, label: \.title)
+                ChipPicker(title: String(localized: "Consistency"), options: PoopConsistency.allCases, selection: $draft.poopConsistency, label: \.title)
                 if draft.poopColor?.needsAttention == true {
                     Label("Black (after the first days), red or pale/white stool can be a sign of a problem. Consider calling your pediatrician.", systemImage: "exclamationmark.triangle.fill")
                         .font(.callout)

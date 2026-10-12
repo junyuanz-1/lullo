@@ -97,7 +97,7 @@ struct AppearanceView: View {
                                     .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                            .stroke(currentIcon == icon ? Color.accentColor : .clear, lineWidth: 3)
+                                            .stroke(currentIcon == icon ? AnyShapeStyle(.tint) : AnyShapeStyle(.clear), lineWidth: 3)
                                     )
                                     .overlay(alignment: .topTrailing) { lockBadge(locked: !icon.isFree) }
                                 Text(icon.title).font(.caption).foregroundStyle(.primary)

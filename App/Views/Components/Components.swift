@@ -212,7 +212,7 @@ struct UnitToggle<Value: Hashable>: View {
                         .fixedSize()
                         .padding(.horizontal, 9)
                         .padding(.vertical, 5)
-                        .background(selected ? Color.accentColor : .clear, in: Capsule())
+                        .background(selected ? AnyShapeStyle(.tint) : AnyShapeStyle(.clear), in: Capsule())
                         .foregroundStyle(selected ? Color.white : Color.secondary)
                 }
                 .buttonStyle(.plain)
@@ -243,7 +243,7 @@ struct VolumePresets: View {
                     Button {
                         metricValue = ml
                     } label: {
-                        ChipLabel(title: Fmt.volume(ml, unit: unitSystem), selected: selected, tint: .orange)
+                        ChipLabel(title: Fmt.volume(ml, unit: unitSystem), selected: selected)
                     }
                     .buttonStyle(.plain)
                 }
@@ -252,12 +252,21 @@ struct VolumePresets: View {
     }
 }
 
+extension AnyShapeStyle {
+    /// `color`, or the theme colour (the environment tint) when nil. Controls
+    /// use the theme; kind colours are for icons, tiles and charts.
+    static func themed(_ color: Color?) -> AnyShapeStyle {
+        color.map { AnyShapeStyle($0) } ?? AnyShapeStyle(.tint)
+    }
+}
+
 /// Visual for one selectable pill.
 struct ChipLabel: View {
     var title: String
     var systemImage: String?
     var selected: Bool
-    var tint: Color = .accentColor
+    /// nil follows the theme, like every other control.
+    var tint: Color?
 
     var body: some View {
         HStack(spacing: 5) {
@@ -267,7 +276,7 @@ struct ChipLabel: View {
         .font(.subheadline.weight(.medium))
         .padding(.horizontal, 13)
         .padding(.vertical, 7)
-        .background(selected ? tint : Color(.tertiarySystemFill), in: Capsule())
+        .background(selected ? AnyShapeStyle.themed(tint) : AnyShapeStyle(Color(.tertiarySystemFill)), in: Capsule())
         .foregroundStyle(selected ? Color.white : Color.primary)
         .contentShape(Capsule())
     }
@@ -281,7 +290,7 @@ struct ChipPicker<Value: Hashable>: View {
     @Binding var selection: Value?
     /// Tapping the selected pill again clears an optional field.
     var allowsDeselect = true
-    var tint: Color = .accentColor
+    var tint: Color?
     var label: (Value) -> String
     var systemImage: ((Value) -> String)?
 
@@ -316,7 +325,7 @@ extension ChipPicker {
         title: String?,
         options: [Value],
         value selection: Binding<Value>,
-        tint: Color = .accentColor,
+        tint: Color? = nil,
         label: @escaping (Value) -> String,
         systemImage: ((Value) -> String)? = nil
     ) {
@@ -338,7 +347,7 @@ struct MultiChipPicker<Value: Hashable>: View {
     var title: String?
     var options: [Value]
     @Binding var selection: [Value]
-    var tint: Color = .accentColor
+    var tint: Color?
     var label: (Value) -> String
 
     var body: some View {
@@ -378,7 +387,7 @@ struct PillSegmentedControl<Value: Hashable>: View {
 
     var segments: [Segment]
     @Binding var selection: Value
-    var tint: Color = .accentColor
+    var tint: Color?
     @Namespace private var highlight
     @Environment(\.dynamicTypeSize) private var typeSize
 
@@ -409,7 +418,11 @@ struct PillSegmentedControl<Value: Hashable>: View {
                     .foregroundStyle(selected ? Color.white : Color.secondary)
                     .background {
                         if selected {
-                            Capsule().fill(tint.gradient).matchedGeometryEffect(id: "highlight", in: highlight)
+                            Capsule()
+                                .fill(AnyShapeStyle.themed(tint))
+                                // The same soft top light as `Color.gradient`.
+                                .overlay(Capsule().fill(LinearGradient(colors: [.white.opacity(0.18), .clear], startPoint: .top, endPoint: .bottom)))
+                                .matchedGeometryEffect(id: "highlight", in: highlight)
                         }
                     }
                     .contentShape(Capsule())

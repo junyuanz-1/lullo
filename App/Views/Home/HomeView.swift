@@ -292,7 +292,6 @@ struct TimerCard: View {
                                     .font(.headline)
                             }
                             .buttonStyle(.borderedProminent)
-                            .tint(record.kind.color)
                         }
                     }
                 }
@@ -312,7 +311,7 @@ extension TimerCard {
                 if let ring = alarms.fireDate(for: record) {
                     Label(String(localized: "Rings at \(Fmt.time(ring))"), systemImage: "bell.fill")
                         .font(.caption)
-                        .foregroundStyle(record.kind.color)
+                        .foregroundStyle(.tint)
                 }
             }
         }
@@ -328,7 +327,8 @@ extension TimerCard {
             .accessibilityLabel(Text("Edit"))
     }
 
-    /// Countdown for this timer, set right on the card: Off or one of the presets.
+    /// Countdown for this timer, set right on the card: Off or one of the presets
+    /// (and the fine-tuned one chosen when it started, if that is not a preset).
     fileprivate func alarmMenu(for record: EventRecord) -> some View {
         let current = alarms.duration(for: record.id).map { Int($0 / 60) }
         return Menu {
@@ -342,7 +342,7 @@ extension TimerCard {
                         Text("Off")
                     }
                 }
-                ForEach(TimerAlarm.presetMinutes(for: record.kind), id: \.self) { minutes in
+                ForEach(TimerAlarm.choices(presets: alarms.presetMinutes(for: record.kind), selected: current), id: \.self) { minutes in
                     Button {
                         setAlarm(TimeInterval(minutes * 60), for: record)
                     } label: {
@@ -392,8 +392,8 @@ struct NursingControls: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(active ? Color.pink : Color.pink.opacity(0.12), in: RoundedRectangle(cornerRadius: 14))
-                        .foregroundStyle(active ? .white : .pink)
+                        .background(active ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.opacity(0.12)), in: RoundedRectangle(cornerRadius: 14))
+                        .foregroundStyle(active ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(active ? String(localized: "Pause \(side.title)") : String(localized: "Start \(side.title)"))
@@ -409,7 +409,6 @@ struct NursingControls: View {
                         .font(.headline)
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.pink)
             }
         }
     }
@@ -591,8 +590,8 @@ struct QuickActionsGrid: View {
         }
     }
 
-    /// Opens the form for `kind` with Save at hand ("Log Past"; the Timer
-    /// segment is one tap away). A running bottle opens that bottle instead, to
+    /// Opens the form for `kind` in Timer or Log Past, whichever was last chosen
+    /// for it (Log Past, with Save at hand, until then). A running bottle opens that bottle instead, to
     /// add the amount or stop it, and says so with a pencil badge; so does a
     /// fussy spell still going on, to end it. Activities can overlap, so the
     /// tile always adds a new one and only names what is running.
@@ -604,7 +603,7 @@ struct QuickActionsGrid: View {
             if let open {
                 editor = EditorRoute(kind: kind, existing: open)
             } else {
-                editor = EditorRoute(kind: kind, mode: .manual)
+                editor = EditorRoute(kind: kind, mode: EventEditorView.rememberedMode(for: kind) ?? .manual)
             }
         } label: {
             QuickActionTile(
