@@ -8,6 +8,11 @@ inputs:
       Xcode and simulator; after changing it, re-record them.
     default: "26.3"
 
+outputs:
+  cache-key:
+    description: Key to save build/DerivedData under (see "Save build cache" in ci.yml).
+    value: ${{ steps.keys.outputs.key }}
+
 runs:
   using: composite
   steps:
@@ -35,3 +40,22 @@ runs:
         if ! git diff --quiet -- Tinytide.xcodeproj; then
           echo "::notice::Tinytide.xcodeproj differs from what this XcodeGen version generates (usually just tool version noise)."
         fi
+
+    # Swift packages and earlier build products, saved by CI on main. Reusing
+    # them skips fetching and compiling the dependencies (swift-snapshot-testing,
+    # swift-syntax); the app's own files are still recompiled.
+    - name: Cache keys
+      id: keys
+      shell: bash
+      run: |
+        echo "prefix=derived-data-xcode${{ inputs.xcode-version }}-${{ hashFiles('project.yml', 'Packages/BabyCore/Package.swift') }}-" >> "$GITHUB_OUTPUT"
+        echo "key=derived-data-xcode${{ inputs.xcode-version }}-${{ hashFiles('project.yml', 'Packages/BabyCore/Package.swift') }}-${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
+    - name: Restore build cache
+      uses: actions/cache/restore@v4
+      with:
+        path: build/DerivedData
+        key: ${{ steps.keys.outputs.key }}
+        restore-keys: |
+          ${{ steps.keys.outputs.prefix }}
+          derived-data-xcode${{ inputs.xcode-version }}-

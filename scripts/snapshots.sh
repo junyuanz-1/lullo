@@ -12,7 +12,7 @@ cd "$(dirname "$0")/.."
 
 MODE="${1:-verify}"
 DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 17 Pro,OS=latest}"
-DERIVED="${DERIVED_DATA:-build/snapshots}"
+DERIVED="${DERIVED_DATA:-build/DerivedData}"
 RESULTS="${RESULTS_DIR:-build/snapshot-results}"
 ARTIFACTS="${SNAPSHOT_ARTIFACTS:-$PWD/build/snapshot-diffs}"
 # language:region pairs; English also covers dark mode and large text.
@@ -29,10 +29,13 @@ pretty() { if command -v xcbeautify >/dev/null; then xcbeautify --quiet; else ca
 rm -rf "$RESULTS" "$ARTIFACTS"
 mkdir -p "$RESULTS" "$ARTIFACTS"
 
-xcodebuild build-for-testing \
-  -project Tinytide.xcodeproj -scheme TinytideSnapshots \
-  -destination "$DESTINATION" -derivedDataPath "$DERIVED" \
-  CODE_SIGNING_ALLOWED=NO | pretty
+# SKIP_BUILD=1 when the TinytideSnapshots scheme was already built into $DERIVED_DATA.
+if [ "${SKIP_BUILD:-0}" != "1" ]; then
+  xcodebuild build-for-testing \
+    -project Tinytide.xcodeproj -scheme TinytideSnapshots \
+    -destination "$DESTINATION" -derivedDataPath "$DERIVED" \
+    CODE_SIGNING_ALLOWED=NO | pretty
+fi
 
 status=0
 for pair in $LANGUAGES; do

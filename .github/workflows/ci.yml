@@ -27,39 +27,75 @@ jobs:
   ios:
     name: Build and test iOS app
     runs-on: macos-15
-    timeout-minutes: 45
+    timeout-minutes: 60
+    env:
+      # The snapshot reference images are recorded on this exact simulator.
+      DESTINATION: platform=iOS Simulator,name=iPhone 17 Pro,OS=latest
+      DERIVED_DATA: build/DerivedData
     steps:
       - uses: actions/checkout@v4
+        with:
+          # A pull request is checked out as a merge commit; its first parent is
+          # the base branch, which is what the change list below compares with.
+          fetch-depth: 2
 
-      - uses: ./.github/actions/setup-xcode
+      - id: setup
+        uses: ./.github/actions/setup-xcode
 
-      - name: Pick a simulator
-        id: sim
+      # Screenshot diffs take the longest, so skip them when a pull request
+      # can't have changed how a screen looks (tests, docs, scripts...).
+      - name: Check whether screens may have changed
+        id: scope
         run: |
-          UDID=$(xcrun simctl list devices available -j | python3 -c '
-          import json, sys
-          devices = json.load(sys.stdin)["devices"]
-          for runtime in sorted(devices, reverse=True):
-              if "iOS" not in runtime:
-                  continue
-              for d in devices[runtime]:
-                  if d["name"].startswith("iPhone"):
-                      print(d["udid"]); sys.exit(0)
-          sys.exit("No iPhone simulator found")
-          ')
-          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
-          xcrun simctl list devices | grep "$UDID"
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "snapshots=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          changed=$(git diff --name-only HEAD^1 HEAD)
+          echo "$changed"
+          if echo "$changed" | grep -qE '^(App/|Shared/|Packages/BabyCore/Sources/|Tests/TinytideSnapshotTests/|Config/|project\.yml|scripts/snapshots\.sh|\.github/)'; then
+            echo "snapshots=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No app UI files changed; skipping screenshot diffs."
+            echo "snapshots=false" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Build and test
+      # Both test schemes share one DerivedData, so the app is compiled once.
+      - name: Build
         run: |
           set -o pipefail
-          xcodebuild test \
-            -project Tinytide.xcodeproj \
-            -scheme Tinytide \
-            -destination "id=${{ steps.sim.outputs.udid }}" \
-            -resultBundlePath TestResults.xcresult \
+          xcodebuild build-for-testing \
+            -project Tinytide.xcodeproj -scheme Tinytide \
+            -destination "$DESTINATION" -derivedDataPath "$DERIVED_DATA" \
             CODE_SIGNING_ALLOWED=NO \
             | tee xcodebuild.log | xcbeautify --renderer github-actions
+          if [ "${{ steps.scope.outputs.snapshots }}" = "true" ]; then
+            xcodebuild build-for-testing \
+              -project Tinytide.xcodeproj -scheme TinytideSnapshots \
+              -destination "$DESTINATION" -derivedDataPath "$DERIVED_DATA" \
+              CODE_SIGNING_ALLOWED=NO \
+              | tee -a xcodebuild.log | xcbeautify --renderer github-actions
+          fi
+
+      - name: Unit tests
+        run: |
+          set -o pipefail
+          xcodebuild test-without-building \
+            -project Tinytide.xcodeproj -scheme Tinytide \
+            -destination "$DESTINATION" -derivedDataPath "$DERIVED_DATA" \
+            -resultBundlePath TestResults.xcresult \
+            | tee -a xcodebuild.log | xcbeautify --renderer github-actions
+
+      - name: Screenshot diffs
+        if: steps.scope.outputs.snapshots == 'true'
+        env:
+          SKIP_BUILD: "1"
+        run: |
+          if [ -z "$(find Tests/TinytideSnapshotTests/__Snapshots__ -name '*.png' 2>/dev/null)" ]; then
+            echo "::warning::No reference screenshots yet. Add the 'record-snapshots' label to the pull request."
+            exit 0
+          fi
+          scripts/snapshots.sh
 
       - name: Upload test results
         if: always()
@@ -71,27 +107,19 @@ jobs:
             xcodebuild.log
           if-no-files-found: ignore
 
-  snapshots:
-    name: Screenshot diffs
-    runs-on: macos-15
-    timeout-minutes: 45
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: ./.github/actions/setup-xcode
-
-      - name: Compare screens with reference images
-        run: |
-          if [ -z "$(find Tests/TinytideSnapshotTests/__Snapshots__ -name '*.png' 2>/dev/null)" ]; then
-            echo "::warning::No reference screenshots yet. Run the 'Record snapshots' workflow on this branch."
-            exit 0
-          fi
-          scripts/snapshots.sh
-
-      - name: Upload differences
+      - name: Upload screenshot differences
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: snapshot-diffs
           path: build/snapshot-diffs
           if-no-files-found: ignore
+
+      # Only main saves the cache, so pull requests (which can read it) don't
+      # fill the 10 GB cache quota with one copy each.
+      - name: Save build cache
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/cache/save@v4
+        with:
+          path: build/DerivedData
+          key: ${{ steps.setup.outputs.cache-key }}
