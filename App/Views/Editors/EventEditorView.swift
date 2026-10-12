@@ -208,17 +208,18 @@ struct EventEditorView: View {
     /// Countdown choices ("ring after 10 min"), with Off as a choice of its own
     /// like the bell menu on the timer card. Nursing counts each side separately.
     private func alarmPicker(selection: Binding<Int?>) -> some View {
-        ChipPicker(
-            title: kind == .nursing ? String(localized: "Alarm per Side") : String(localized: "Alarm"),
-            options: [0] + TimerAlarm.presetMinutes(for: kind),
-            value: Binding(
-                get: { selection.wrappedValue ?? 0 },
-                set: { selection.wrappedValue = $0 == 0 ? nil : $0 }
-            ),
-            tint: kind.color,
-            label: { $0 == 0 ? String(localized: "Off") : Fmt.duration(TimeInterval($0 * 60), style: .short) },
-            systemImage: { $0 == 0 ? "bell.slash" : "bell.fill" }
+        // 0 stands for Off.
+        let title: String = kind == .nursing ? String(localized: "Alarm per Side") : String(localized: "Alarm")
+        let options: [Int] = [0] + TimerAlarm.presetMinutes(for: kind)
+        let minutes = Binding<Int>(
+            get: { selection.wrappedValue ?? 0 },
+            set: { selection.wrappedValue = $0 == 0 ? nil : $0 }
         )
+        let label: (Int) -> String = { minutes in
+            minutes == 0 ? String(localized: "Off") : Fmt.duration(TimeInterval(minutes * 60), style: .short)
+        }
+        let image: (Int) -> String = { minutes in minutes == 0 ? "bell.slash" : "bell.fill" }
+        return ChipPicker(title: title, options: options, value: minutes, tint: kind.color, label: label, systemImage: image)
     }
 
     @ViewBuilder
