@@ -35,12 +35,14 @@ struct SettingsView: View {
     @State private var pendingImport: BackupFile?
     @State private var importResult: String?
     @State private var errorMessage: String?
+    @State private var notificationsDenied = false
 
     var body: some View {
         NavigationStack {
             Form {
                 babiesSection
                 familySection
+                guideSection
                 preferencesSection
                 remindersSection
                 alarmSection
@@ -78,6 +80,14 @@ struct SettingsView: View {
                 Button("OK") { importResult = nil }
             } message: {
                 Text(importResult ?? "")
+            }
+            .alert("Notifications Are Off", isPresented: $notificationsDenied) {
+                Button("Open Settings") {
+                    if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("Allow notifications for Tinytide in the Settings app to get reminders.")
             }
             .alert("Something Went Wrong", isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })) {
                 Button("OK") { errorMessage = nil }
@@ -225,9 +235,9 @@ struct SettingsView: View {
         } footer: {
             Text("Medication reminders can be set when logging a dose.")
         }
-        .onChange(of: feedReminder) { _, on in remindersChanged(on) }
-        .onChange(of: diaperReminder) { _, on in remindersChanged(on) }
-        .onChange(of: napReminder) { _, on in remindersChanged(on) }
+        .onChange(of: feedReminder) { _, on in remindersChanged(on) { feedReminder = false } }
+        .onChange(of: diaperReminder) { _, on in remindersChanged(on) { diaperReminder = false } }
+        .onChange(of: napReminder) { _, on in remindersChanged(on) { napReminder = false } }
         .onChange(of: feedHours) { _, _ in store.refreshSideEffects() }
         .onChange(of: diaperHours) { _, _ in store.refreshSideEffects() }
     }
@@ -332,7 +342,8 @@ struct SettingsView: View {
         }
     }
 
-    private var aboutSection: some View {
+    /// Near the top, not under the tip jar: these are features worth finding early.
+    private var guideSection: some View {
         Section {
             NavigationLink {
                 FeatureGuideView()
@@ -343,6 +354,11 @@ struct SettingsView: View {
                     Image(systemName: "square.grid.2x2.fill").foregroundStyle(.blue)
                 }
             }
+        }
+    }
+
+    private var aboutSection: some View {
+        Section {
             NavigationLink {
                 AboutView()
             } label: {
@@ -372,9 +388,15 @@ struct SettingsView: View {
         return date.formatted(date: .omitted, time: .shortened)
     }
 
-    private func remindersChanged(_ enabled: Bool) {
+    /// Asks for notification permission when a reminder is switched on. If it
+    /// is refused, the toggle goes back off (no reminder would ever arrive) and
+    /// the user is told where to allow it.
+    private func remindersChanged(_ enabled: Bool, turnOff: @escaping () -> Void) {
         Task {
-            if enabled { _ = await NotificationManager.requestAuthorization() }
+            if enabled, !(await NotificationManager.requestAuthorization()) {
+                turnOff()
+                notificationsDenied = true
+            }
             store.refreshSideEffects()
         }
     }

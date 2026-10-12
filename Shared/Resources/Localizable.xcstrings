@@ -2663,6 +2663,64 @@
         }
       }
     },
+    "Allow notifications for Tinytide in the Settings app to get reminders.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erlaube Mitteilungen für Tinytide in der Einstellungen-App, um Erinnerungen zu erhalten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow notifications for Tinytide in the Settings app to get reminders."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permite las notificaciones de Tinytide en la app Ajustes para recibir recordatorios."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorisez les notifications de Tinytide dans l’app Réglages pour recevoir les rappels."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リマインダーを受け取るには、設定アプリで Tinytide の通知を許可してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림을 받으려면 설정 앱에서 Tinytide의 알림을 허용하세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permita as notificações do Tinytide no app Ajustes para receber lembretes."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请在系统“设置”中允许摇摇发送通知，才能收到提醒。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請在系統「設定」中允許搖搖傳送通知，才能收到提醒。"
+          }
+        }
+      }
+    },
     "Amount": {
       "localizations": {
         "de": {
@@ -5675,6 +5733,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "每日作息"
+          }
+        }
+      }
+    },
+    "Daily patterns appear here once you start logging sleep, feeds and diapers.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tägliche Muster erscheinen hier, sobald du Schlaf, Mahlzeiten und Windeln einträgst."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily patterns appear here once you start logging sleep, feeds and diapers."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los patrones diarios aparecerán aquí cuando empieces a registrar sueño, tomas y pañales."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les tendances quotidiennes apparaîtront ici dès que vous noterez sommeil, repas et couches."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠・授乳・おむつを記録し始めると、ここに毎日のパターンが表示されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면, 수유, 기저귀를 기록하기 시작하면 여기에 매일의 패턴이 표시돼요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os padrões diários aparecem aqui quando você começar a registrar sono, mamadas e fraldas."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开始记录睡眠、喂奶和尿布后，这里会显示每天的规律。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開始記錄睡眠、餵奶和尿布後，這裡會顯示每天的規律。"
           }
         }
       }
@@ -11075,6 +11191,64 @@
         }
       }
     },
+    "Log a sleep to get nap-time suggestions based on age and your baby's rhythm.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trage einen Schlaf ein, um Vorschläge für Schlafenszeiten nach Alter und Rhythmus deines Babys zu bekommen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log a sleep to get nap-time suggestions based on age and your baby's rhythm."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra un sueño para recibir sugerencias de siesta según la edad y el ritmo de tu bebé."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notez un sommeil pour obtenir des suggestions de sieste selon l’âge et le rythme de votre bébé."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠を記録すると、月齢と赤ちゃんのリズムにもとづいてお昼寝の時間を提案します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면을 기록하면 월령과 아기의 리듬에 맞춰 낮잠 시간을 추천해 드려요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registre um sono para receber sugestões de soneca com base na idade e no ritmo do seu bebê."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "记录一次睡眠后，这里会根据月龄和宝宝的作息推荐小睡时间。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記錄一次睡眠後，這裡會根據月齡和寶寶的作息推薦小睡時間。"
+          }
+        }
+      }
+    },
     "Logged By": {
       "localizations": {
         "de": {
@@ -13744,6 +13918,64 @@
         }
       }
     },
+    "No Matching Entries": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine passenden Einträge"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Matching Entries"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay registros que coincidan"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune entrée correspondante"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "該当する記録はありません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일치하는 기록이 없어요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum registro correspondente"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有符合的记录"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "沒有符合的紀錄"
+          }
+        }
+      }
+    },
     "No backups yet. One is made automatically each day you open the app.": {
       "localizations": {
         "de": {
@@ -14262,6 +14494,122 @@
           "stringUnit": {
             "state": "translated",
             "value": "備註"
+          }
+        }
+      }
+    },
+    "Nothing of this kind in the days shown.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Einträge dieser Art in den angezeigten Tagen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing of this kind in the days shown."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay registros de este tipo en los días mostrados."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rien de ce type sur les jours affichés."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "表示中の期間にこの種類の記録はありません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "표시된 기간에 이 종류의 기록이 없어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum registro deste tipo nos dias mostrados."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所显示的日期内没有这类记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所顯示的日期內沒有這類紀錄。"
+          }
+        }
+      }
+    },
+    "Notifications Are Off": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitteilungen sind aus"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications Are Off"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las notificaciones están desactivadas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les notifications sont désactivées"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知がオフです"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림이 꺼져 있어요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As notificações estão desativadas"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知已关闭"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知已關閉"
           }
         }
       }
@@ -15020,6 +15368,64 @@
         }
       }
     },
+    "Open Settings": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellungen öffnen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir Ajustes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir Réglages"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定を開く"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정 열기"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir Ajustes"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开设置"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打開設定"
+          }
+        }
+      }
+    },
     "Open the app to add your baby.": {
       "localizations": {
         "de": {
@@ -15132,6 +15538,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "打開填寫頁"
+          }
+        }
+      }
+    },
+    "Opens the running bottle": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffnet das laufende Fläschchen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens the running bottle"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre el biberón en curso"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre le biberon en cours"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "実行中のミルクを開きます"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "진행 중인 젖병 기록을 열어요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre a mamadeira em andamento"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开正在进行的奶瓶记录"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打開進行中的奶瓶紀錄"
           }
         }
       }
@@ -16011,7 +16475,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Einstellungen"
+            "value": "Allgemein"
           }
         },
         "en": {
@@ -16233,7 +16697,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "吸奶已結束"
+            "value": "擠奶已結束"
           }
         }
       }
@@ -16291,7 +16755,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "吸奶已開始"
+            "value": "擠奶已開始"
           }
         }
       }
@@ -23194,13 +23658,13 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Temporizador iniciado"
+            "value": "Cronómetro iniciado"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Minuteur démarré"
+            "value": "Chrono démarré"
           }
         },
         "ja": {
@@ -23252,13 +23716,13 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Temporizador detenido"
+            "value": "Cronómetro detenido"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Minuteur arrêté"
+            "value": "Chrono arrêté"
           }
         },
         "ja": {
@@ -23757,30 +24221,30 @@
         }
       }
     },
-    "Today is still in progress: it is drawn lighter in the charts and left out of the averages.": {
+    "Today is still in progress: it is shown faded in the charts and left out of the averages.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Heute läuft noch: Der Tag ist in den Diagrammen heller und zählt nicht zu den Durchschnitten."
+            "value": "Heute läuft noch: Der Tag ist in den Diagrammen blasser und zählt nicht zu den Durchschnitten."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Today is still in progress: it is drawn lighter in the charts and left out of the averages."
+            "value": "Today is still in progress: it is shown faded in the charts and left out of the averages."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hoy aún no ha terminado: se muestra más claro en los gráficos y no cuenta en los promedios."
+            "value": "Hoy aún no ha terminado: se muestra atenuado en los gráficos y no cuenta en los promedios."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aujourd’hui n’est pas terminé : il est plus clair dans les graphiques et exclu des moyennes."
+            "value": "Aujourd’hui n’est pas terminé : il est estompé dans les graphiques et exclu des moyennes."
           }
         },
         "ja": {
@@ -23798,19 +24262,19 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hoje ainda está em andamento: aparece mais claro nos gráficos e fica fora das médias."
+            "value": "Hoje ainda está em andamento: aparece esmaecido nos gráficos e fica fora das médias."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "今天还没结束：图表中以浅色显示，且不计入平均值。"
+            "value": "今天还没结束：图表中以淡色显示，且不计入平均值。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "今天還沒結束：圖表中以淺色顯示，且不計入平均值。"
+            "value": "今天還沒結束：圖表中以淡色顯示，且不計入平均值。"
           }
         }
       }

@@ -655,7 +655,8 @@ enum TinytideTips {
 
     static func configure() {
         guard !DemoMode.isEnabled, !PersistenceController.isRunningTests else { return }
-        try? Tips.configure()
+        // At most one new tip a day, so a first session isn't a pile of popovers.
+        try? Tips.configure([.displayFrequency(.daily)])
     }
 
     static func logged() {
@@ -663,14 +664,14 @@ enum TinytideTips {
     }
 }
 
-/// Shown on the timer buttons once the user has started something with a tap.
+/// Shown on the timer buttons once the user has logged a few things with a tap.
 struct HoldForMoreTip: Tip {
     var title: Text { Text("Touch and Hold for More") }
     var message: Text? { Text("Hold a timer to pick a side, add details before starting, or log one from earlier.") }
     var image: Image? { Image(systemName: "hand.tap.fill") }
 
     var rules: [Rule] {
-        #Rule(TinytideTips.entryLogged) { $0.donations.count >= 1 }
+        #Rule(TinytideTips.entryLogged) { $0.donations.count >= 3 }
     }
 }
 

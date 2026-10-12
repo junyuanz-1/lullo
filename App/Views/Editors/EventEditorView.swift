@@ -22,22 +22,41 @@ struct EventEditorView: View {
     @State private var closing = false
     @State private var newTimerAlarm: Int?
     @ObservedObject private var alarms = TimerAlarms.shared
+    /// Related kinds a new entry can switch between (the Health tile).
+    let choices: [EventKind]
+    /// A timer of this kind is already running for the baby, so a new entry can
+    /// only be logged after the fact (starting would just return that timer).
+    private let timerAlreadyRunning: Bool
 
     /// - Parameter mode: timer or "log past" for a new entry; nil picks the
     ///   default (timer for kinds that support one).
-    init(baby: Baby, kind: EventKind, existing: Event?, mode: Mode? = nil) {
+    /// - Parameter choices: related kinds to offer as chips at the top of a new entry.
+    init(baby: Baby, kind: EventKind, existing: Event?, mode: Mode? = nil, choices: [EventKind] = []) {
         self.baby = baby
         self.existing = existing
+        self.choices = choices
         let now = AppClock.now
         var record = existing?.record ?? EventRecord(babyID: baby.id ?? UUID(), kind: kind, startDate: now)
         if existing == nil {
-            let lastOfKind = TrackerStore.shared.lastEvent(of: [kind], for: baby)?.record
-            Self.applyDefaults(to: &record, now: now, lastOfKind: lastOfKind)
+            Self.applyDefaults(to: &record, now: now, lastOfKind: Self.lastForDefaults(kind, baby: baby))
         }
+        let running = existing == nil && kind.supportsTimer && kind != .activity
+            && TrackerStore.shared.runningTimer(kind, for: baby) != nil
+        timerAlreadyRunning = running
         _draft = State(initialValue: record)
         _baseline = State(initialValue: existing?.record)
         _newTimerAlarm = State(initialValue: TimerAlarms.shared.lastUsed(for: kind).map { Int($0 / 60) })
-        _mode = State(initialValue: mode ?? (existing == nil && kind.supportsTimer ? .timer : .manual))
+        _mode = State(initialValue: running ? .manual : mode ?? (existing == nil && kind.supportsTimer ? .timer : .manual))
+    }
+
+    /// The entry to copy defaults from: the last of this kind, or for bottles
+    /// the last one that has an amount (a bottle stopped from the tile may not).
+    private static func lastForDefaults(_ kind: EventKind, baby: Baby) -> EventRecord? {
+        if kind == .bottle {
+            let recent = TrackerStore.shared.events(for: baby, kinds: [.bottle], limit: 20).map(\.record)
+            return recent.first { $0.amountML != nil } ?? recent.first
+        }
+        return TrackerStore.shared.lastEvent(of: [kind], for: baby)?.record
     }
 
     private var isNew: Bool { existing == nil }
@@ -81,7 +100,11 @@ struct EventEditorView: View {
 
     @ViewBuilder
     private var formContent: some View {
-        if isNew && kind.supportsTimer {
+        if isNew && choices.count > 1 {
+            Section { kindPicker }
+        }
+
+        if isNew && kind.supportsTimer && !timerAlreadyRunning {
             Section {
                 PillSegmentedControl<Mode>(
                     segments: [
@@ -151,6 +174,7 @@ struct EventEditorView: View {
                     activityTypePicker
                 }
                 DatePicker("Start", selection: $timerStart, in: ...AppClock.now)
+                startedAgoPicker
             }
         }
         if TimerAlarm.supportedKinds.contains(kind) {
@@ -192,6 +216,7 @@ struct EventEditorView: View {
                 } label: {
                     Label("Start Timer", systemImage: "play.fill")
                         .font(.headline)
+                        .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
                 }
@@ -199,10 +224,38 @@ struct EventEditorView: View {
                 .tint(kind.color)
             }
         } footer: {
-            Text("The timer keeps running on your Lock Screen and Dynamic Island.")
+            if AppSettings.liveActivitiesEnabled {
+                Text("The timer keeps running on your Lock Screen and Dynamic Island.")
+            }
         }
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
+    }
+
+    /// Chips for the related kinds a new entry can be (Health).
+    private var kindPicker: some View {
+        let selection = Binding<EventKind>(get: { draft.kind }, set: { switchKind(to: $0) })
+        let label: (EventKind) -> String = { $0.title }
+        let image: (EventKind) -> String = { $0.systemImage }
+        return ChipPicker(title: nil, options: choices, value: selection, tint: kind.color, label: label, systemImage: image)
+    }
+
+    /// "She fell asleep 10 minutes ago" in one tap instead of the time wheel.
+    private var startedAgoPicker: some View {
+        let options: [Int] = [0, 5, 10, 15]
+        let selected = Binding<Int?>(
+            get: {
+                let ago = AppClock.now.timeIntervalSince(timerStart)
+                return options.first { abs(ago - Double($0 * 60)) < 30 }
+            },
+            set: { minutes in
+                if let minutes { timerStart = AppClock.now.addingTimeInterval(-Double(minutes * 60)) }
+            }
+        )
+        let label: (Int) -> String = { minutes in
+            minutes == 0 ? String(localized: "Now") : String(localized: "\(Fmt.duration(TimeInterval(minutes * 60), style: .short)) ago")
+        }
+        return ChipPicker(title: nil, options: options, selection: selected, allowsDeselect: false, tint: kind.color, label: label)
     }
 
     /// Countdown choices ("ring after 10 min"), with Off as a choice of its own
@@ -584,6 +637,15 @@ struct EventEditorView: View {
         dismiss()
     }
 
+    /// Switches a new entry to a related kind (Health: medication, temperature…),
+    /// keeping the time, note and photo already entered.
+    private func switchKind(to newKind: EventKind) {
+        guard newKind != draft.kind else { return }
+        var record = EventRecord(id: draft.id, babyID: draft.babyID, kind: newKind, startDate: draft.startDate, note: draft.note)
+        record.photoData = draft.photoData
+        draft = record
+    }
+
     /// Sensible defaults for a new entry, based on what was logged last.
     private static func applyDefaults(to record: inout EventRecord, now: Date, lastOfKind: EventRecord?) {
         switch record.kind {
@@ -595,7 +657,7 @@ struct EventEditorView: View {
         case .diaper:
             record.diaperType = .wet
         case .activity:
-            record.activityType = .tummyTime
+            record.activityType = lastOfKind?.activityType ?? .tummyTime
         default:
             break
         }

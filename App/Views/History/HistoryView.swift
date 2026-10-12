@@ -100,8 +100,10 @@ private struct HistoryList: View {
     @Binding var editor: EditorRoute?
     @Binding var toast: UndoToast?
     var loadMore: () -> Void
+    private let isFiltered: Bool
 
     init(baby: Baby, category: EventCategory?, days: Int, editor: Binding<EditorRoute?>, toast: Binding<UndoToast?>, loadMore: @escaping () -> Void) {
+        isFiltered = category != nil
         let since = Calendar.current.date(byAdding: .day, value: -days, to: Calendar.current.startOfDay(for: AppClock.now))!
         var predicates = [
             NSPredicate(format: "baby == %@", baby),
@@ -160,7 +162,23 @@ private struct HistoryList: View {
         // screen instead of as a card at the top with blank space below it.
         .overlay {
             if events.isEmpty {
-                ContentUnavailableView("No Entries Yet", systemImage: "tray", description: Text("Entries you log will appear here."))
+                // Older entries may still exist beyond the days shown, so the way to
+                // them stays on screen.
+                ContentUnavailableView {
+                    if isFiltered {
+                        Label("No Matching Entries", systemImage: "line.3.horizontal.decrease.circle")
+                    } else {
+                        Label("No Entries Yet", systemImage: "tray")
+                    }
+                } description: {
+                    if isFiltered {
+                        Text("Nothing of this kind in the days shown.")
+                    } else {
+                        Text("Entries you log will appear here.")
+                    }
+                } actions: {
+                    Button("Show Earlier Entries", action: loadMore)
+                }
             }
         }
     }
@@ -191,9 +209,17 @@ private struct DayHeader: View {
                 Spacer()
                 totals
             }
+            // Below the date, wrapping onto more lines at large text sizes.
             VStack(alignment: .leading, spacing: 4) {
                 Text(Fmt.dayTitle(day))
-                totals
+                FlowLayout(spacing: 10, lineSpacing: 4) {
+                    if sleep > 0 { total(.sleep, Fmt.duration(sleep)) }
+                    if feeds > 0 { total(.bottle, "\(feeds)") }
+                    if diapers > 0 { total(.diaper, "\(diapers)") }
+                }
+                .textCase(nil)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(accessibilitySummary(sleep: sleep, feeds: feeds, diapers: diapers)))
             }
         }
     }
@@ -210,8 +236,10 @@ private struct DayHeader: View {
     private func accessibilitySummary(sleep: TimeInterval, feeds: Int, diapers: Int) -> String {
         var parts: [String] = []
         if sleep > 0 { parts.append(String(localized: "Sleep \(Fmt.duration(sleep))")) }
-        if feeds > 0 { parts.append(String(localized: "Feeds \(feeds)")) }
-        if diapers > 0 { parts.append(String(localized: "Diapers \(diapers)")) }
+        // Passed as text so the keys are "Feeds %@" / "Diapers %@" (an Int would
+        // look up "%lld" and miss the translations).
+        if feeds > 0 { parts.append(String(localized: "Feeds \(String(feeds))")) }
+        if diapers > 0 { parts.append(String(localized: "Diapers \(String(diapers))")) }
         return parts.joined(separator: ", ")
     }
 }

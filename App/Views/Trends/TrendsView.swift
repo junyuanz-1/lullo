@@ -60,11 +60,25 @@ private struct TrendsContent: View {
         let now = AppClock.now
         let classifier = AppSettings.sleepClassifier
         let days = Statistics.dailySummaries(events: records, from: from, to: to, now: now, classifier: classifier)
-        // Today is still in progress, so it would pull every average down.
-        let average = Statistics.average(days.filter { !$0.isToday }) ?? Statistics.average(days)
+        // Today is still in progress, so it would pull every average down; until
+        // a full day has been logged there are no averages to show.
+        let average = Statistics.average(days.filter { !$0.isToday })
         let schedules = Statistics.schedules(events: records, from: from, to: to, now: now)
         let ageMonths = baby.record.ageInMonths(at: AppClock.now)
 
+        if !days.contains(where: \.hasData) {
+            ContentUnavailableView(
+                "No Trends Yet",
+                systemImage: "chart.bar.xaxis",
+                description: Text("Daily patterns appear here once you start logging sleep, feeds and diapers.")
+            )
+            .background(Color(.systemGroupedBackground))
+        } else {
+            charts(days: days, average: average, schedules: schedules, ageMonths: ageMonths)
+        }
+    }
+
+    private func charts(days: [DailySummary], average: DailySummary?, schedules: [DaySchedule], ageMonths: Double) -> some View {
         ScrollView {
             VStack(spacing: 16) {
                 if let average {
@@ -109,7 +123,7 @@ private struct AveragesCard: View {
             Text("Recommended total sleep for this age: \(Fmt.number(recommended.lowerBound, digits: 0))–\(Fmt.number(recommended.upperBound, digits: 0)) h")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            Text("Today is still in progress: it is drawn lighter in the charts and left out of the averages.")
+            Text("Today is still in progress: it is shown faded in the charts and left out of the averages.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -275,7 +289,7 @@ private struct FeedingChart: View {
                     }
                     ForEach(days.filter(\.isToday)) { day in
                         PointMark(x: .value("Day", day.day, unit: .day), y: .value("Volume", displayVolume(day.bottleVolumeML)))
-                            .foregroundStyle(.orange.opacity(0.4))
+                            .foregroundStyle(.orange.opacity(0.55))
                     }
                 }
                 .chartYAxisLabel(AppSettings.unitSystem == .metric ? String(localized: "ml") : String(localized: "oz"))
@@ -342,6 +356,7 @@ private struct PumpingChart: View {
 private extension DailySummary {
     var isToday: Bool { Calendar.current.isDate(day, inSameDayAs: AppClock.now) }
 
-    /// Today is still in progress, so its bars are drawn lighter.
-    var chartOpacity: Double { isToday ? 0.4 : 1 }
+    /// Today is still in progress, so its bars are faded (enough to stay
+    /// visible on a dark background).
+    var chartOpacity: Double { isToday ? 0.55 : 1 }
 }

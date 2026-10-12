@@ -11,8 +11,8 @@ struct EditorRoute: Identifiable {
     var existing: Event?
     /// Forces the editor into timer or "log past" mode; nil picks the default.
     var mode: EventEditorView.Mode?
-    /// Related kinds the sheet can switch between before anything is entered
-    /// (the Health tile: medication, temperature, symptom, vaccine).
+    /// Related kinds the new entry can switch between (the Health tile:
+    /// medication, temperature, symptom, vaccine).
     var choices: [EventKind] = []
 }
 
@@ -20,38 +20,14 @@ struct EditorRoute: Identifiable {
 struct EditorSheet: View {
     @ObservedObject var baby: Baby
     let route: EditorRoute
-    @State private var kind: EventKind
-
-    init(baby: Baby, route: EditorRoute) {
-        self.baby = baby
-        self.route = route
-        _kind = State(initialValue: route.kind)
-    }
 
     var body: some View {
         NavigationStack {
-            EventEditorView(baby: baby, kind: kind, existing: route.existing, mode: route.mode)
-                // A new editor (and draft) per kind.
-                .id(kind)
-                .safeAreaInset(edge: .top, spacing: 0) {
-                    if route.existing == nil && route.choices.count > 1 {
-                        ChipPicker(
-                            title: nil,
-                            options: route.choices,
-                            value: $kind,
-                            tint: kind.color,
-                            label: \.title,
-                            systemImage: { $0.systemImage }
-                        )
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal)
-                        .background(Color(.systemGroupedBackground))
-                    }
-                }
+            EventEditorView(baby: baby, kind: route.kind, existing: route.existing, mode: route.mode, choices: route.choices)
         }
         // Short forms (diaper, note) open half-height so the Save button is close
         // at hand; drag up for more room.
-        .presentationDetents(kind.prefersCompactSheet ? [.medium, .large] : [.large])
+        .presentationDetents(route.kind.prefersCompactSheet ? [.medium, .large] : [.large])
     }
 }
 
@@ -89,7 +65,7 @@ struct HomeView: View {
                     ForEach(running) { event in
                         TimerCard(event: event, onEdit: { editor = EditorRoute(kind: event.eventKind, existing: event) }, onStop: { stop(event) })
                     }
-                    if !running.isEmpty {
+                    if !running.isEmpty && AppSettings.liveActivitiesEnabled {
                         TipView(TinytideTips.lockScreen)
                     }
 
@@ -142,6 +118,9 @@ struct HomeView: View {
     // MARK: One-tap actions
 
     private func startTimer(_ kind: EventKind, activityType: ActivityType?) {
+        // Already running (say, started on another phone a moment ago and just
+        // synced): the store hands back that timer, which is not ours to undo.
+        if kind != .activity, store.runningTimer(kind, for: baby) != nil { return }
         guard let event = store.startTimer(kind, for: baby, activityType: activityType) else { return }
         haptic()
         TinytideTips.logged()
@@ -157,6 +136,8 @@ struct HomeView: View {
     }
 
     private func startNursing(_ side: BreastSide?) {
+        // A running session would only switch sides; the timer card does that.
+        if store.runningTimer(.nursing, for: baby) != nil { return }
         guard let event = store.startNursing(for: baby, side: side) else { return }
         haptic()
         TinytideTips.logged()
@@ -177,8 +158,13 @@ struct HomeView: View {
         case .activity: message = String(localized: "Activity finished")
         default: message = String(localized: "Timer stopped")
         }
-        // Saving the earlier record puts the timer back exactly as it was.
-        var toast = UndoToast(message: message) { store.save(before) }
+        // Stopping clears the timer's alarm; Undo puts the timer and its alarm
+        // back exactly as they were.
+        let alarm = TimerAlarms.shared.duration(for: before.id)
+        var toast = UndoToast(message: message) {
+            store.save(before)
+            if let alarm { TimerAlarms.shared.setDuration(alarm, for: before.id) }
+        }
         if before.kind == .pumping || before.kind == .bottle {
             // Amounts are often known only at the end; offer the entry without
             // forcing it open.
@@ -240,30 +226,29 @@ struct TimerCard: View {
     @EnvironmentObject private var store: TrackerStore
     @ObservedObject private var alarms = TimerAlarms.shared
     @ObservedObject var event: Event
+    @Environment(\.dynamicTypeSize) private var typeSize
     var onEdit: () -> Void
     var onStop: () -> Void
 
     var body: some View {
         let record = event.record
         Card {
-            HStack {
-                KindIcon(systemImage: record.displayImage, color: record.kind.color)
-                VStack(alignment: .leading) {
-                    Text(record.kind == .sleep ? String(localized: "Sleeping") : record.displayTitle).font(.headline)
-                    Text("Started \(Fmt.time(record.startDate))").font(.caption).foregroundStyle(.secondary)
-                    if let ring = alarms.fireDate(for: record) {
-                        Label(String(localized: "Rings at \(Fmt.time(ring))"), systemImage: "bell.fill")
-                            .font(.caption)
-                            .foregroundStyle(record.kind.color)
+            // At accessibility text sizes the bell and pencil get their own row, so
+            // the title isn't squeezed into hyphenated fragments.
+            if typeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 8) {
+                    titleBlock(record)
+                    HStack(spacing: 16) {
+                        Spacer()
+                        controls(record)
                     }
                 }
-                Spacer()
-                if TimerAlarm.supportedKinds.contains(record.kind) {
-                    alarmMenu(for: record)
+            } else {
+                HStack {
+                    titleBlock(record)
+                    Spacer()
+                    controls(record)
                 }
-                Button(action: onEdit) { Image(systemName: "pencil.circle.fill").font(.title2) }
-                    .buttonStyle(.borderless)
-                    .accessibilityLabel(Text("Edit"))
             }
 
             ClockTimeline(every: 1) { now in
@@ -289,6 +274,31 @@ struct TimerCard: View {
 }
 
 extension TimerCard {
+    fileprivate func titleBlock(_ record: EventRecord) -> some View {
+        HStack {
+            KindIcon(systemImage: record.displayImage, color: record.kind.color)
+            VStack(alignment: .leading) {
+                Text(record.kind == .sleep ? String(localized: "Sleeping") : record.displayTitle).font(.headline)
+                Text("Started \(Fmt.time(record.startDate))").font(.caption).foregroundStyle(.secondary)
+                if let ring = alarms.fireDate(for: record) {
+                    Label(String(localized: "Rings at \(Fmt.time(ring))"), systemImage: "bell.fill")
+                        .font(.caption)
+                        .foregroundStyle(record.kind.color)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    fileprivate func controls(_ record: EventRecord) -> some View {
+        if TimerAlarm.supportedKinds.contains(record.kind) {
+            alarmMenu(for: record)
+        }
+        Button(action: onEdit) { Image(systemName: "pencil.circle.fill").font(.title2) }
+            .buttonStyle(.borderless)
+            .accessibilityLabel(Text("Edit"))
+    }
+
     /// Countdown for this timer, set right on the card: Off or one of the presets.
     fileprivate func alarmMenu(for record: EventRecord) -> some View {
         let current = alarms.duration(for: record.id).map { Int($0 / 60) }
@@ -399,7 +409,17 @@ struct QuickActionsGrid: View {
     static let timerKinds: [EventKind] = [.sleep, .nursing, .pumping]
     static let healthKinds: [EventKind] = [.medication, .temperature, .symptom, .vaccine]
 
-    private let columns = [GridItem(.adaptive(minimum: 76), spacing: 12)]
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    /// Four entry tiles a row, two at accessibility text sizes so titles fit.
+    private var columns: [GridItem] {
+        [GridItem(.adaptive(minimum: typeSize.isAccessibilitySize ? 140 : 76), spacing: 12)]
+    }
+
+    /// The three timers side by side, or two a row at accessibility text sizes.
+    private var timerColumns: [GridItem] {
+        Array(repeating: GridItem(.flexible(), spacing: 12), count: typeSize.isAccessibilitySize ? 2 : 3)
+    }
 
     private func runningTimers(of kind: EventKind) -> [Event] { running.filter { $0.eventKind == kind } }
 
@@ -409,17 +429,21 @@ struct QuickActionsGrid: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .firstTextBaseline) {
-                groupTitle(String(localized: "Timers"), hint: String(localized: "Tap to start or stop"))
-                Spacer()
-                logPastMenu
+            // The hint gets its own line so long translations don't crowd Log Past.
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(alignment: .center) {
+                    groupTitle(String(localized: "Timers"))
+                    Spacer()
+                    logPastMenu
+                }
+                Text("Tap to start or stop").font(.caption).foregroundStyle(.secondary)
             }
-            HStack(spacing: 12) {
+            LazyVGrid(columns: timerColumns, spacing: 12) {
                 ForEach(Self.timerKinds) { kind in timerTile(kind) }
             }
             .popoverTip(TinytideTips.holdForMore, arrowEdge: .top)
 
-            groupTitle(String(localized: "Add Entry"), hint: nil)
+            groupTitle(String(localized: "Add Entry"))
                 .padding(.top, 6)
             LazyVGrid(columns: columns, spacing: 12) {
                 entryTile(.bottle)
@@ -433,15 +457,10 @@ struct QuickActionsGrid: View {
         }
     }
 
-    private func groupTitle(_ title: String, hint: String?) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 6) {
-            Text(title).font(.subheadline.weight(.semibold))
-            if let hint {
-                Text(hint).font(.caption).foregroundStyle(.secondary)
-            }
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityAddTraits(.isHeader)
+    private func groupTitle(_ title: String) -> some View {
+        Text(title)
+            .font(.subheadline.weight(.semibold))
+            .accessibilityAddTraits(.isHeader)
     }
 
     /// A labeled header button rather than a hidden long-press: logging
@@ -459,10 +478,14 @@ struct QuickActionsGrid: View {
             HStack(spacing: 4) {
                 Image(systemName: "clock.arrow.circlepath")
                 Text("Log Past")
-                Image(systemName: "chevron.down").font(.caption2.bold())
+                Image(systemName: "chevron.down").font(.caption2.bold()).accessibilityHidden(true)
             }
             .font(.subheadline.weight(.medium))
+            // A comfortable target for a text-only button.
+            .padding(.vertical, 8)
+            .contentShape(Rectangle())
         }
+        .fixedSize()
     }
 
     // MARK: Tiles
@@ -528,29 +551,32 @@ struct QuickActionsGrid: View {
         }
     }
 
-    /// Opens the form for `kind`. A running bottle opens that bottle (to add
-    /// the amount or stop it); activities can overlap, so a new one opens.
+    /// Opens the form for `kind` with Save at hand ("Log Past"; the Timer
+    /// segment is one tap away). A running bottle opens that bottle instead, to
+    /// add the amount or stop it, and says so with a pencil badge. Activities can
+    /// overlap, so the tile always adds a new one and only names what is running.
     private func entryTile(_ kind: EventKind) -> some View {
-        let active = runningTimers(of: kind).map(\.record)
-        let open = kind == .bottle ? runningTimers(of: kind).first : nil
+        let active = runningTimers(of: kind)
+        let open = kind == .bottle ? active.first : nil
+        let openRecord = open?.record
         return Button {
             if let open {
                 editor = EditorRoute(kind: kind, existing: open)
             } else {
-                editor = EditorRoute(kind: kind)
+                editor = EditorRoute(kind: kind, mode: .manual)
             }
         } label: {
             QuickActionTile(
                 title: kind.title,
-                subtitle: kind == .activity ? active.first.map(\.displayTitle) : nil,
+                subtitle: kind == .activity ? active.first.map { $0.record.displayTitle } : nil,
                 systemImage: kind.systemImage,
                 color: kind.color,
-                badge: active.isEmpty ? .add : .running,
-                elapsed: active.first.map { record in { (now: Date) in record.duration(at: now) } }
+                badge: openRecord == nil ? .add : .edit,
+                elapsed: openRecord.map { record in { (now: Date) in record.duration(at: now) } }
             )
         }
         .buttonStyle(.plain)
-        .accessibilityHint(Text("Opens a form"))
+        .accessibilityHint(open == nil ? Text("Opens a form") : Text("Opens the running bottle"))
     }
 
     /// The hint about touch-and-hold is no longer needed once it has been used.
@@ -584,8 +610,8 @@ struct QuickActionTile: View {
         case stop
         /// Opens a form.
         case add
-        /// Opens a form; a timer of this kind is running.
-        case running
+        /// Opens the running entry of this kind.
+        case edit
     }
 
     var title: String
@@ -596,7 +622,9 @@ struct QuickActionTile: View {
     /// Shown counting up under the title while a timer runs.
     var elapsed: ((Date) -> TimeInterval)?
 
-    private var isActive: Bool { badge == .stop || badge == .running }
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    private var isActive: Bool { badge == .stop || badge == .edit }
     private var shape: RoundedRectangle { RoundedRectangle(cornerRadius: 14, style: .continuous) }
 
     var body: some View {
@@ -605,14 +633,18 @@ struct QuickActionTile: View {
                 .padding(.bottom, 2)
             Text(title)
                 .font(.caption)
-                .lineLimit(1)
+                .lineLimit(typeSize.isAccessibilitySize ? 2 : 1)
                 .minimumScaleFactor(0.8)
+                .multilineTextAlignment(.center)
                 .foregroundStyle(Color.primary)
             // Always laid out so every tile in a row is the same height.
             Group {
                 if let elapsed {
                     ClockTimeline(every: 1) { now in
-                        Text(Fmt.clock(elapsed(now))).monospacedDigit()
+                        Text(Fmt.clock(elapsed(now)))
+                            .monospacedDigit()
+                            // "18 minutes" rather than a clock time.
+                            .accessibilityLabel(Text(Fmt.duration(elapsed(now), style: .full)))
                     }
                     .foregroundStyle(color)
                 } else {
@@ -637,6 +669,7 @@ struct QuickActionTile: View {
         }
         .contentShape(shape)
         .accessibilityElement(children: .combine)
+        .accessibilityValue(isActive ? Text("Running") : Text(verbatim: ""))
     }
 
     @ViewBuilder
@@ -648,8 +681,8 @@ struct QuickActionTile: View {
             badgeIcon("stop.fill", foreground: .white, background: color)
         case .add:
             badgeIcon("plus", foreground: .secondary, background: Color(.tertiarySystemFill))
-        case .running:
-            EmptyView()
+        case .edit:
+            badgeIcon("pencil", foreground: .white, background: color)
         }
     }
 
@@ -714,13 +747,14 @@ struct StatusTile: View {
     var detail: String?
     var footnote: String?
     var kind: EventKind
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Label(title, systemImage: kind.systemImage)
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(kind.color)
-            Text(value).font(.title3.bold()).lineLimit(1).minimumScaleFactor(0.7)
+            Text(value).font(.title3.bold()).lineLimit(typeSize.isAccessibilitySize ? 2 : 1).minimumScaleFactor(0.7)
             if let detail, !detail.isEmpty {
                 Text(detail).font(.caption).foregroundStyle(.secondary).lineLimit(2)
             }
@@ -745,6 +779,14 @@ struct SweetSpotCard: View {
         let prediction = sleeps.contains(where: \.isOngoing) ? nil : NapPredictor.predict(
             birthDate: baby.birthDate, sleeps: sleeps, now: now, classifier: AppSettings.sleepClassifier
         )
+        if prediction == nil && sleeps.isEmpty {
+            // Nothing to predict from yet; say what will appear here.
+            Card(title: String(localized: "Next Nap Sweet Spot"), systemImage: "sparkles", tint: .indigo) {
+                Text("Log a sleep to get nap-time suggestions based on age and your baby's rhythm.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
         if let prediction {
             Card(title: prediction.isBedtime ? String(localized: "Suggested Bedtime") : String(localized: "Next Nap Sweet Spot"),
                  systemImage: "sparkles", tint: .indigo) {
