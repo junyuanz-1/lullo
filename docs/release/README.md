@@ -30,12 +30,12 @@
 
 - [x] **文案**：`bundle exec fastlane upload_metadata` 上传 9 种语言的文案和审核说明
 - [x] **截图**：`bundle exec fastlane upload_screenshots`（6.9 英寸，9 种语言）
-- [ ] **版权**：`fastlane/metadata/copyright.txt` 目前写的是 `2026 Tinytide`，可以改成你的法定姓名或公司名
-- [ ] **类别**：主要“健康健美”，次要“生活”（`primary_category.txt` / `secondary_category.txt`，上传文案时一起设置）
-- [ ] **年龄分级**：问卷全部选“无”，结果应为 4+。不要勾选“儿童”类别：这个 App 是给家长用的
-- [ ] **App 隐私**：选“我们不会从此 App 中收集数据”（没有分析、广告、第三方 SDK，数据只在设备和用户自己的 iCloud）
-- [ ] **价格**：免费
-- [ ] **审核联系人**：姓名和电话在 App Store Connect 里填（不存在仓库里）；邮箱用 support@tinytide.app
+- [x] **版权**：`fastlane/metadata/copyright.txt` 目前写的是 `2026 Tinytide`，可以改成你的法定姓名或公司名
+- [x] **类别**：主要“健康健美”，次要“生活”（`primary_category.txt` / `secondary_category.txt`，上传文案时一起设置）
+- [x] **年龄分级**：问卷全部选“无”，结果应为 4+。不要勾选“儿童”类别：这个 App 是给家长用的
+- [x] **App 隐私**：选“我们不会从此 App 中收集数据”（没有分析、广告、第三方 SDK，数据只在设备和用户自己的 iCloud）
+- [x] **价格**：免费
+- [x] **审核联系人**：姓名和电话在 App Store Connect 里填（不存在仓库里）；邮箱用 support@tinytide.app
 - [ ] **内购项目**（每个都要填价格、9 种语言的显示名称和描述，并上传一张审核截图）：
 
   | 产品 ID | 类型 | 价格 |
