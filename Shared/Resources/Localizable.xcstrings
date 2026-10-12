@@ -1451,6 +1451,64 @@
         }
       }
     },
+    "Add": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hinzufügen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "追加"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "추가"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicionar"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新增"
+          }
+        }
+      }
+    },
     "Add Amount": {
       "localizations": {
         "de": {
@@ -1795,6 +1853,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "新增照片"
+          }
+        }
+      }
+    },
+    "Add Time": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeit hinzufügen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Time"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir tiempo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter une durée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "時間を追加"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시간 추가"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicionar tempo"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加时长"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新增時長"
           }
         }
       }
@@ -2431,6 +2547,64 @@
         }
       }
     },
+    "Alarm Choices": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wecker-Zeiten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarm Choices"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opciones de alarma"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durées d’alarme"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アラームの時間"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알람 시간"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opções de alarme"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "闹钟时长"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "鬧鐘時長"
+          }
+        }
+      }
+    },
     "Alarm per Side": {
       "localizations": {
         "de": {
@@ -2775,6 +2949,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "請在系統「設定」中允許搖搖傳送通知，才能收到提醒。"
+          }
+        }
+      }
+    },
+    "Also shows on your Lock Screen and in the Dynamic Island.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auch auf dem Sperrbildschirm und in der Dynamic Island."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Also shows on your Lock Screen and in the Dynamic Island."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "También se muestra en la pantalla bloqueada y en la Dynamic Island."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S’affiche aussi sur l’écran verrouillé et dans la Dynamic Island."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック画面とダイナミックアイランドにも表示されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잠금 화면과 Dynamic Island에도 표시돼요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Também aparece na Tela Bloqueada e na Dynamic Island."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "也会显示在锁定屏幕和灵动岛上。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "也會顯示在鎖定畫面和動態島上。"
           }
         }
       }
@@ -5385,6 +5617,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "開始計時時可以選擇倒數，例如每側 10 分鐘。iOS 26 以上即使在靜音模式也會響鈴；較早的版本會以通知的方式播放。點一下聲音可以試聽。"
+          }
+        }
+      }
+    },
+    "Choose a side to start the timer.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle eine Seite, um den Timer zu starten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a side to start the timer."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un lado para iniciar el cronómetro."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez un côté pour démarrer le chrono."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "左右を選んでタイマーを開始します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방향을 골라 타이머를 시작해요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha um lado para iniciar o cronômetro."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择一侧开始计时。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇一側開始計時。"
           }
         }
       }
@@ -9160,6 +9450,64 @@
         }
       }
     },
+    "From 1 to %lld minutes.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 bis %lld Minuten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From 1 to %lld minutes."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De 1 a %lld minutos."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De 1 à %lld minutes."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1〜%lld 分。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1~%lld분."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De 1 a %lld minutos."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 到 %lld 分钟。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 到 %lld 分鐘。"
+          }
+        }
+      }
+    },
     "Funds new features for every family.": {
       "localizations": {
         "de": {
@@ -10262,60 +10610,60 @@
         }
       }
     },
-    "Hold a timer to pick a side, add details before starting, or log one from earlier.": {
+    "Hold a timer to add details before starting, or log one from earlier.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Halte einen Timer gedrückt, um eine Seite zu wählen, vor dem Start Details hinzuzufügen oder etwas nachzutragen."
+            "value": "Halte einen Timer gedrückt, um vor dem Start Details hinzuzufügen oder etwas nachzutragen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hold a timer to pick a side, add details before starting, or log one from earlier."
+            "value": "Hold a timer to add details before starting, or log one from earlier."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mantén pulsado un cronómetro para elegir el lado, añadir detalles antes de empezar o registrar uno anterior."
+            "value": "Mantén pulsado un cronómetro para añadir detalles antes de empezar o registrar uno anterior."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Touchez longuement un chrono pour choisir le côté, ajouter des détails avant de démarrer ou noter une entrée passée."
+            "value": "Touchez longuement un chrono pour ajouter des détails avant de démarrer ou noter une entrée passée."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "タイマーを長押しすると、左右を選んだり、詳細を入力してから開始したり、あとから記録したりできます。"
+            "value": "タイマーを長押しすると、詳細を入力してから開始したり、あとから記録したりできます。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "타이머를 길게 누르면 방향을 고르거나, 세부 정보를 입력하고 시작하거나, 지난 기록을 추가할 수 있어요."
+            "value": "타이머를 길게 누르면 세부 정보를 입력하고 시작하거나, 지난 기록을 추가할 수 있어요."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Toque e segure um cronômetro para escolher o lado, adicionar detalhes antes de começar ou registrar um anterior."
+            "value": "Toque e segure um cronômetro para adicionar detalhes antes de começar ou registrar um anterior."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "长按计时按钮，可以选择喂奶侧、填写详情后开始，或补录之前的记录。"
+            "value": "长按计时按钮，可以填写详情后开始，或补录之前的记录。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "長按計時按鈕，可以選擇餵奶側、填寫詳情後開始，或補登之前的紀錄。"
+            "value": "長按計時按鈕，可以填寫詳情後開始，或補登之前的紀錄。"
           }
         }
       }
@@ -17050,60 +17398,60 @@
         }
       }
     },
-    "On Today, touch and hold a timer to pick a nursing side, add details before starting, or log one from earlier.": {
+    "On Today, tap Nursing to pick a side. Touch and hold a timer to add details before starting, or log one from earlier.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Halte unter „Heute“ einen Timer gedrückt, um eine Stillseite zu wählen, vor dem Start Details hinzuzufügen oder etwas nachzutragen."
+            "value": "Tippe unter „Heute“ auf Stillen, um die Seite zu wählen. Halte einen Timer gedrückt, um vor dem Start Details hinzuzufügen oder etwas nachzutragen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "On Today, touch and hold a timer to pick a nursing side, add details before starting, or log one from earlier."
+            "value": "On Today, tap Nursing to pick a side. Touch and hold a timer to add details before starting, or log one from earlier."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "En Hoy, mantén pulsado un cronómetro para elegir el lado, añadir detalles antes de empezar o registrar uno anterior."
+            "value": "En Hoy, toca Lactancia para elegir el lado. Mantén pulsado un cronómetro para añadir detalles antes de empezar o registrar uno anterior."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dans Aujourd’hui, touchez longuement un chrono pour choisir le côté, ajouter des détails avant de démarrer ou noter une entrée passée."
+            "value": "Dans Aujourd’hui, touchez Allaitement pour choisir le côté. Touchez longuement un chrono pour ajouter des détails avant de démarrer ou noter une entrée passée."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "「今日」でタイマーを長押しすると、授乳の左右を選んだり、詳細を入力してから開始したり、あとから記録したりできます。"
+            "value": "「今日」で「授乳」をタップすると左右を選べます。タイマーを長押しすると、詳細を入力してから開始したり、あとから記録したりできます。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "오늘 화면에서 타이머를 길게 누르면 수유 방향을 고르거나, 세부 정보를 입력하고 시작하거나, 지난 기록을 추가할 수 있어요."
+            "value": "오늘 화면에서 모유 수유를 탭하면 방향을 고를 수 있어요. 타이머를 길게 누르면 세부 정보를 입력하고 시작하거나, 지난 기록을 추가할 수 있어요."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Em Hoje, toque e segure um cronômetro para escolher o lado, adicionar detalhes antes de começar ou registrar um anterior."
+            "value": "Em Hoje, toque em Amamentação para escolher o lado. Toque e segure um cronômetro para adicionar detalhes antes de começar ou registrar um anterior."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "在“今天”页长按计时按钮，可以选择喂奶侧、填写详情后再开始，或补录之前的记录。"
+            "value": "在“今天”页点按“亲喂”可以选择喂奶侧。长按计时按钮，可以填写详情后再开始，或补录之前的记录。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "在「今天」頁長按計時按鈕，可以選擇餵奶側、填寫詳情後再開始，或補登之前的紀錄。"
+            "value": "在「今天」頁點按「親餵」可以選擇餵奶側。長按計時按鈕，可以填寫詳情後再開始，或補登之前的紀錄。"
           }
         }
       }
@@ -18442,6 +18790,64 @@
         }
       }
     },
+    "Plays a gentle sound. Change it in Settings → Timer Alarm.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klingelt mit einem sanften Ton. Ändern unter Einstellungen → Timer-Wecker."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plays a gentle sound. Change it in Settings → Timer Alarm."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suena con un tono suave. Cámbialo en Ajustes → Alarma del temporizador."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonne avec un son doux. Modifiez-le dans Réglages → Alarme du minuteur."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "やさしい音で鳴ります。設定 → タイマーアラーム で変更できます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "부드러운 소리로 울려요. 설정 → 타이머 알람에서 바꿀 수 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca com um som suave. Mude em Ajustes → Alarme do timer."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "响铃声音很轻柔，可以在 设置 → 计时闹钟 中更改。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "響鈴聲音很輕柔，可以在 設定 → 計時鬧鐘 中更改。"
+          }
+        }
+      }
+    },
     "Poop": {
       "localizations": {
         "de": {
@@ -19661,6 +20067,64 @@
         }
       }
     },
+    "Restore Defaults": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standardwerte wiederherstellen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore Defaults"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar valores predeterminados"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rétablir les valeurs par défaut"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デフォルトに戻す"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본값으로 복원"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar padrões"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "恢复默认"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "恢復預設"
+          }
+        }
+      }
+    },
     "Restore This Backup": {
       "localizations": {
         "de": {
@@ -19893,6 +20357,64 @@
         }
       }
     },
+    "Rings after %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klingelt nach %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rings after %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suena tras %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonne après %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@後に鳴ります"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 후에 울려요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca após %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@后响铃"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@後響鈴"
+          }
+        }
+      }
+    },
     "Rings at %@": {
       "localizations": {
         "de": {
@@ -20005,64 +20527,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "會用柔和的聲音提醒。可在「更多 → 計時鬧鐘」中選擇聲音。"
-          }
-        }
-      }
-    },
-    "Rings with a gentle sound. Choose the sound in Settings → Timer Alarm.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Klingelt mit einem sanften Ton. Den Ton wählst du unter Einstellungen → Timer-Wecker."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rings with a gentle sound. Choose the sound in Settings → Timer Alarm."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suena con un tono suave. Elige el sonido en Ajustes → Alarma del temporizador."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sonne avec un son doux. Choisissez-le dans Réglages → Alarme du minuteur."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "やさしい音で鳴ります。音は 設定 → タイマーアラーム で選べます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "부드러운 소리로 울려요. 설정 → 타이머 알람에서 소리를 고를 수 있어요."
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toca com um som suave. Escolha o som em Ajustes → Alarme do timer."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "响铃声音很轻柔。可以在 设置 → 计时闹钟 中选择铃声。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "響鈴聲音很輕柔。可以在 設定 → 計時鬧鐘 中選擇鈴聲。"
           }
         }
       }
@@ -25671,60 +26135,60 @@
         }
       }
     },
-    "The timer keeps running on your Lock Screen and Dynamic Island.": {
+    "The times offered when you start a timer. Swipe left to remove one.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der Timer läuft auf dem Sperrbildschirm und in der Dynamic Island weiter."
+            "value": "Die Zeiten, die beim Starten eines Timers angeboten werden. Zum Entfernen nach links wischen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The timer keeps running on your Lock Screen and Dynamic Island."
+            "value": "The times offered when you start a timer. Swipe left to remove one."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El cronómetro sigue corriendo en la pantalla bloqueada y en la Dynamic Island."
+            "value": "Los tiempos que se ofrecen al iniciar un temporizador. Desliza a la izquierda para quitar uno."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le chronomètre continue de tourner sur l’écran verrouillé et dans la Dynamic Island."
+            "value": "Les durées proposées au lancement d’un minuteur. Balayez vers la gauche pour en retirer une."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "タイマーはロック画面とダイナミックアイランドで動き続けます。"
+            "value": "タイマーを開始するときに表示される時間です。左にスワイプすると削除できます。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "타이머가 잠금 화면과 Dynamic Island에서 계속 실행돼요."
+            "value": "타이머를 시작할 때 보이는 시간이에요. 왼쪽으로 밀면 삭제돼요."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "O cronômetro continua na Tela Bloqueada e na Dynamic Island."
+            "value": "Os tempos oferecidos ao iniciar um timer. Deslize para a esquerda para remover."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "计时会在锁屏和灵动岛上持续显示。"
+            "value": "开始计时时可选的时长。向左滑动可删除。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "計時會持續顯示在鎖定畫面和動態島上。"
+            "value": "開始計時時可選的時長。向左滑動可刪除。"
           }
         }
       }

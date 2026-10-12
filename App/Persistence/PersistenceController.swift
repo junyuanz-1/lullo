@@ -126,10 +126,32 @@ final class PersistenceController: @unchecked Sendable {
     }
 
     func existingShare(for object: NSManagedObject) -> CKShare? {
-        if let share = try? container.fetchShares(matching: [object.objectID])[object.objectID] {
-            return share
+        guard let share = try? container.fetchShares(matching: [object.objectID])[object.objectID] else { return nil }
+        return stoppedShares.contains(share.recordID.recordName) ? nil : share
+    }
+
+    /// Shares the owner stopped on this phone. Stopping deletes the share in
+    /// iCloud right away, but the container's own copy (what `fetchShares`
+    /// reads) lingers until a later sync, sometimes until the next launch, and
+    /// the baby would still show as Shared. Kept until the container catches up.
+    private static let stoppedSharesKey = "stoppedShareRecordNames"
+
+    private var stoppedShares: Set<String> {
+        get { Set(SharedContainer.defaults.stringArray(forKey: Self.stoppedSharesKey) ?? []) }
+        set { SharedContainer.defaults.set(Array(newValue), forKey: Self.stoppedSharesKey) }
+    }
+
+    /// Called when the owner stops sharing: the baby is no longer shared,
+    /// though its data stays (only a participant's copy is removed).
+    func shareStopped(_ share: CKShare) {
+        var stopped = stoppedShares
+        stopped.insert(share.recordID.recordName)
+        // Forget the ones the container has dropped by now.
+        if let privateStore, let current = try? container.fetchShares(in: privateStore) {
+            let names = Set(current.map(\.recordID.recordName))
+            stopped.formIntersection(names.union([share.recordID.recordName]))
         }
-        return nil
+        stoppedShares = stopped
     }
 
     func isShared(_ object: NSManagedObject) -> Bool {
@@ -145,6 +167,8 @@ final class PersistenceController: @unchecked Sendable {
     func share(_ baby: Baby) async throws -> CKShare {
         if let share = existingShare(for: baby) { return share }
         let (_, share, _) = try await container.share([baby], to: nil)
+        // Shared again after stopping: this share is live.
+        stoppedShares.remove(share.recordID.recordName)
         share[CKShare.SystemFieldKey.title] = baby.displayName as CKRecordValue
         share.publicPermission = .none
         return share

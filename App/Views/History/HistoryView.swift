@@ -87,7 +87,7 @@ private struct CategoryFilter: View {
                 .font(.subheadline.weight(.medium))
                 .padding(.horizontal, 14)
                 .padding(.vertical, 6)
-                .background(selected ? Color.accentColor : Color(.secondarySystemFill), in: Capsule())
+                .background(selected ? AnyShapeStyle(.tint) : AnyShapeStyle(Color(.secondarySystemFill)), in: Capsule())
                 .foregroundStyle(selected ? Color.white : Color.primary)
         }
         .buttonStyle(.plain)

@@ -212,7 +212,7 @@ struct UnitToggle<Value: Hashable>: View {
                         .fixedSize()
                         .padding(.horizontal, 9)
                         .padding(.vertical, 5)
-                        .background(selected ? Color.accentColor : .clear, in: Capsule())
+                        .background(selected ? AnyShapeStyle(.tint) : AnyShapeStyle(.clear), in: Capsule())
                         .foregroundStyle(selected ? Color.white : Color.secondary)
                 }
                 .buttonStyle(.plain)
@@ -243,7 +243,7 @@ struct VolumePresets: View {
                     Button {
                         metricValue = ml
                     } label: {
-                        ChipLabel(title: Fmt.volume(ml, unit: unitSystem), selected: selected, tint: .orange)
+                        ChipLabel(title: Fmt.volume(ml, unit: unitSystem), selected: selected)
                     }
                     .buttonStyle(.plain)
                 }
@@ -252,12 +252,21 @@ struct VolumePresets: View {
     }
 }
 
+extension AnyShapeStyle {
+    /// `color`, or the theme colour (the environment tint) when nil. Controls
+    /// use the theme; kind colours are for icons, tiles and charts.
+    static func themed(_ color: Color?) -> AnyShapeStyle {
+        color.map { AnyShapeStyle($0) } ?? AnyShapeStyle(.tint)
+    }
+}
+
 /// Visual for one selectable pill.
 struct ChipLabel: View {
     var title: String
     var systemImage: String?
     var selected: Bool
-    var tint: Color = .accentColor
+    /// nil follows the theme, like every other control.
+    var tint: Color?
 
     var body: some View {
         HStack(spacing: 5) {
@@ -267,7 +276,7 @@ struct ChipLabel: View {
         .font(.subheadline.weight(.medium))
         .padding(.horizontal, 13)
         .padding(.vertical, 7)
-        .background(selected ? tint : Color(.tertiarySystemFill), in: Capsule())
+        .background(selected ? AnyShapeStyle.themed(tint) : AnyShapeStyle(Color(.tertiarySystemFill)), in: Capsule())
         .foregroundStyle(selected ? Color.white : Color.primary)
         .contentShape(Capsule())
     }
@@ -281,7 +290,7 @@ struct ChipPicker<Value: Hashable>: View {
     @Binding var selection: Value?
     /// Tapping the selected pill again clears an optional field.
     var allowsDeselect = true
-    var tint: Color = .accentColor
+    var tint: Color?
     var label: (Value) -> String
     var systemImage: ((Value) -> String)?
 
@@ -316,7 +325,7 @@ extension ChipPicker {
         title: String?,
         options: [Value],
         value selection: Binding<Value>,
-        tint: Color = .accentColor,
+        tint: Color? = nil,
         label: @escaping (Value) -> String,
         systemImage: ((Value) -> String)? = nil
     ) {
@@ -338,7 +347,7 @@ struct MultiChipPicker<Value: Hashable>: View {
     var title: String?
     var options: [Value]
     @Binding var selection: [Value]
-    var tint: Color = .accentColor
+    var tint: Color?
     var label: (Value) -> String
 
     var body: some View {
@@ -378,7 +387,7 @@ struct PillSegmentedControl<Value: Hashable>: View {
 
     var segments: [Segment]
     @Binding var selection: Value
-    var tint: Color = .accentColor
+    var tint: Color?
     @Namespace private var highlight
     @Environment(\.dynamicTypeSize) private var typeSize
 
@@ -409,7 +418,11 @@ struct PillSegmentedControl<Value: Hashable>: View {
                     .foregroundStyle(selected ? Color.white : Color.secondary)
                     .background {
                         if selected {
-                            Capsule().fill(tint.gradient).matchedGeometryEffect(id: "highlight", in: highlight)
+                            Capsule()
+                                .fill(AnyShapeStyle.themed(tint))
+                                // The same soft top light as `Color.gradient`.
+                                .overlay(Capsule().fill(LinearGradient(colors: [.white.opacity(0.18), .clear], startPoint: .top, endPoint: .bottom)))
+                                .matchedGeometryEffect(id: "highlight", in: highlight)
                         }
                     }
                     .contentShape(Capsule())
@@ -637,59 +650,131 @@ extension View {
 // MARK: - Swipe to delete
 
 /// Swipe left to reveal Delete, for rows that are not in a List (which has
-/// swipeActions built in). Tap the row to open it, or to close the swipe.
+/// swipeActions built in), drawn the way Mail does it: the red action fills
+/// the gap the row leaves, and a long swipe deletes outright. Tap the row to
+/// open it, or to close the swipe.
+///
+/// The row should span the full width of its card, so it slides out past the
+/// card's edge rather than being cut off inside its padding.
 struct SwipeToDeleteRow<Content: View>: View {
+    /// Shared by the rows of a card, so opening one closes the others.
+    @Binding var isRevealed: Bool
     var onTap: () -> Void
     var onDelete: () -> Void
     @ViewBuilder var content: Content
 
     @State private var offset: CGFloat = 0
-    @State private var revealed = false
-    private let buttonWidth: CGFloat = 72
+    @State private var width: CGFloat = 0
+    /// Past this point letting go deletes; a haptic marks crossing it.
+    @State private var armed = false
+    /// Decided on the first movement: a mostly vertical drag is left to scrolling.
+    @State private var horizontal: Bool?
+    /// Where the row was when the drag began (closed, or open on Delete).
+    @State private var dragStart: CGFloat = 0
+    private let buttonWidth: CGFloat = 80
+
+    private var fullSwipe: CGFloat { max(buttonWidth * 2, width * 0.55) }
 
     var body: some View {
         content
             .contentShape(Rectangle())
             .onTapGesture {
-                if revealed { close() } else { onTap() }
+                if isRevealed { isRevealed = false } else { onTap() }
             }
             .offset(x: offset)
-            .background(alignment: .trailing) {
-                Button(role: .destructive) {
-                    close()
-                    onDelete()
-                } label: {
-                    Image(systemName: "trash")
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                        .frame(width: buttonWidth)
-                        .frame(maxHeight: .infinity)
-                        .background(Color.red, in: RoundedRectangle(cornerRadius: 10))
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(Text("Delete"))
-                .opacity(offset < -8 ? 1 : 0)
+            .overlay(alignment: .trailing) {
+                if offset < 0 { action }
             }
             .clipped()
-            .gesture(
-                DragGesture(minimumDistance: 20)
-                    .onChanged { value in
-                        let base: CGFloat = revealed ? -buttonWidth : 0
-                        offset = min(0, max(-buttonWidth - 16, base + value.translation.width))
-                    }
-                    .onEnded { _ in
-                        withAnimation(.snappy(duration: 0.2)) {
-                            revealed = offset < -buttonWidth / 2
-                            offset = revealed ? -buttonWidth : 0
-                        }
-                    }
-            )
+            .background {
+                GeometryReader { proxy in
+                    Color.clear
+                        .onAppear { width = proxy.size.width }
+                        .onChange(of: proxy.size.width) { _, new in width = new }
+                }
+            }
+            .gesture(drag)
+            .onChange(of: isRevealed) { _, revealed in
+                if !revealed { settle(at: 0) }
+            }
+            .accessibilityAction(named: Text("Delete"), onDelete)
     }
 
-    private func close() {
-        withAnimation(.snappy(duration: 0.2)) {
-            revealed = false
-            offset = 0
+    /// Fills exactly the space the row has moved out of.
+    private var action: some View {
+        Button(role: .destructive, action: slideOutAndDelete) {
+            VStack(spacing: 3) {
+                Image(systemName: "trash.fill").font(.body.weight(.semibold))
+                Text("Delete").font(.caption2.weight(.semibold)).lineLimit(1)
+            }
+            .fixedSize()
+            .foregroundStyle(.white)
+            // Hidden until there is room for it, then follows the row's edge
+            // once a full swipe is armed, like Mail.
+            .opacity(-offset > 44 ? 1 : 0)
+            .frame(width: buttonWidth)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: armed ? .leading : .trailing)
+            .background(Color.red)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .frame(width: -offset)
+        .clipped()
+        .accessibilityHidden(true)
+    }
+
+    private var drag: some Gesture {
+        DragGesture(minimumDistance: 12)
+            .onChanged { value in
+                let dx = value.translation.width, dy = value.translation.height
+                if horizontal == nil {
+                    horizontal = abs(dx) > abs(dy)
+                    dragStart = offset
+                }
+                guard horizontal == true else { return }
+                if !isRevealed && dx < 0 { isRevealed = true }
+                offset = min(0, dragStart + dx)
+                let nowArmed = -offset > fullSwipe
+                if nowArmed != armed {
+                    withAnimation(.snappy(duration: 0.2)) { armed = nowArmed }
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                }
+            }
+            .onEnded { value in
+                defer { horizontal = nil }
+                guard horizontal == true else { return }
+                if armed {
+                    slideOutAndDelete()
+                } else if -offset > buttonWidth / 2 || value.predictedEndTranslation.width < -buttonWidth * 2 {
+                    settle(at: -buttonWidth)
+                } else {
+                    isRevealed = false
+                    settle(at: 0)
+                }
+            }
+    }
+
+    private func settle(at target: CGFloat) {
+        withAnimation(.snappy(duration: 0.25)) {
+            offset = target
+            armed = false
+        }
+    }
+
+    /// The row leaves to the left before it is removed, as in a List.
+    private func slideOutAndDelete() {
+        withAnimation(.easeOut(duration: 0.2)) {
+            offset = -max(width, buttonWidth)
+            armed = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            onDelete()
+            // Normally the row is gone by now; if it stays (the delete didn't
+            // happen), it comes back closed.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                isRevealed = false
+                settle(at: 0)
+            }
         }
     }
 }
@@ -743,7 +828,7 @@ enum TinytideTips {
 /// Shown on the timer buttons once the user has logged a few things with a tap.
 struct HoldForMoreTip: Tip {
     var title: Text { Text("Touch and Hold for More") }
-    var message: Text? { Text("Hold a timer to pick a side, add details before starting, or log one from earlier.") }
+    var message: Text? { Text("Hold a timer to add details before starting, or log one from earlier.") }
     var image: Image? { Image(systemName: "hand.tap.fill") }
 
     var rules: [Rule] {

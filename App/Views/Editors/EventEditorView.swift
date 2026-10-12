@@ -5,7 +5,15 @@ import SwiftUI
 /// Create or edit any kind of entry. Timer kinds can either start a live timer
 /// or be logged after the fact.
 struct EventEditorView: View {
-    enum Mode: Hashable { case timer, manual }
+    enum Mode: String, Hashable { case timer, manual }
+
+    /// The Timer / Log Past choice last made for `kind` on this phone, offered
+    /// again when the form opens without asking for one (the Bottle tile).
+    static func rememberedMode(for kind: EventKind) -> Mode? {
+        SharedContainer.defaults.string(forKey: modeKey(kind)).flatMap(Mode.init(rawValue:))
+    }
+
+    private static func modeKey(_ kind: EventKind) -> String { "editorMode.\(kind.rawValue)" }
 
     @EnvironmentObject private var store: TrackerStore
     @Environment(\.dismiss) private var dismiss
@@ -25,6 +33,7 @@ struct EventEditorView: View {
     @State private var closing = false
     @State private var newTimerAlarm: Int?
     @ObservedObject private var alarms = TimerAlarms.shared
+    @Environment(\.dynamicTypeSize) private var typeSize
     /// Related kinds a new entry can switch between (the Health tile).
     let choices: [EventKind]
     /// A timer of this kind is already running for the baby, so a new entry can
@@ -75,6 +84,13 @@ struct EventEditorView: View {
             Group { formContent }
                 .disabled(!canEdit)
         }
+        // Start sits at the bottom, always in reach, with Notes above it so
+        // they are filled in before starting rather than skipped.
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if mode == .timer && isNew {
+                startBar.disabled(!canEdit)
+            }
+        }
         .navigationTitle(kind.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -89,6 +105,10 @@ struct EventEditorView: View {
             }
         }
         .listSectionSpacing(.compact)
+        // Only a tap on the switch changes it; the starting mode is not a choice.
+        .onChange(of: mode) { _, newMode in
+            SharedContainer.defaults.set(newMode.rawValue, forKey: Self.modeKey(kind))
+        }
         .confirmationDialog("Delete this entry?", isPresented: $confirmingDelete, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
                 closing = true
@@ -116,8 +136,7 @@ struct EventEditorView: View {
                         .init(value: Mode.timer, title: String(localized: "Timer"), systemImage: "timer"),
                         .init(value: Mode.manual, title: String(localized: "Log Past"), systemImage: "clock.arrow.circlepath"),
                     ],
-                    selection: $mode,
-                    tint: kind.color
+                    selection: $mode
                 )
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
@@ -186,21 +205,26 @@ struct EventEditorView: View {
             Section {
                 alarmPicker(selection: $newTimerAlarm)
             } footer: {
-                Text("Rings with a gentle sound. Choose the sound in Settings → Timer Alarm.")
+                // Only worth saying once there is something to ring.
+                if newTimerAlarm != nil {
+                    Text("Plays a gentle sound. Change it in Settings → Timer Alarm.")
+                }
             }
         }
-        // The start buttons get their own section with no card behind them, so
-        // the cards above keep their rounded bottoms instead of looking cut off.
-        Section {
+    }
+
+    /// The start buttons, pinned under the form on a bar.
+    private var startBar: some View {
+        VStack(spacing: 6) {
             if kind == .nursing {
                 let suggested = EventRecord.suggestedNextSide(after: store.lastEvent(of: [.nursing], for: baby)?.record)
-                HStack(spacing: 16) {
+                HStack(spacing: 12) {
                     ForEach([BreastSide.left, .right], id: \.self) { side in
                         Button {
                             startNursing(side)
                         } label: {
-                            VStack(spacing: 6) {
-                                Image(systemName: "play.fill").font(.title2)
+                            VStack(spacing: 4) {
+                                Image(systemName: "play.fill").font(.title3)
                                 Text("Start \(side.title)").font(.headline)
                                 // Always laid out so both buttons are the same height.
                                 Text("Suggested").font(.caption2.bold())
@@ -208,9 +232,9 @@ struct EventEditorView: View {
                                     .accessibilityHidden(side != suggested)
                             }
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 18)
-                            .background(side == suggested ? Color.pink : Color.pink.opacity(0.15), in: RoundedRectangle(cornerRadius: 14))
-                            .foregroundStyle(side == suggested ? .white : .pink)
+                            .padding(.vertical, 12)
+                            .background(side == suggested ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.opacity(0.15)), in: RoundedRectangle(cornerRadius: 14))
+                            .foregroundStyle(side == suggested ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
                         }
                         .buttonStyle(.plain)
                     }
@@ -226,15 +250,25 @@ struct EventEditorView: View {
                         .padding(.vertical, 8)
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(kind.color)
+                .buttonBorderShape(.capsule)
             }
-        } footer: {
-            if AppSettings.liveActivitiesEnabled {
-                Text("The timer keeps running on your Lock Screen and Dynamic Island.")
+            // At accessibility sizes the caption would take a third of the
+            // screen; the button says enough.
+            if AppSettings.liveActivitiesEnabled && !typeSize.isAccessibilitySize {
+                Text("Also shows on your Lock Screen and in the Dynamic Island.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
             }
         }
-        .listRowInsets(EdgeInsets())
-        .listRowBackground(Color.clear)
+        .padding(.horizontal)
+        .padding(.top, 12)
+        .padding(.bottom, 8)
+        .frame(maxWidth: .infinity)
+        // Opaque, like the form behind it: a translucent bar let the fields
+        // scrolled under it show through the caption.
+        .background(Color(.systemGroupedBackground))
+        .overlay(alignment: .top) { Divider() }
     }
 
     /// Chips for the related kinds a new entry can be (Health).
@@ -242,7 +276,7 @@ struct EventEditorView: View {
         let selection = Binding<EventKind>(get: { draft.kind }, set: { switchKind(to: $0) })
         let label: (EventKind) -> String = { $0.title }
         let image: (EventKind) -> String = { $0.systemImage }
-        return ChipPicker(title: nil, options: choices, value: selection, tint: kind.color, label: label, systemImage: image)
+        return ChipPicker(title: nil, options: choices, value: selection, label: label, systemImage: image)
     }
 
     /// "She fell asleep 10 minutes ago" in one tap instead of the time wheel.
@@ -261,15 +295,17 @@ struct EventEditorView: View {
         let label: (Int) -> String = { minutes in
             minutes == 0 ? String(localized: "Now") : String(localized: "\(Fmt.duration(TimeInterval(minutes * 60), style: .short)) ago")
         }
-        return ChipPicker(title: nil, options: options, selection: selected, allowsDeselect: false, tint: kind.color, label: label)
+        return ChipPicker(title: nil, options: options, selection: selected, allowsDeselect: false, label: label)
     }
 
     /// Countdown choices ("ring after 10 min"), with Off as a choice of its own
-    /// like the bell menu on the timer card. Nursing counts each side separately.
+    /// like the bell menu on the timer card, and − / + to fine-tune the chosen
+    /// one (3 min nudged down to 2). Nursing counts each side separately.
+    @ViewBuilder
     private func alarmPicker(selection: Binding<Int?>) -> some View {
         // 0 stands for Off.
         let title: String = kind == .nursing ? String(localized: "Alarm per Side") : String(localized: "Alarm")
-        let options: [Int] = [0] + TimerAlarm.presetMinutes(for: kind)
+        let options: [Int] = [0] + TimerAlarm.choices(presets: alarms.presetMinutes(for: kind), selected: selection.wrappedValue)
         let minutes = Binding<Int>(
             get: { selection.wrappedValue ?? 0 },
             set: { selection.wrappedValue = $0 == 0 ? nil : $0 }
@@ -278,7 +314,16 @@ struct EventEditorView: View {
             minutes == 0 ? String(localized: "Off") : Fmt.duration(TimeInterval(minutes * 60), style: .short)
         }
         let image: (Int) -> String = { minutes in minutes == 0 ? "bell.slash" : "bell.fill" }
-        return ChipPicker(title: title, options: options, value: minutes, tint: kind.color, label: label, systemImage: image)
+        ChipPicker(title: title, options: options, value: minutes, label: label, systemImage: image)
+        if let chosen = selection.wrappedValue {
+            Stepper(value: Binding(
+                get: { chosen },
+                set: { selection.wrappedValue = TimerAlarm.clampedMinutes($0) }
+            ), in: 1...TimerAlarm.maxMinutes) {
+                Text("Rings after \(Fmt.duration(TimeInterval(chosen * 60), style: .short))")
+                    .monospacedDigit()
+            }
+        }
     }
 
     @ViewBuilder
@@ -298,15 +343,15 @@ struct EventEditorView: View {
                     if let existing { store.stopTimer(existing) }
                 }
             } else if kind == .nursing {
-                DatePicker("Start", selection: $draft.startDate)
+                DatePicker("Start", selection: toTheMinute($draft.startDate))
                 minutesField(BreastSide.left.title, value: $draft.leftDuration)
                 minutesField(BreastSide.right.title, value: $draft.rightDuration)
                 // Which side to suggest next only needs asking when both were used.
                 if draft.leftDuration > 0 && draft.rightDuration > 0 {
-                    ChipPicker(title: String(localized: "Ended On"), options: BreastSide.allCases, selection: $draft.lastSide, tint: .pink, label: \.title)
+                    ChipPicker(title: String(localized: "Ended On"), options: BreastSide.allCases, selection: $draft.lastSide, label: \.title)
                 }
             } else {
-                DatePicker(draft.hasTimeRange ? String(localized: "Start") : String(localized: "Time"), selection: $draft.startDate)
+                DatePicker(draft.hasTimeRange ? String(localized: "Start") : String(localized: "Time"), selection: toTheMinute($draft.startDate))
             }
             if kind.allowsOptionalEnd {
                 optionalEndRows
@@ -325,7 +370,7 @@ struct EventEditorView: View {
                 } else {
                     DatePicker("End", selection: Binding(
                         get: { draft.endDate ?? draft.startDate },
-                        set: { draft.endDate = $0 }
+                        set: { draft.endDate = $0.flooredToMinute }
                     ), in: draft.startDate...)
                     LabeledContent("Duration", value: Fmt.duration(draft.duration()))
                 }
@@ -351,7 +396,8 @@ struct EventEditorView: View {
             get: { draft.endDate != nil },
             set: { on in
                 guard on else { draft.endDate = nil; return }
-                let now = AppClock.now
+                let now = AppClock.now.flooredToMinute
+                draft.startDate = draft.startDate.flooredToMinute
                 if now.timeIntervalSince(draft.startDate) < 60 {
                     // Started "now" and already over: most likely it just ended,
                     // so offer a range ending now rather than one in the future.
@@ -365,10 +411,17 @@ struct EventEditorView: View {
         if draft.endDate != nil {
             DatePicker("End", selection: Binding(
                 get: { draft.endDate ?? draft.startDate },
-                set: { draft.endDate = $0 }
+                set: { draft.endDate = $0.flooredToMinute }
             ), in: draft.startDate...)
             LabeledContent("Duration", value: Fmt.duration(draft.duration()))
         }
+    }
+
+    /// What a time picker shows is what is kept: picking 09:54 means 09:54:00,
+    /// not 09:54 plus the seconds of the time that was there, which made
+    /// 09:54–10:05 come out as 10 min instead of 11.
+    private func toTheMinute(_ date: Binding<Date>) -> Binding<Date> {
+        Binding(get: { date.wrappedValue }, set: { date.wrappedValue = $0.flooredToMinute })
     }
 
     /// One row per side: type the minutes, or nudge them with the stepper.
@@ -398,7 +451,7 @@ struct EventEditorView: View {
         switch kind {
         case .sleep:
             Section("Details") {
-                ChipPicker(title: String(localized: "Where"), options: SleepLocation.allCases, selection: $draft.sleepLocation, tint: .indigo, label: \.title)
+                ChipPicker(title: String(localized: "Where"), options: SleepLocation.allCases, selection: $draft.sleepLocation, label: \.title)
             }
         case .nursing:
             EmptyView()
@@ -406,13 +459,13 @@ struct EventEditorView: View {
             Section {
                 MeasurementField(title: String(localized: "Amount"), metricValue: $draft.amountML, quantity: .volume)
                 VolumePresets(metricValue: $draft.amountML)
-                ChipPicker(title: String(localized: "Contents"), options: BottleContent.allCases, selection: $draft.bottleContent, tint: .orange, label: \.title)
+                ChipPicker(title: String(localized: "Contents"), options: BottleContent.allCases, selection: $draft.bottleContent, label: \.title)
             }
         case .solids:
             Section("Food") {
                 TextField("What did they eat?", text: optionalText($draft.foodName))
                 MeasurementField(title: String(localized: "Amount"), metricValue: $draft.amountML, quantity: .volume)
-                ChipPicker(title: String(localized: "Reaction"), options: FoodReaction.allCases, selection: $draft.foodReaction, tint: EventKind.solids.color) {
+                ChipPicker(title: String(localized: "Reaction"), options: FoodReaction.allCases, selection: $draft.foodReaction) {
                     "\($0.emoji) \($0.title)"
                 }
             }
@@ -443,8 +496,7 @@ struct EventEditorView: View {
                     ChipPicker(
                         title: String(localized: "Remind Next Dose"),
                         options: [0.0, 4, 6, 8, 12, 24],
-                        value: $medicationReminderHours,
-                        tint: EventKind.medication.color
+                        value: $medicationReminderHours
                     ) { hours in
                         hours == 0 ? String(localized: "Off") : String(localized: "In \(Fmt.duration(hours * 3600, style: .full))")
                     }
@@ -482,9 +534,9 @@ struct EventEditorView: View {
             }
         case .fussy:
             Section("Details") {
-                ChipPicker(title: String(localized: "How Fussy"), options: FussIntensity.allCases, selection: $draft.fussIntensity, tint: EventKind.fussy.color, label: \.title)
-                MultiChipPicker(title: String(localized: "Possible Cause"), options: FussCause.allCases, selection: $draft.fussCauses, tint: EventKind.fussy.color, label: \.title)
-                MultiChipPicker(title: String(localized: "Soothing"), options: SoothingMethod.allCases, selection: $draft.soothingMethods, tint: EventKind.fussy.color, label: \.title)
+                ChipPicker(title: String(localized: "How Fussy"), options: FussIntensity.allCases, selection: $draft.fussIntensity, label: \.title)
+                MultiChipPicker(title: String(localized: "Possible Cause"), options: FussCause.allCases, selection: $draft.fussCauses, label: \.title)
+                MultiChipPicker(title: String(localized: "Soothing"), options: SoothingMethod.allCases, selection: $draft.soothingMethods, label: \.title)
             }
         case .note:
             EmptyView()
@@ -497,7 +549,6 @@ struct EventEditorView: View {
             options: ActivityType.allCases,
             selection: $draft.activityType,
             allowsDeselect: false,
-            tint: EventKind.activity.color,
             label: \.title,
             systemImage: { $0.systemImage }
         )
@@ -518,8 +569,8 @@ struct EventEditorView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
-                        .background(selected ? Color.teal : Color.teal.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
-                        .foregroundStyle(selected ? .white : .teal)
+                        .background(selected ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.opacity(0.12)), in: RoundedRectangle(cornerRadius: 12))
+                        .foregroundStyle(selected ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
                     }
                     .buttonStyle(.plain)
                 }
@@ -528,7 +579,7 @@ struct EventEditorView: View {
         }
         if draft.diaperType?.isWet == true {
             Section("Pee Amount") {
-                ChipPicker(title: nil, options: PeeAmount.allCases, selection: $draft.peeAmount, tint: .teal, label: \.title)
+                ChipPicker(title: nil, options: PeeAmount.allCases, selection: $draft.peeAmount, label: \.title)
             }
         }
         if draft.diaperType?.isDirty == true {
@@ -543,7 +594,7 @@ struct EventEditorView: View {
                                     Circle()
                                         .fill(color.swatch)
                                         .frame(width: 30, height: 30)
-                                        .overlay(Circle().stroke(draft.poopColor == color ? Color.accentColor : .secondary.opacity(0.3), lineWidth: draft.poopColor == color ? 3 : 1))
+                                        .overlay(Circle().stroke(draft.poopColor == color ? AnyShapeStyle(.tint) : AnyShapeStyle(Color.secondary.opacity(0.3)), lineWidth: draft.poopColor == color ? 3 : 1))
                                     Text(color.title).font(.caption2)
                                 }
                             }
@@ -552,7 +603,7 @@ struct EventEditorView: View {
                     }
                     .padding(.vertical, 4)
                 }
-                ChipPicker(title: String(localized: "Consistency"), options: PoopConsistency.allCases, selection: $draft.poopConsistency, tint: .brown, label: \.title)
+                ChipPicker(title: String(localized: "Consistency"), options: PoopConsistency.allCases, selection: $draft.poopConsistency, label: \.title)
                 if draft.poopColor?.needsAttention == true {
                     Label("Black (after the first days), red or pale/white stool can be a sign of a problem. Consider calling your pediatrician.", systemImage: "exclamationmark.triangle.fill")
                         .font(.callout)
@@ -741,10 +792,19 @@ struct EventEditorView: View {
             break
         }
         if record.kind.hasDuration && record.kind != .nursing {
-            // For "log past", default to a range ending now.
+            // For "log past", default to a range ending now, in whole minutes
+            // like the time pickers show it.
             let minutes: Double = record.kind == .bottle ? 15 : 30
-            record.startDate = now.addingTimeInterval(-minutes * 60)
-            record.endDate = now
+            let end = now.flooredToMinute
+            record.startDate = end.addingTimeInterval(-minutes * 60)
+            record.endDate = end
         }
+    }
+}
+
+private extension Date {
+    /// Without the seconds, as the time pickers show it.
+    var flooredToMinute: Date {
+        Calendar.current.dateInterval(of: .minute, for: self)?.start ?? self
     }
 }

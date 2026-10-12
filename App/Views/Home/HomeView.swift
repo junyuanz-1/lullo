@@ -292,7 +292,6 @@ struct TimerCard: View {
                                     .font(.headline)
                             }
                             .buttonStyle(.borderedProminent)
-                            .tint(record.kind.color)
                         }
                     }
                 }
@@ -312,7 +311,7 @@ extension TimerCard {
                 if let ring = alarms.fireDate(for: record) {
                     Label(String(localized: "Rings at \(Fmt.time(ring))"), systemImage: "bell.fill")
                         .font(.caption)
-                        .foregroundStyle(record.kind.color)
+                        .foregroundStyle(.tint)
                 }
             }
         }
@@ -328,7 +327,8 @@ extension TimerCard {
             .accessibilityLabel(Text("Edit"))
     }
 
-    /// Countdown for this timer, set right on the card: Off or one of the presets.
+    /// Countdown for this timer, set right on the card: Off or one of the presets
+    /// (and the fine-tuned one chosen when it started, if that is not a preset).
     fileprivate func alarmMenu(for record: EventRecord) -> some View {
         let current = alarms.duration(for: record.id).map { Int($0 / 60) }
         return Menu {
@@ -342,7 +342,7 @@ extension TimerCard {
                         Text("Off")
                     }
                 }
-                ForEach(TimerAlarm.presetMinutes(for: record.kind), id: \.self) { minutes in
+                ForEach(TimerAlarm.choices(presets: alarms.presetMinutes(for: record.kind), selected: current), id: \.self) { minutes in
                     Button {
                         setAlarm(TimeInterval(minutes * 60), for: record)
                     } label: {
@@ -392,8 +392,8 @@ struct NursingControls: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(active ? Color.pink : Color.pink.opacity(0.12), in: RoundedRectangle(cornerRadius: 14))
-                        .foregroundStyle(active ? .white : .pink)
+                        .background(active ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.opacity(0.12)), in: RoundedRectangle(cornerRadius: 14))
+                        .foregroundStyle(active ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(active ? String(localized: "Pause \(side.title)") : String(localized: "Start \(side.title)"))
@@ -409,7 +409,6 @@ struct NursingControls: View {
                         .font(.headline)
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.pink)
             }
         }
     }
@@ -421,7 +420,8 @@ struct NursingControls: View {
 /// predictable:
 /// - Timers (sleep, nursing, pumping) start on a single tap and stop on the
 ///   next one. A ▶ badge marks them; while running the tile is outlined and
-///   counts up. Long-press for "Start with Details" or to pick a side.
+///   counts up. Long-press for "Start with Details". Nursing asks which side
+///   first, in a menu on the tap, rather than guessing and needing a switch.
 /// - Add Entry tiles always open a form (prefilled, so most entries are just
 ///   Save). A ＋ badge marks them.
 /// Entries from earlier are one tap away under "Log Past" in the header.
@@ -548,37 +548,22 @@ struct QuickActionsGrid: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityHint(kind == .sleep ? Text("Ends the sleep") : Text("Stops the timer"))
+            } else if kind == .nursing {
+                nursingStartMenu
             } else {
                 Button {
-                    if kind == .nursing { startNursing(suggestedSide) } else { startTimer(kind, nil) }
+                    startTimer(kind, nil)
                 } label: {
-                    QuickActionTile(
-                        title: kind.title,
-                        subtitle: kind == .nursing ? String(localized: "Next Side: \(suggestedSide.shortTitle)") : nil,
-                        systemImage: kind.systemImage,
-                        color: kind.color,
-                        badge: .start
-                    )
+                    QuickActionTile(title: kind.title, systemImage: kind.systemImage, color: kind.color, badge: .start)
                 }
                 .buttonStyle(.plain)
                 .accessibilityHint(Text("Starts a timer. Touch and hold for more options."))
                 .contextMenu {
-                    if kind == .nursing {
-                        ForEach([BreastSide.left, .right], id: \.self) { side in
-                            Button {
-                                usedHold()
-                                startNursing(side)
-                            } label: {
-                                Label(String(localized: "Start \(side.title)"), systemImage: "play.fill")
-                            }
-                        }
-                    } else {
-                        Button {
-                            usedHold()
-                            editor = EditorRoute(kind: kind, mode: .timer)
-                        } label: {
-                            Label("Start with Details", systemImage: "timer")
-                        }
+                    Button {
+                        usedHold()
+                        editor = EditorRoute(kind: kind, mode: .timer)
+                    } label: {
+                        Label("Start with Details", systemImage: "timer")
                     }
                     Button {
                         usedHold()
@@ -591,8 +576,47 @@ struct QuickActionsGrid: View {
         }
     }
 
-    /// Opens the form for `kind` with Save at hand ("Log Past"; the Timer
-    /// segment is one tap away). A running bottle opens that bottle instead, to
+    /// The Nursing tile when nothing is running: a tap asks which side, with the
+    /// suggested one first, so the timer never starts on the wrong side.
+    private var nursingStartMenu: some View {
+        Menu {
+            ForEach([suggestedSide, suggestedSide.other], id: \.self) { side in
+                Button {
+                    startNursing(side)
+                } label: {
+                    Label(String(localized: "Start \(side.title)"), systemImage: "play.fill")
+                    if side == suggestedSide { Text("Suggested") }
+                }
+            }
+            Divider()
+            Button {
+                editor = EditorRoute(kind: .nursing, mode: .timer)
+            } label: {
+                Label("Start with Details", systemImage: "timer")
+            }
+            Button {
+                editor = EditorRoute(kind: .nursing, mode: .manual)
+            } label: {
+                Label("Log Past", systemImage: "clock.arrow.circlepath")
+            }
+        } label: {
+            QuickActionTile(
+                title: EventKind.nursing.title,
+                subtitle: String(localized: "Next Side: \(suggestedSide.shortTitle)"),
+                systemImage: EventKind.nursing.systemImage,
+                color: EventKind.nursing.color,
+                badge: .start
+            )
+        }
+        .menuStyle(.button)
+        .buttonStyle(.plain)
+        // Keep the suggested side first even when the menu opens upwards.
+        .menuOrder(.fixed)
+        .accessibilityHint(Text("Choose a side to start the timer."))
+    }
+
+    /// Opens the form for `kind` in Timer or Log Past, whichever was last chosen
+    /// for it (Log Past, with Save at hand, until then). A running bottle opens that bottle instead, to
     /// add the amount or stop it, and says so with a pencil badge; so does a
     /// fussy spell still going on, to end it. Activities can overlap, so the
     /// tile always adds a new one and only names what is running.
@@ -604,7 +628,7 @@ struct QuickActionsGrid: View {
             if let open {
                 editor = EditorRoute(kind: kind, existing: open)
             } else {
-                editor = EditorRoute(kind: kind, mode: .manual)
+                editor = EditorRoute(kind: kind, mode: EventEditorView.rememberedMode(for: kind) ?? .manual)
             }
         } label: {
             QuickActionTile(
@@ -899,6 +923,12 @@ struct RecentCard: View {
     /// Nil when the entries can't be deleted (a read-only caregiver).
     var onDelete: ((Event) -> Void)?
 
+    /// The row swiped open, if any; only one at a time, as in a List.
+    @State private var revealed: NSManagedObjectID?
+    /// The Card's own padding, which rows reach into so they can slide out past
+    /// the card's edge.
+    private let inset: CGFloat = 16
+
     var body: some View {
         if !events.isEmpty {
             Card(title: String(localized: "Recent"), systemImage: "clock.fill", tint: .gray) {
@@ -919,24 +949,37 @@ struct RecentCard: View {
                                 }
                             }
                         }
-                        if event != events.last { Divider() }
+                        if event != events.last {
+                            // Lined up with the titles, past the icon (34 + 12).
+                            Divider().padding(.leading, inset + 46)
+                        }
                     }
                 }
+                .padding(.horizontal, -inset)
             }
         }
     }
 
     @ViewBuilder
     private func row(_ event: Event) -> some View {
+        let content = EventRow(event: event)
+            .padding(.vertical, 8)
+            .padding(.horizontal, inset)
         if let onDelete {
-            SwipeToDeleteRow(onTap: { onSelect(event) }, onDelete: { onDelete(event) }) {
-                EventRow(event: event)
-                    .padding(.vertical, 6)
+            SwipeToDeleteRow(
+                isRevealed: Binding(
+                    get: { revealed == event.objectID },
+                    set: { open in
+                        if open { revealed = event.objectID } else if revealed == event.objectID { revealed = nil }
+                    }
+                ),
+                onTap: { onSelect(event) },
+                onDelete: { onDelete(event) }
+            ) {
+                content
             }
         } else {
-            EventRow(event: event)
-                .padding(.vertical, 6)
-                .onTapGesture { onSelect(event) }
+            content.onTapGesture { onSelect(event) }
         }
     }
 }

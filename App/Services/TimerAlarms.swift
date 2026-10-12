@@ -94,6 +94,31 @@ final class TimerAlarms: ObservableObject {
         defaults.set(duration ?? 0, forKey: "timerAlarmLast.\(kind.rawValue)")
     }
 
+    /// The countdown pills offered for this kind: the ones set up in Settings,
+    /// or the built-in ones.
+    func presetMinutes(for kind: EventKind) -> [Int] {
+        customPresets(for: kind) ?? TimerAlarm.presetMinutes(for: kind)
+    }
+
+    func hasCustomPresets(for kind: EventKind) -> Bool {
+        customPresets(for: kind) != nil
+    }
+
+    /// Saves the pills for this kind; nil goes back to the built-in ones.
+    func setPresetMinutes(_ minutes: [Int]?, for kind: EventKind) {
+        objectWillChange.send()
+        let key = "timerAlarmPresets.\(kind.rawValue)"
+        if let minutes {
+            defaults.set(TimerAlarm.normalizedPresets(minutes), forKey: key)
+        } else {
+            defaults.removeObject(forKey: key)
+        }
+    }
+
+    private func customPresets(for kind: EventKind) -> [Int]? {
+        (defaults.array(forKey: "timerAlarmPresets.\(kind.rawValue)") as? [Int]).map(TimerAlarm.normalizedPresets)
+    }
+
     func fireDate(for record: EventRecord, now: Date = Date()) -> Date? {
         guard let duration = durations[record.id] else { return nil }
         return TimerAlarm.fireDate(for: record, after: duration, now: now)
