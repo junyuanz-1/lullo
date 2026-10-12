@@ -48,7 +48,8 @@ for pair in $LANGUAGES; do
   language="${pair%%:*}"
   region="${pair##*:}"
   echo "▸ Snapshots: $language ($region), $MODE"
-  run="$RESULTS/$language.xctestrun"
+  # Paths inside an .xctestrun are relative to its folder, so the copy stays next to it.
+  run="$(dirname "$XCTESTRUN")/Language-$language.xctestrun"
   scripts/xctestrun_language.py "$XCTESTRUN" "$run" "$language" "$region" \
     "SNAPSHOT_TESTING_RECORD=$RECORD" "SNAPSHOT_ARTIFACTS=$ARTIFACTS" "TZ=UTC"
   xcodebuild test-without-building \
