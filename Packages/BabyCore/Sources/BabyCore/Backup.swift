@@ -132,3 +132,100 @@ public enum BackupMerge {
         return result
     }
 }
+
+/// What restoring a backup changes, as "roll back to that moment": for every
+/// baby in scope, entries added since the backup are deleted, edited ones are
+/// put back and deleted ones come back. Babies not in the backup are left alone.
+public struct RollbackPlan: Sendable {
+    public var upsertBabies: [BabyRecord] = []
+    public var upsertEvents: [EventRecord] = []
+    public var deleteEventIDs: [UUID] = []
+    public var unchangedEvents = 0
+
+    public var changeCount: Int { upsertBabies.count + upsertEvents.count + deleteEventIDs.count }
+}
+
+public enum BackupRollback {
+    /// - Parameters:
+    ///   - babyIDs: the babies to roll back (for example only those this user may edit).
+    ///   - now: stamped as `updatedAt` on everything written, so the restored copy
+    ///     wins over older copies on other devices.
+    public static func plan(
+        backup: BackupFile,
+        currentBabies: [BabyRecord],
+        currentEvents: [EventRecord],
+        babyIDs: Set<UUID>,
+        now: Date = Date()
+    ) -> RollbackPlan {
+        var plan = RollbackPlan()
+        let babiesByID = Dictionary(currentBabies.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
+        for baby in backup.babies where babyIDs.contains(baby.id) {
+            if let current = babiesByID[baby.id], sameContent(current, baby) { continue }
+            var restored = baby
+            restored.updatedAt = now
+            plan.upsertBabies.append(restored)
+        }
+
+        let eventsByID = Dictionary(currentEvents.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
+        var kept = Set<UUID>()
+        for event in backup.events where babyIDs.contains(event.babyID) && kept.insert(event.id).inserted {
+            if let current = eventsByID[event.id], sameContent(current, event) {
+                plan.unchangedEvents += 1
+                continue
+            }
+            var restored = event
+            restored.updatedAt = now
+            plan.upsertEvents.append(restored)
+        }
+        plan.deleteEventIDs = currentEvents
+            .filter { babyIDs.contains($0.babyID) && !kept.contains($0.id) }
+            .map(\.id)
+        return plan
+    }
+
+    private static func sameContent(_ a: BabyRecord, _ b: BabyRecord) -> Bool {
+        var a = a, b = b
+        a.updatedAt = .distantPast
+        b.updatedAt = .distantPast
+        a.birthDate = rounded(a.birthDate); b.birthDate = rounded(b.birthDate)
+        a.createdAt = rounded(a.createdAt); b.createdAt = rounded(b.createdAt)
+        return a == b
+    }
+
+    private static func sameContent(_ a: EventRecord, _ b: EventRecord) -> Bool {
+        normalized(a) == normalized(b)
+    }
+
+    /// Backups store milliseconds; compare dates at that precision.
+    private static func normalized(_ r: EventRecord) -> EventRecord {
+        var r = r
+        r.updatedAt = .distantPast
+        r.startDate = rounded(r.startDate)
+        r.endDate = r.endDate.map(rounded)
+        r.createdAt = rounded(r.createdAt)
+        r.activeSideStartedAt = r.activeSideStartedAt.map(rounded)
+        r.leftDuration = (r.leftDuration * 1000).rounded() / 1000
+        r.rightDuration = (r.rightDuration * 1000).rounded() / 1000
+        return r
+    }
+
+    private static func rounded(_ date: Date) -> Date {
+        Date(timeIntervalSince1970: (date.timeIntervalSince1970 * 1000).rounded() / 1000)
+    }
+}
+
+/// Rules for the automatic daily backups kept on the device.
+public enum AutoBackupPolicy {
+    public static let keepCount = 10
+
+    /// One automatic backup per calendar day.
+    public static func isDue(lastBackup: Date?, now: Date = Date(), calendar: Calendar = .current) -> Bool {
+        guard let lastBackup else { return true }
+        return !calendar.isDate(lastBackup, inSameDayAs: now) || lastBackup > now
+    }
+
+    /// The items to delete so that only the newest `keep` remain.
+    public static func toPrune<T>(_ items: [T], date: (T) -> Date, keep: Int = keepCount) -> [T] {
+        Array(items.sorted { date($0) > date($1) }.dropFirst(keep))
+    }
+}

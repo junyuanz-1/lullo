@@ -20,6 +20,8 @@ struct EventEditorView: View {
     @State private var timerStart = Date()
     @State private var confirmingDelete = false
     @State private var closing = false
+    @State private var newTimerAlarm: Int?
+    @ObservedObject private var alarms = TimerAlarms.shared
 
     init(baby: Baby, kind: EventKind, existing: Event?) {
         self.baby = baby
@@ -31,6 +33,7 @@ struct EventEditorView: View {
         }
         _draft = State(initialValue: record)
         _baseline = State(initialValue: existing?.record)
+        _newTimerAlarm = State(initialValue: TimerAlarms.shared.lastUsed(for: kind).map { Int($0 / 60) })
         _mode = State(initialValue: existing == nil && kind.supportsTimer ? .timer : .manual)
     }
 
@@ -132,14 +135,30 @@ struct EventEditorView: View {
 
     @ViewBuilder
     private var timerStartSection: some View {
+        if kind != .nursing {
+            Section {
+                if kind == .activity {
+                    activityTypePicker
+                }
+                DatePicker("Start", selection: $timerStart, in: ...Date())
+            }
+        }
+        if TimerAlarm.supportedKinds.contains(kind) {
+            Section {
+                alarmPicker(selection: $newTimerAlarm)
+            } footer: {
+                Text("Rings with a gentle sound. Choose the sound in More → Timer Alarm.")
+            }
+        }
+        // The start buttons get their own section with no card behind them, so
+        // the cards above keep their rounded bottoms instead of looking cut off.
         Section {
             if kind == .nursing {
                 let suggested = EventRecord.suggestedNextSide(after: store.lastEvent(of: [.nursing], for: baby)?.record)
                 HStack(spacing: 16) {
                     ForEach([BreastSide.left, .right], id: \.self) { side in
                         Button {
-                            store.startNursing(for: baby, side: side)
-                            dismiss()
+                            startNursing(side)
                         } label: {
                             VStack(spacing: 6) {
                                 Image(systemName: "play.fill").font(.title2)
@@ -157,22 +176,7 @@ struct EventEditorView: View {
                         .buttonStyle(.plain)
                     }
                 }
-                .listRowBackground(Color.clear)
             } else {
-                if kind == .activity {
-                    activityTypePicker
-                }
-                DatePicker("Start", selection: $timerStart, in: ...Date())
-            }
-        } footer: {
-            if kind == .nursing {
-                Text("The timer keeps running on your Lock Screen and Dynamic Island.")
-            }
-        }
-        if kind != .nursing {
-            // Its own section, so the card above keeps its rounded bottom instead of
-            // looking cut off where the clear button row starts.
-            Section {
                 Button {
                     startTimer()
                 } label: {
@@ -183,12 +187,37 @@ struct EventEditorView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(kind.color)
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
-            } footer: {
-                Text("The timer keeps running on your Lock Screen and Dynamic Island.")
             }
+        } footer: {
+            Text("The timer keeps running on your Lock Screen and Dynamic Island.")
         }
+        .listRowInsets(EdgeInsets())
+        .listRowBackground(Color.clear)
+    }
+
+    /// Countdown choices ("ring after 10 min"). Nursing counts each side separately.
+    private func alarmPicker(selection: Binding<Int?>) -> some View {
+        ChipPicker(
+            title: kind == .nursing ? String(localized: "Alarm per Side") : String(localized: "Alarm"),
+            options: TimerAlarm.presetMinutes(for: kind),
+            selection: selection,
+            tint: kind.color,
+            label: { Fmt.duration(TimeInterval($0 * 60), style: .short) },
+            systemImage: { _ in "bell.fill" }
+        )
+    }
+
+    /// The countdown on the running timer being edited; changes apply right away.
+    private var runningAlarm: Binding<Int?> {
+        Binding(
+            get: { alarms.duration(for: existing?.id).map { Int($0 / 60) } },
+            set: { minutes in
+                guard let id = existing?.id else { return }
+                let duration = minutes.map { TimeInterval($0 * 60) }
+                alarms.setDuration(duration, for: id)
+                alarms.rememberLastUsed(duration, for: kind)
+            }
+        )
     }
 
     @ViewBuilder
@@ -199,6 +228,10 @@ struct EventEditorView: View {
                 durationStepper(String(localized: "Left"), value: $draft.leftDuration)
                 durationStepper(String(localized: "Right"), value: $draft.rightDuration)
                 ChipPicker(title: String(localized: "Last Side"), options: BreastSide.allCases, selection: $draft.lastSide, tint: .pink, label: \.title)
+                if draft.isOngoing && !isNew {
+                    alarmPicker(selection: runningAlarm)
+                    alarmTimeNote
+                }
             } else if kind.hasDuration {
                 if draft.endDate == nil && !isNew {
                     LabeledContent("End", value: String(localized: "Running"))
@@ -210,6 +243,10 @@ struct EventEditorView: View {
                     TimelineView(.periodic(from: .now, by: 1)) { context in
                         LabeledContent("Duration", value: Fmt.duration(draft.duration(at: context.date)))
                     }
+                    if TimerAlarm.supportedKinds.contains(kind) {
+                        alarmPicker(selection: runningAlarm)
+                        alarmTimeNote
+                    }
                 } else {
                     DatePicker("End", selection: Binding(
                         get: { draft.endDate ?? draft.startDate },
@@ -218,6 +255,19 @@ struct EventEditorView: View {
                     LabeledContent("Duration", value: Fmt.duration(draft.duration()))
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var alarmTimeNote: some View {
+        if let date = alarms.fireDate(for: draft) {
+            Label(String(localized: "Rings at \(Fmt.time(date))"), systemImage: "bell.fill")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        } else if draft.isNursingPaused, alarms.duration(for: existing?.id) != nil {
+            Label("Paused: the alarm continues when nursing resumes.", systemImage: "bell.slash")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
     }
 
@@ -441,12 +491,25 @@ struct EventEditorView: View {
     }
 
     private func startTimer() {
+        let event: Event?
         if kind == .activity {
-            store.startTimer(.activity, for: baby, activityType: draft.activityType ?? .play, at: timerStart)
+            event = store.startTimer(.activity, for: baby, activityType: draft.activityType ?? .play, at: timerStart)
         } else {
-            store.startTimer(kind, for: baby, at: timerStart)
+            event = store.startTimer(kind, for: baby, at: timerStart)
         }
+        applyNewTimerAlarm(to: event)
         dismiss()
+    }
+
+    private func startNursing(_ side: BreastSide) {
+        applyNewTimerAlarm(to: store.startNursing(for: baby, side: side))
+        dismiss()
+    }
+
+    private func applyNewTimerAlarm(to event: Event?) {
+        let duration = newTimerAlarm.map { TimeInterval($0 * 60) }
+        alarms.rememberLastUsed(duration, for: kind)
+        if let id = event?.id, let duration { alarms.setDuration(duration, for: id) }
     }
 
     private func save() {

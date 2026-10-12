@@ -238,6 +238,11 @@ final class TrackerStore: ObservableObject {
         WidgetCenter.shared.reloadAllTimelines()
         LiveActivityManager.shared.sync(with: snapshot)
         NotificationManager.reschedule(from: snapshot)
+        let all = babies()
+        TimerAlarms.shared.sync(
+            running: all.flatMap { runningTimers(for: $0) }.map(\.record),
+            babyNames: Dictionary(all.compactMap { b in b.id.map { ($0, b.displayName) } }, uniquingKeysWith: { a, _ in a })
+        )
     }
 
     func makeSnapshot(now: Date = Date()) -> WidgetSnapshot {

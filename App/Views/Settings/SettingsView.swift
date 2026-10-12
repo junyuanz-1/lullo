@@ -22,6 +22,7 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.diaperReminderHours, store: SharedContainer.defaults) private var diaperHours = 3.0
     @AppStorage(SettingsKey.napReminderEnabled, store: SharedContainer.defaults) private var napReminder = false
     @AppStorage(SettingsKey.liveActivitiesEnabled, store: SharedContainer.defaults) private var liveActivities = true
+    @AppStorage(SettingsKey.alarmSound, store: SharedContainer.defaults) private var alarmSound: AlarmSound = .chime
 
     @State private var editingBaby: Baby?
     @State private var addingBaby = false
@@ -41,6 +42,7 @@ struct SettingsView: View {
                 familySection
                 preferencesSection
                 remindersSection
+                alarmSection
                 iCloudSection
                 dataSection
                 supportSection
@@ -192,6 +194,26 @@ struct SettingsView: View {
         .onChange(of: diaperHours) { _, _ in store.refreshSideEffects() }
     }
 
+    private var alarmSection: some View {
+        Section {
+            ChipPicker(
+                title: String(localized: "Sound"),
+                options: AlarmSound.allCases,
+                value: Binding(
+                    get: { alarmSound },
+                    set: { alarmSound = $0; TimerAlarms.shared.playPreview($0) }
+                ),
+                label: \.title,
+                systemImage: { _ in "speaker.wave.2.fill" }
+            )
+        } header: {
+            Text("Timer Alarm")
+        } footer: {
+            Text("Choose a countdown when you start a timer, like 10 minutes per side. On iOS 26 and later the alarm rings even in Silent mode; on earlier versions it plays as a notification. Tap a sound to hear it.")
+        }
+        .onDisappear { TimerAlarms.shared.stopPreview() }
+    }
+
     private var iCloudSection: some View {
         Section {
             LabeledContent("iCloud Account", value: accountText)
@@ -212,6 +234,11 @@ struct SettingsView: View {
 
     private var dataSection: some View {
         Section {
+            NavigationLink {
+                BackupsView()
+            } label: {
+                Label("Automatic Backups", systemImage: "clock.arrow.circlepath")
+            }
             Button {
                 export { try BackupService.exportBackup(store: store) }
             } label: {

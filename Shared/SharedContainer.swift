@@ -36,6 +36,7 @@ enum SettingsKey {
     static let selectedBabyID = "selectedBabyID"
     static let unitSystem = "unitSystem"
     static let temperatureUnit = "temperatureUnit"
+    static let alarmSound = "alarmSound"
     static let nightStartHour = "nightStartHour"
     static let nightEndHour = "nightEndHour"
     static let caregiverName = "caregiverName"

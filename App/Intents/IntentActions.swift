@@ -33,6 +33,22 @@ enum IntentActions {
         return event.record.activeSide
     }
 
+    /// Returns the total nursing time, or nil when no nursing timer was running.
+    static func finishNursing(babyID: UUID?) -> TimeInterval? {
+        guard let baby = baby(babyID), let session = store.runningTimer(.nursing, for: baby) else { return nil }
+        store.stopTimer(session)
+        store.refreshSideEffects()
+        return session.record.duration()
+    }
+
+    static func logBottle(babyID: UUID?, amountML: Double) -> Bool {
+        guard let baby = baby(babyID), let id = baby.id else { return false }
+        let content = store.lastEvent(of: [.bottle], for: baby)?.record.bottleContent ?? .formula
+        store.save(EventRecord(babyID: id, kind: .bottle, startDate: Date(), amountML: amountML, bottleContent: content))
+        store.refreshSideEffects()
+        return true
+    }
+
     static func logDiaper(babyID: UUID?, type: DiaperType) -> Bool {
         guard let baby = baby(babyID) else { return false }
         store.logDiaper(type, for: baby)
@@ -88,6 +104,24 @@ struct TrackerShortcuts: AppShortcutsProvider {
             ],
             shortTitle: "Start Nursing",
             systemImageName: "heart.fill"
+        )
+        AppShortcut(
+            intent: FinishNursingIntent(),
+            phrases: [
+                "Finish nursing in \(.applicationName)",
+                "Done breastfeeding in \(.applicationName)",
+            ],
+            shortTitle: "Finish Nursing",
+            systemImageName: "checkmark.circle.fill"
+        )
+        AppShortcut(
+            intent: LogBottleIntent(),
+            phrases: [
+                "Log a bottle in \(.applicationName)",
+                "Baby had a bottle in \(.applicationName)",
+            ],
+            shortTitle: "Log Bottle",
+            systemImageName: "waterbottle.fill"
         )
         AppShortcut(
             intent: LogDiaperIntent(),
