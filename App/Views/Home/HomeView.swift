@@ -630,8 +630,10 @@ struct QuickActionTile: View {
         .overlay {
             if isActive { shape.strokeBorder(color, lineWidth: 2) }
         }
+        // Small and tucked into the corner so it clears the icon even on the
+        // narrow four-column tiles.
         .overlay(alignment: .topTrailing) {
-            badgeView.padding(6)
+            badgeView.padding(4)
         }
         .contentShape(shape)
         .accessibilityElement(children: .combine)
@@ -653,9 +655,9 @@ struct QuickActionTile: View {
 
     private func badgeIcon(_ name: String, foreground: Color, background: Color) -> some View {
         Image(systemName: name)
-            .font(.system(size: 9, weight: .bold))
+            .font(.system(size: 8, weight: .bold))
             .foregroundStyle(foreground)
-            .frame(width: 20, height: 20)
+            .frame(width: 16, height: 16)
             .background(background, in: Circle())
             .accessibilityHidden(true)
     }
