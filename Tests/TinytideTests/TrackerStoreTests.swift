@@ -39,10 +39,10 @@ final class TrackerStoreTests: XCTestCase {
         let baby = makeBaby()
         let babyID = try XCTUnwrap(baby.id)
         var record = EventRecord(babyID: babyID, kind: .fussy, startDate: Date(),
-                                 fussIntensity: .moderate, fussCauses: [.tired, .gas], soothingMethods: [.rocking])
+                                 fussIntensity: .moderate, fussCauses: [.gas, .tired], soothingMethods: [.rocking])
         let event = try XCTUnwrap(store.save(record))
-        XCTAssertEqual(event.fussCauses, "gas,tired", "Stored in declaration order")
-        XCTAssertEqual(event.record.fussCauses, [.gas, .tired])
+        XCTAssertEqual(event.fussCauses, "tired,gas", "Stored in declaration order")
+        XCTAssertEqual(event.record.fussCauses, [.tired, .gas])
         XCTAssertEqual(event.record.soothingMethods, [.rocking])
         XCTAssertEqual(event.record.fussIntensity, .moderate)
         XCTAssertTrue(store.runningTimers(for: baby).isEmpty, "A fussy moment without an end is not a running timer")
