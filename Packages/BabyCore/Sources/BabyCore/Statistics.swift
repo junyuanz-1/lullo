@@ -266,7 +266,11 @@ public enum Statistics {
     static func nextDay(after day: Date, calendar: Calendar) -> Date? {
         guard let later = calendar.date(byAdding: .day, value: 1, to: day) else { return nil }
         let next = calendar.startOfDay(for: later)
-        return next > day ? next : nil
+        if next > day { return next }
+        // If adding a day landed back on the same day (a calendar that resolves a
+        // skipped hour backwards), step past it by elapsed time instead.
+        let fallback = calendar.startOfDay(for: day.addingTimeInterval(25 * 3600))
+        return fallback > day ? fallback : nil
     }
 
     /// Splits `[start, end)` into per-day overlaps.
