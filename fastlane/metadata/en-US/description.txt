@@ -1,0 +1,40 @@
+Tinytide is a gentle baby tracker for sleep, feeds, diapers and growth. One tap to log, easy to read at 3 a.m., and shared in real time with everyone who helps.
+
+ONE-TAP LOGGING
+• Start sleep, nursing and pumping timers with a single tap, and stop them from the Lock Screen or the Dynamic Island
+• Left and right nursing timer that remembers which side is next
+• Bottles with amount and contents, pumping per side, and solids with reactions
+• Diapers with pee amount, poop color and consistency, and diaper rash
+• Medication with dose reminders, temperature, symptoms, vaccines, activities like tummy time and bath, plus notes and photos
+• Made a mistake? Undo it right away
+
+NAP SWEET SPOT
+• See when the next nap is likely to go well, based on your baby's age and their own recent wake windows
+
+TRENDS AND GROWTH
+• A 24-hour daily rhythm chart, and 7, 14 and 30-day trends for sleep, feeds, diapers and pumping
+• Weight, length and head circumference with WHO growth percentiles (0 to 24 months)
+
+SHARED WITH FAMILY
+• Invite a partner, grandparent or nanny with their own Apple Account. Everyone logs and sees the same day, in real time
+• Choose who can edit and who can only view. Every entry shows who logged it
+
+GENTLE ALARMS
+• Set a countdown when you start a timer, like 10 minutes per side, with soft sounds such as a music box or wind chimes
+
+ALWAYS AT HAND
+• Live Activities, plus Home Screen and Lock Screen widgets
+• Siri: "Baby is sleeping in Tinytide" or "Baby woke up in Tinytide"
+• Available in 9 languages
+
+YOUR DATA STAYS YOURS
+• No accounts, no ads, no tracking. Everything is stored on your iPhone and in your own private iCloud
+• Automatic daily backups on your iPhone, plus backup files and CSV export to move to a new phone or share with your pediatrician
+
+FREE, WITH AN OPTIONAL SUPPORTER SUBSCRIPTION
+Every tracking feature is free. Tinytide Supporter is an optional auto-renewing monthly or yearly subscription that unlocks alternate app icons, theme colors and a supporter badge, as a thank-you for supporting an independent app. You can also leave a one-time tip.
+
+Tinytide is not a medical device. Nap suggestions, growth percentiles and health tips are general information. Always talk to your pediatrician about your baby's health.
+
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Privacy Policy: https://tinytide.app/privacy/

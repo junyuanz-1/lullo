@@ -1,5 +1,37 @@
 # fastlane
 
+Release tooling only. Nothing in `fastlane/` is part of the Xcode project, so
+none of it is bundled into the app (`scripts/check_store_metadata.py` checks
+this in CI). The release checklist is in [`docs/release/README.md`](../docs/release/README.md).
+
+## App Store listing (`metadata/`)
+
+The text shown on the App Store, in all 9 languages, in
+[fastlane deliver's format](https://docs.fastlane.tools/actions/deliver/):
+
+| File | Field | Limit |
+|---|---|---|
+| `metadata/<language>/name.txt` | App name | 30 |
+| `metadata/<language>/subtitle.txt` | Subtitle | 30 |
+| `metadata/<language>/promotional_text.txt` | Promotional text (can change without a new version) | 170 |
+| `metadata/<language>/description.txt` | Description | 4000 |
+| `metadata/<language>/keywords.txt` | Keywords, comma separated, no spaces | 100 |
+| `metadata/<language>/release_notes.txt` | What's New (add from version 1.1 on) | 4000 |
+| `metadata/<language>/*_url.txt` | Privacy policy, support and marketing URLs | |
+| `metadata/review_information/notes.txt` | Notes for App Review | 4000 |
+| `metadata/copyright.txt`, `*_category.txt` | Shared by all languages | |
+
+Edit the files, then check and upload:
+
+```sh
+python3 scripts/check_store_metadata.py   # also runs in CI
+bundle exec fastlane upload_metadata      # needs the API key below
+```
+
+Keep the languages in step with `languages(...)` in `Snapfile`. The App
+Review contact name and phone number are entered in App Store Connect, not
+stored here.
+
 ## App Store screenshots
 
 ```sh
@@ -31,4 +63,4 @@ download the result as an artifact.
    }
    ```
 
-3. `bundle exec fastlane upload_screenshots`
+3. `bundle exec fastlane upload_metadata` and `bundle exec fastlane upload_screenshots`

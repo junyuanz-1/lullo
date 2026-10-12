@@ -6,6 +6,21 @@ platform :ios do
     capture_screenshots
   end
 
+  desc "Upload the App Store listing in fastlane/metadata (all languages, review notes, URLs)"
+  desc "Doesn't touch screenshots, the build or the review submission"
+  lane :upload_metadata do
+    sh("python3", "../scripts/check_store_metadata.py")
+    deliver(
+      api_key_path: ENV.fetch("ASC_API_KEY_PATH", "fastlane/asc_api_key.json"),
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      skip_app_version_update: true,
+      submit_for_review: false,
+      force: true,
+      run_precheck_before_submit: false
+    )
+  end
+
   desc "Upload fastlane/screenshots to App Store Connect, replacing the current ones"
   desc "Needs an App Store Connect API key: see fastlane/README.md"
   lane :upload_screenshots do
