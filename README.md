@@ -93,7 +93,7 @@ open Tinytide.xcodeproj
 | `tinytide.supporter.monthly` | 1 个月 | $0.99 / ¥1 |
 | `tinytide.supporter.yearly` | 1 年 | $9.99 / ¥10 |
 
-订阅需要隐私政策链接。官网 https://tinytide.app 托管在 GitHub Pages（仓库 [junyuanz1/lullo-site](https://github.com/junyuanz1/lullo-site)），App Store Connect 里填写：
+订阅需要隐私政策链接。官网 https://tinytide.app 托管在 GitHub Pages（仓库 [junyuanz1/tinytide-site](https://github.com/junyuanz1/tinytide-site)），App Store Connect 里填写：
 
 | 字段 | 网址 |
 |---|---|
