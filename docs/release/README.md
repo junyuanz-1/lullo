@@ -22,14 +22,14 @@
 - [x] 网站与邮箱：tinytide.app、support@tinytide.app
 - [ ] **协议、税务和银行业务**：签署“付费 App 协议”，填写银行和税务信息（不签就不能上架内购，审核需要几天，越早做越好）
 - [ ] **CloudKit 正式环境**：CloudKit Console → `iCloud.app.tinytide.ios` → Deploy Schema Changes。部署前先在开发版里把每种记录（宝宝、各种事件、共享）都创建一次。**TestFlight 和正式版用的是正式环境，没部署的话同步和共享都会失败**
-- [ ] **App Store Connect 里新建 App**：平台 iOS，名称 `Tinytide: Baby Tracker`，主要语言 English (U.S.)，Bundle ID `app.tinytide.ios`，SKU 随意（例如 `tinytide-ios`）
-- [ ] **App Store Connect API 密钥**（给 fastlane 用）：用户和访问 → 集成 → App Store Connect API，权限选 App 管理，保存为 `fastlane/asc_api_key.json`（已被 git 忽略）
-- [ ] **欧盟交易者身份**（DSA）：App 信息 → 交易者身份。不声明就不能在欧盟上架；个人开发者的联系方式会公开显示
+- [x] **App Store Connect 里新建 App**：平台 iOS，名称 `Tinytide: Baby Tracker`，主要语言 English (U.S.)，Bundle ID `app.tinytide.ios`，SKU 随意（例如 `tinytide-ios`）
+- [x] **App Store Connect API 密钥**（给 fastlane 用）：用户和访问 → 集成 → App Store Connect API，权限选 App 管理，保存为 `fastlane/asc_api_key.json`（已被 git 忽略）
+- [x] **欧盟交易者身份**（DSA）：App 信息 → 交易者身份。不声明就不能在欧盟上架；个人开发者的联系方式会公开显示
 
 ## App Store Connect 里要填的
 
-- [ ] **文案**：`bundle exec fastlane upload_metadata` 上传 9 种语言的文案和审核说明
-- [ ] **截图**：`bundle exec fastlane upload_screenshots`（6.9 英寸，9 种语言）
+- [x] **文案**：`bundle exec fastlane upload_metadata` 上传 9 种语言的文案和审核说明
+- [x] **截图**：`bundle exec fastlane upload_screenshots`（6.9 英寸，9 种语言）
 - [ ] **版权**：`fastlane/metadata/copyright.txt` 目前写的是 `2026 Tinytide`，可以改成你的法定姓名或公司名
 - [ ] **类别**：主要“健康健美”，次要“生活”（`primary_category.txt` / `secondary_category.txt`，上传文案时一起设置）
 - [ ] **年龄分级**：问卷全部选“无”，结果应为 4+。不要勾选“儿童”类别：这个 App 是给家长用的
