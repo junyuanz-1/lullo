@@ -228,7 +228,11 @@ final class TrackerStore: ObservableObject {
         guard !event.isDeleted, event.managedObjectContext != nil, canEdit(event.baby) else { return }
         // Start from the latest stored values (a change from another device may
         // have landed since this object was read).
-        if !event.hasChanges { context.refresh(event, mergeChanges: false) }
+        if !event.hasChanges {
+            context.refresh(event, mergeChanges: false)
+            // Deleted on another device but not merged here yet: nothing to change.
+            guard (try? context.existingObject(with: event.objectID)) != nil else { return }
+        }
         var record = event.record
         change(&record)
         record.updatedAt = Date()

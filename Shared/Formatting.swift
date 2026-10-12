@@ -79,7 +79,8 @@ enum Fmt {
 
     static func percentile(_ p: Double) -> String {
         let clamped = min(99.9, max(0.1, p))
-        return String(localized: "\(number(clamped, digits: clamped < 1 || clamped > 99 ? 1 : 0))th percentile")
+        // Neutral wording: "1th"/"22th" style ordinals are wrong in English and French.
+        return String(localized: "Percentile: \(number(clamped, digits: clamped < 1 || clamped > 99 ? 1 : 0))")
     }
 
     static func number(_ value: Double, digits: Int) -> String {

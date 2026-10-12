@@ -41,7 +41,12 @@ struct GrowthView: View {
                         metric: metric,
                         sex: record.sex,
                         points: points.map { ($0.month, $0.value) },
-                        maxMonth: min(GrowthStandards.maxMonth, max(6, (record.ageInMonths(at: AppClock.now).rounded(.up)) + 2))
+                        // Wide enough for every measurement: the WHO bands stop at 24
+                        // months, but a toddler's later points must stay inside the plot.
+                        maxMonth: max(
+                            min(GrowthStandards.maxMonth, max(6, (record.ageInMonths(at: AppClock.now).rounded(.up)) + 2)),
+                            (points.map(\.month).max() ?? 0).rounded(.up)
+                        )
                     )
                     .frame(height: 280)
                     .padding(.vertical, 8)

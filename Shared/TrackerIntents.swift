@@ -47,6 +47,9 @@ struct StartSleepIntent: LiveActivityIntent {
         #if WIDGET_EXTENSION
         return .result(dialog: "")
         #else
+        if let readOnly = await IntentActions.readOnlyMessage(babyID: babyID.flatMap(UUID.init(uuidString:))) {
+            return .result(dialog: "\(readOnly)")
+        }
         let name = await IntentActions.startSleep(babyID: babyID.flatMap(UUID.init(uuidString:)))
         let message = name.map { String(localized: "Sleep timer started for \($0).") }
             ?? String(localized: "Add a baby in the app first.")
@@ -69,6 +72,9 @@ struct WakeUpIntent: LiveActivityIntent {
         #if WIDGET_EXTENSION
         return .result(dialog: "")
         #else
+        if let readOnly = await IntentActions.readOnlyMessage(babyID: babyID.flatMap(UUID.init(uuidString:))) {
+            return .result(dialog: "\(readOnly)")
+        }
         let slept = await IntentActions.wakeUp(babyID: babyID.flatMap(UUID.init(uuidString:)))
         let message = slept.map { String(localized: "Slept for \(Fmt.duration($0)).") }
             ?? String(localized: "No sleep timer is running.")
@@ -97,6 +103,9 @@ struct StartNursingIntent: LiveActivityIntent {
         #if WIDGET_EXTENSION
         return .result(dialog: "")
         #else
+        if let readOnly = await IntentActions.readOnlyMessage(babyID: babyID.flatMap(UUID.init(uuidString:))) {
+            return .result(dialog: "\(readOnly)")
+        }
         let started = await IntentActions.startNursing(babyID: babyID.flatMap(UUID.init(uuidString:)), side: side?.side)
         let message = started.map { String(localized: "Nursing timer started on the \($0.title) side.") }
             ?? String(localized: "Add a baby in the app first.")
@@ -119,6 +128,9 @@ struct FinishNursingIntent: LiveActivityIntent {
         #if WIDGET_EXTENSION
         return .result(dialog: "")
         #else
+        if let readOnly = await IntentActions.readOnlyMessage(babyID: babyID.flatMap(UUID.init(uuidString:))) {
+            return .result(dialog: "\(readOnly)")
+        }
         let total = await IntentActions.finishNursing(babyID: babyID.flatMap(UUID.init(uuidString:)))
         let message = total.map { String(localized: "Nursed for \(Fmt.duration($0)).") }
             ?? String(localized: "No nursing timer is running.")
@@ -143,6 +155,9 @@ struct LogBottleIntent: LiveActivityIntent {
         #if WIDGET_EXTENSION
         return .result(dialog: "")
         #else
+        if let readOnly = await IntentActions.readOnlyMessage(babyID: babyID.flatMap(UUID.init(uuidString:))) {
+            return .result(dialog: "\(readOnly)")
+        }
         let ml = AppSettings.unitSystem == .metric ? amount : UnitConversion.ml(fromOunces: amount)
         let ok = await IntentActions.logBottle(babyID: babyID.flatMap(UUID.init(uuidString:)), amountML: ml)
         let message = ok
@@ -173,6 +188,9 @@ struct LogDiaperIntent: LiveActivityIntent {
         #if WIDGET_EXTENSION
         return .result(dialog: "")
         #else
+        if let readOnly = await IntentActions.readOnlyMessage(babyID: babyID.flatMap(UUID.init(uuidString:))) {
+            return .result(dialog: "\(readOnly)")
+        }
         let ok = await IntentActions.logDiaper(babyID: babyID.flatMap(UUID.init(uuidString:)), type: type.diaperType)
         let message = ok
             ? String(localized: "Logged a \(type.diaperType.title) diaper.")

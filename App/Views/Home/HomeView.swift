@@ -83,7 +83,8 @@ struct HomeView: View {
                         startNursing: startNursing,
                         stop: stop
                     )
-                    // Read-only caregivers can look (the forms open read-only) but not log.
+                    // Read-only caregivers can look at entries (from Recent and the
+                    // timer card) but not log new ones.
                     .disabled(!canEdit)
 
                     ClockTimeline(every: 30) { now in

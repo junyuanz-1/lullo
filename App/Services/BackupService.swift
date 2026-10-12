@@ -43,14 +43,6 @@ enum BackupService {
         return try BackupCodec.decode(Data(contentsOf: url))
     }
 
-    /// Importing or restoring while iCloud is still bringing down this device's
-    /// data could create a second copy of a baby that is about to arrive.
-    struct SyncPending: LocalizedError {
-        var errorDescription: String? {
-            String(localized: "iCloud is still downloading your data. Try again once it has finished.")
-        }
-    }
-
     /// Merges a backup into the current data. Records are matched by ID; newer copies win.
     /// Babies shared with this user read-only (and their entries) are left as they are.
     static func importBackup(_ file: BackupFile, into store: TrackerStore) -> ImportSummary {

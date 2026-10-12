@@ -115,7 +115,6 @@ final class AutoBackup: ObservableObject {
     /// the backup was taken. A backup of the current data is made first, so the
     /// restore itself can be undone. Changes sync to everyone the baby is shared with.
     func restore(_ entry: Entry, store: TrackerStore) throws -> RestoreSummary {
-        if !store.persistence.inMemory && AppSettings.awaitingFirstCloudImport { throw BackupService.SyncPending() }
         let file = try read(entry)
         try backUp(store: store, reason: .beforeRestore)
 

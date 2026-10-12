@@ -27,6 +27,13 @@ enum IntentActions {
         return event
     }
 
+    /// What to tell the user when the baby is shared with them view-only (nil
+    /// otherwise), instead of acting as if something was logged or missing.
+    static func readOnlyMessage(babyID: UUID?) -> String? {
+        guard let baby = baby(babyID), !store.canEdit(baby) else { return nil }
+        return String(localized: "\(baby.displayName) is shared with you to view only, so nothing was logged.")
+    }
+
     /// Returns the baby's name, or nil when there is no baby.
     static func startSleep(babyID: UUID?) -> String? {
         guard let baby = baby(babyID), store.startTimer(.sleep, for: baby) != nil else { return nil }
@@ -36,7 +43,7 @@ enum IntentActions {
 
     /// Returns how long the baby slept, or nil when no sleep was running.
     static func wakeUp(babyID: UUID?) -> TimeInterval? {
-        guard let baby = baby(babyID), let sleep = store.runningTimer(.sleep, for: baby) else { return nil }
+        guard let baby = baby(babyID), store.canEdit(baby), let sleep = store.runningTimer(.sleep, for: baby) else { return nil }
         store.stopTimer(sleep)
         store.refreshSideEffects()
         return sleep.record.duration()
@@ -50,7 +57,7 @@ enum IntentActions {
 
     /// Returns the total nursing time, or nil when no nursing timer was running.
     static func finishNursing(babyID: UUID?) -> TimeInterval? {
-        guard let baby = baby(babyID), let session = store.runningTimer(.nursing, for: baby) else { return nil }
+        guard let baby = baby(babyID), store.canEdit(baby), let session = store.runningTimer(.nursing, for: baby) else { return nil }
         store.stopTimer(session)
         store.refreshSideEffects()
         return session.record.duration()

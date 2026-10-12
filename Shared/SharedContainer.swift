@@ -47,6 +47,8 @@ enum SettingsKey {
     static let napReminderEnabled = "napReminderEnabled"
     static let liveActivitiesEnabled = "liveActivitiesEnabled"
     static let initialCloudImportDone = "initialCloudImportDone"
+    static let cloudAccountAvailable = "cloudAccountAvailable"
+    static let firstCloudImportWaitStart = "firstCloudImportWaitStart"
 }
 
 enum AppSettings {
@@ -82,16 +84,34 @@ enum AppSettings {
         defaults.object(forKey: SettingsKey.liveActivitiesEnabled) as? Bool ?? true
     }
 
-    /// Set once iCloud has finished a first download on this device.
+    /// Set once iCloud has finished a first download of this user's own data on
+    /// this device; cleared when the iCloud account changes.
     static var initialCloudImportDone: Bool {
         get { defaults.bool(forKey: SettingsKey.initialCloudImportDone) }
         set { defaults.set(newValue, forKey: SettingsKey.initialCloudImportDone) }
     }
 
-    /// True while a signed-in device may still be downloading its iCloud data
-    /// (fresh install, new phone). Backups taken or restored now would miss it.
+    /// Whether CloudKit last reported a usable iCloud account.
+    static var cloudAccountAvailable: Bool {
+        get { defaults.bool(forKey: SettingsKey.cloudAccountAvailable) }
+        set { defaults.set(newValue, forKey: SettingsKey.cloudAccountAvailable) }
+    }
+
+    /// When this device started waiting for its first download.
+    static var firstCloudImportWaitStart: Date? {
+        get { defaults.object(forKey: SettingsKey.firstCloudImportWaitStart) as? Date }
+        set { defaults.set(newValue, forKey: SettingsKey.firstCloudImportWaitStart) }
+    }
+
+    /// True while a device with iCloud may still be downloading its data (fresh
+    /// install, new phone): a backup taken now would hold only part of it, and an
+    /// import could add a second copy of a baby that is about to arrive. Never
+    /// for more than 3 days, so a device whose sync never completes (iCloud off
+    /// for this app, persistent errors) still gets its daily backups.
     static var awaitingFirstCloudImport: Bool {
-        FileManager.default.ubiquityIdentityToken != nil && !initialCloudImportDone
+        guard cloudAccountAvailable, !initialCloudImportDone else { return false }
+        guard let start = firstCloudImportWaitStart else { return true }
+        return Date().timeIntervalSince(start) < 3 * 86_400
     }
 }
 
