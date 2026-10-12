@@ -29,8 +29,8 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 60
     env:
-      # The snapshot reference images are recorded on this exact simulator.
-      DESTINATION: platform=iOS Simulator,name=iPhone 17 Pro,OS=latest
+      # DESTINATION (the booted iPhone 17 Pro the reference images are recorded
+      # on) is set by the setup-xcode action.
       DERIVED_DATA: build/DerivedData
     steps:
       - uses: actions/checkout@v4

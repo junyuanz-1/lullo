@@ -29,6 +29,49 @@ runs:
         sudo xcode-select -s "$XCODE/Contents/Developer"
         xcodebuild -version
 
+    # The first simctl call can find no simulators while CoreSimulator is still
+    # starting, so wait for the pinned device (creating it if this runner image
+    # lacks it), boot it now, and hand its id to later steps as $DESTINATION.
+    - name: Prepare iPhone 17 Pro simulator
+      shell: bash
+      run: |
+        NAME="iPhone 17 Pro"
+        find_device() {
+          xcrun simctl list devices available -j | python3 -c '
+        import json, sys
+        devices = json.load(sys.stdin)["devices"]
+        for runtime in sorted((r for r in devices if "iOS" in r), key=lambda r: [int(x) for x in r.rsplit("iOS-", 1)[-1].split("-") if x.isdigit()], reverse=True):
+            for d in devices[runtime]:
+                if d["name"] == sys.argv[1]:
+                    print(d["udid"]); sys.exit(0)
+        ' "$NAME"
+        }
+        UDID=""
+        for attempt in $(seq 1 12); do
+          UDID=$(find_device || true)
+          [ -n "$UDID" ] && break
+          RUNTIME=$(xcrun simctl list runtimes available -j | python3 -c '
+        import json, sys
+        ios = [r for r in json.load(sys.stdin)["runtimes"] if r.get("platform") == "iOS"]
+        print(ios[-1]["identifier"] if ios else "")
+        ' || true)
+          if [ -n "$RUNTIME" ]; then
+            echo "Creating $NAME on $RUNTIME"
+            xcrun simctl create "$NAME" com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro "$RUNTIME" || true
+          else
+            echo "No iOS simulator runtime yet (attempt $attempt); waiting for CoreSimulator..."
+            sleep 10
+          fi
+        done
+        if [ -z "$UDID" ]; then
+          echo "::error::No $NAME simulator available on this runner."
+          xcrun simctl list
+          exit 1
+        fi
+        xcrun simctl bootstatus "$UDID" -b
+        echo "Using $NAME ($UDID)"
+        echo "DESTINATION=platform=iOS Simulator,id=$UDID" >> "$GITHUB_ENV"
+
     - name: Install tools
       shell: bash
       run: brew install xcodegen xcbeautify
