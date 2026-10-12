@@ -103,7 +103,7 @@ struct SettingsView: View {
                             VStack(alignment: .leading) {
                                 Text(baby.displayName).foregroundStyle(.primary)
                                 HStack(spacing: 6) {
-                                    Text(Fmt.age(birthDate: baby.birthDate ?? Date()))
+                                    Text(Fmt.age(birthDate: baby.birthDate ?? AppClock.now))
                                     if store.persistence.isParticipant(baby) {
                                         Text("Shared with You").foregroundStyle(.blue)
                                     }

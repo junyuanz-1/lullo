@@ -102,7 +102,7 @@ private struct HistoryList: View {
     var loadMore: () -> Void
 
     init(baby: Baby, category: EventCategory?, days: Int, editor: Binding<EditorRoute?>, toast: Binding<UndoToast?>, loadMore: @escaping () -> Void) {
-        let since = Calendar.current.date(byAdding: .day, value: -days, to: Calendar.current.startOfDay(for: Date()))!
+        let since = Calendar.current.date(byAdding: .day, value: -days, to: Calendar.current.startOfDay(for: AppClock.now))!
         var predicates = [
             NSPredicate(format: "baby == %@", baby),
             NSPredicate(format: "startDate >= %@", since as NSDate),
@@ -173,7 +173,7 @@ private struct HistoryList: View {
         let records = events.map(\.record)
         let feeds = records.filter { $0.kind.isFeeding }.count
         let diapers = records.filter { $0.kind == .diaper }.count
-        let sleep = records.filter { $0.kind == .sleep }.reduce(0) { $0 + $1.duration() }
+        let sleep = records.filter { $0.kind == .sleep }.reduce(0) { $0 + $1.duration(at: AppClock.now) }
         var parts: [String] = []
         if sleep > 0 { parts.append("💤 \(Fmt.duration(sleep))") }
         if feeds > 0 { parts.append("🍼 \(feeds)") }

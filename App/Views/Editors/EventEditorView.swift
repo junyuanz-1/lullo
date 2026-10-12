@@ -17,7 +17,7 @@ struct EventEditorView: View {
     @State private var baseline: EventRecord?
     @State private var mode: Mode
     @State private var medicationReminderHours: Double = 0
-    @State private var timerStart = Date()
+    @State private var timerStart = AppClock.now
     @State private var confirmingDelete = false
     @State private var closing = false
     @State private var newTimerAlarm: Int?
@@ -28,7 +28,7 @@ struct EventEditorView: View {
     init(baby: Baby, kind: EventKind, existing: Event?, mode: Mode? = nil) {
         self.baby = baby
         self.existing = existing
-        let now = Date()
+        let now = AppClock.now
         var record = existing?.record ?? EventRecord(babyID: baby.id ?? UUID(), kind: kind, startDate: now)
         if existing == nil {
             let lastOfKind = TrackerStore.shared.lastEvent(of: [kind], for: baby)?.record
@@ -150,7 +150,7 @@ struct EventEditorView: View {
                 if kind == .activity {
                     activityTypePicker
                 }
-                DatePicker("Start", selection: $timerStart, in: ...Date())
+                DatePicker("Start", selection: $timerStart, in: ...AppClock.now)
             }
         }
         if TimerAlarm.supportedKinds.contains(kind) {
@@ -238,8 +238,8 @@ struct EventEditorView: View {
                 // minutes that are still counting. The timer card has the controls.
                 LabeledContent("Started", value: Fmt.time(draft.startDate))
                 ForEach(BreastSide.allCases, id: \.self) { side in
-                    TimelineView(.periodic(from: .now, by: 1)) { context in
-                        LabeledContent(side.title, value: Fmt.duration(draft.nursingElapsed(side, at: context.date)))
+                    ClockTimeline(every: 1) { now in
+                        LabeledContent(side.title, value: Fmt.duration(draft.nursingElapsed(side, at: now)))
                     }
                 }
                 Button("Stop Now") {
@@ -266,8 +266,8 @@ struct EventEditorView: View {
                         // the end time then shows up here through syncWithStore.
                         if let existing { store.stopTimer(existing) } else { draft.endDate = Date() }
                     }
-                    TimelineView(.periodic(from: .now, by: 1)) { context in
-                        LabeledContent("Duration", value: Fmt.duration(draft.duration(at: context.date)))
+                    ClockTimeline(every: 1) { now in
+                        LabeledContent("Duration", value: Fmt.duration(draft.duration(at: now)))
                     }
                     if TimerAlarm.supportedKinds.contains(kind) {
                         alarmPicker(selection: runningAlarm)

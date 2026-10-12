@@ -31,25 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # The newest Xcode on the runner, so code behind `#if canImport(AlarmKit)`
-      # (iOS 26 SDK) is compiled too.
-      - name: Select Xcode
-        run: |
-          ls -d /Applications/Xcode_*.app
-          XCODE=$(ls -d /Applications/Xcode_*.app | grep -v -i beta | sort -V | tail -1)
-          echo "Using $XCODE"
-          sudo xcode-select -s "$XCODE/Contents/Developer"
-          xcodebuild -version
-
-      - name: Install tools
-        run: brew install xcodegen xcbeautify
-
-      - name: Generate project
-        run: |
-          xcodegen generate --spec project.yml
-          if ! git diff --quiet -- Tinytide.xcodeproj; then
-            echo "::warning::Tinytide.xcodeproj is out of date with project.yml. Run 'xcodegen generate' and commit the result."
-          fi
+      - uses: ./.github/actions/setup-xcode
 
       - name: Pick a simulator
         id: sim
@@ -87,4 +69,29 @@ jobs:
           path: |
             TestResults.xcresult
             xcodebuild.log
+          if-no-files-found: ignore
+
+  snapshots:
+    name: Screenshot diffs
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-xcode
+
+      - name: Compare screens with reference images
+        run: |
+          if [ -z "$(find Tests/TinytideSnapshotTests/__Snapshots__ -name '*.png' 2>/dev/null)" ]; then
+            echo "::warning::No reference screenshots yet. Run the 'Record snapshots' workflow on this branch."
+            exit 0
+          fi
+          scripts/snapshots.sh
+
+      - name: Upload differences
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-diffs
+          path: build/snapshot-diffs
           if-no-files-found: ignore

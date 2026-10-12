@@ -1,0 +1,34 @@
+name: App Store screenshots
+
+# Generates the App Store screenshots for every language with fastlane and
+# uploads them as an artifact (Actions → App Store screenshots → Run workflow).
+on:
+  workflow_dispatch:
+
+jobs:
+  screenshots:
+    name: Capture screenshots
+    runs-on: macos-15
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-xcode
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Capture
+        run: bundle exec fastlane screenshots
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-store-screenshots
+          path: |
+            fastlane/screenshots
+            ~/Library/Logs/snapshot
+          if-no-files-found: warn

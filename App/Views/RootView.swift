@@ -2,8 +2,13 @@ import BabyCore
 import CoreData
 import SwiftUI
 
+enum RootTab: Hashable {
+    case today, log, trends, growth, more
+}
+
 struct RootView: View {
     @EnvironmentObject private var store: TrackerStore
+    @State private var tab = DemoMode.initialTab
     @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "createdAt", ascending: true)])
     private var babies: FetchedResults<Baby>
     @AppStorage(Appearance.themeKey, store: SharedContainer.defaults) private var theme: AppTheme = .lullaby
@@ -21,21 +26,26 @@ struct RootView: View {
         if let baby = selectedBaby {
             // Each tab is rebuilt for the new baby (their fetch requests are set up
             // in init), while the TabView itself keeps the selected tab.
-            TabView {
+            TabView(selection: $tab) {
                 HomeView(baby: baby)
                     .id(baby.objectID)
                     .tabItem { Label("Today", systemImage: "house.fill") }
+                    .tag(RootTab.today)
                 HistoryView(baby: baby)
                     .id(baby.objectID)
                     .tabItem { Label("Log", systemImage: "list.bullet.rectangle") }
+                    .tag(RootTab.log)
                 TrendsView(baby: baby)
                     .id(baby.objectID)
                     .tabItem { Label("Trends", systemImage: "chart.bar.xaxis") }
+                    .tag(RootTab.trends)
                 GrowthView(baby: baby)
                     .id(baby.objectID)
                     .tabItem { Label("Growth", systemImage: "chart.line.uptrend.xyaxis") }
+                    .tag(RootTab.growth)
                 SettingsView()
                     .tabItem { Label("More", systemImage: "gearshape.fill") }
+                    .tag(RootTab.more)
             }
         } else {
             OnboardingView()

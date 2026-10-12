@@ -41,7 +41,7 @@ struct GrowthView: View {
                         metric: metric,
                         sex: record.sex,
                         points: points.map { ($0.month, $0.value) },
-                        maxMonth: min(GrowthStandards.maxMonth, max(6, (record.ageInMonths().rounded(.up)) + 2))
+                        maxMonth: min(GrowthStandards.maxMonth, max(6, (record.ageInMonths(at: AppClock.now).rounded(.up)) + 2))
                     )
                     .frame(height: 280)
                     .padding(.vertical, 8)

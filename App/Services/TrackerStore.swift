@@ -234,6 +234,8 @@ final class TrackerStore: ObservableObject {
 
     /// Rebuilds the widget snapshot, then updates widgets, Live Activities and reminders from it.
     func refreshSideEffects() {
+        // Demo mode (App Store screenshots) never touches widgets, Live Activities or reminders.
+        guard !DemoMode.isEnabled else { return }
         closeStaleBottles()
         let snapshot = makeSnapshot()
         SharedContainer.saveSnapshot(snapshot)

@@ -36,7 +36,8 @@ struct HomeView: View {
 
     init(baby: Baby) {
         self.baby = baby
-        let since = Calendar.current.date(byAdding: .day, value: -3, to: Calendar.current.startOfDay(for: Date()))!
+        _editor = State(initialValue: DemoMode.initialEditor.map { EditorRoute(kind: $0) })
+        let since = Calendar.current.date(byAdding: .day, value: -3, to: Calendar.current.startOfDay(for: AppClock.now))!
         _recent = FetchRequest(
             sortDescriptors: [NSSortDescriptor(key: "startDate", ascending: false)],
             // Recent entries, plus any timer still running from before the window.
@@ -63,8 +64,8 @@ struct HomeView: View {
 
                     // What a tired parent checks first: how long since the last feed,
                     // diaper and sleep. The one-tap buttons come right after.
-                    TimelineView(.periodic(from: .now, by: 30)) { context in
-                        StatusCards(records: records, now: context.date)
+                    ClockTimeline(every: 30) { now in
+                        StatusCards(records: records, now: now)
                     }
 
                     QuickActionsGrid(
@@ -77,10 +78,10 @@ struct HomeView: View {
                         logDiaper: logDiaper
                     )
 
-                    TimelineView(.periodic(from: .now, by: 30)) { context in
+                    ClockTimeline(every: 30) { now in
                         VStack(spacing: 16) {
-                            SweetSpotCard(baby: baby.record, records: records, now: context.date)
-                            TodayCard(records: records, now: context.date)
+                            SweetSpotCard(baby: baby.record, records: records, now: now)
+                            TodayCard(records: records, now: now)
                         }
                     }
 
@@ -188,7 +189,7 @@ struct BabyHeader: View {
             BabyAvatar(photoData: baby.photoData, name: baby.displayName, size: 56)
             VStack(alignment: .leading, spacing: 2) {
                 Text(baby.displayName).font(.title2.bold())
-                Text(Fmt.age(birthDate: baby.birthDate ?? Date())).foregroundStyle(.secondary)
+                Text(Fmt.age(birthDate: baby.birthDate ?? AppClock.now)).foregroundStyle(.secondary)
             }
             Spacer()
             if supporter.isSupporter {
@@ -238,12 +239,12 @@ struct TimerCard: View {
                     .accessibilityLabel(Text("Edit"))
             }
 
-            TimelineView(.periodic(from: .now, by: 1)) { context in
+            ClockTimeline(every: 1) { now in
                 if record.kind == .nursing {
-                    NursingControls(event: event, record: record, now: context.date, onStop: onStop)
+                    NursingControls(event: event, record: record, now: now, onStop: onStop)
                 } else {
                     HStack {
-                        Text(Fmt.clock(record.duration(at: context.date)))
+                        Text(Fmt.clock(record.duration(at: now)))
                             .font(.system(size: 44, weight: .semibold, design: .rounded))
                             .monospacedDigit()
                         Spacer()

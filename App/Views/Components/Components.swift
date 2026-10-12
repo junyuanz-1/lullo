@@ -604,3 +604,25 @@ struct SwipeToDeleteRow<Content: View>: View {
         }
     }
 }
+
+/// A `TimelineView` that follows `AppClock`: it ticks normally, and renders a
+/// single frame at the pinned time when the clock is fixed.
+struct ClockTimeline<Content: View>: View {
+    var interval: TimeInterval
+    @ViewBuilder var content: (Date) -> Content
+
+    init(every interval: TimeInterval, @ViewBuilder content: @escaping (Date) -> Content) {
+        self.interval = interval
+        self.content = content
+    }
+
+    var body: some View {
+        if let fixed = AppClock.fixed {
+            content(fixed)
+        } else {
+            TimelineView(.periodic(from: .now, by: interval)) { context in
+                content(context.date)
+            }
+        }
+    }
+}
