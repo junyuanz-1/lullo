@@ -61,6 +61,7 @@ targets:
         CKSharingSupported: true
         NSSupportsLiveActivities: true
         NSSupportsLiveActivitiesFrequentUpdates: false
+        NSAlarmKitUsageDescription: Tinytide rings when a feeding, nap or activity countdown you set is up.
         ITSAppUsesNonExemptEncryption: false
         AppGroupIdentifier: $(APP_GROUP_ID)
         CloudKitContainerIdentifier: $(CLOUDKIT_CONTAINER_ID)

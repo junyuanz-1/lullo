@@ -268,6 +268,97 @@ final class RebaseTests: XCTestCase {
     }
 }
 
+final class RollbackTests: XCTestCase {
+    private let t = Date(timeIntervalSince1970: 1_700_000_000)
+
+    func testRollbackRestoresEditsDeletionsAndRemovesNewEntries() {
+        let baby = BabyRecord(name: "Mia", birthDate: t)
+        let other = BabyRecord(name: "Leo", birthDate: t)
+        let unchanged = EventRecord(babyID: baby.id, kind: .diaper, startDate: t, diaperType: .wet)
+        let edited = EventRecord(babyID: baby.id, kind: .bottle, startDate: t, amountML: 120)
+        let deleted = EventRecord(babyID: baby.id, kind: .note, startDate: t, note: "hi")
+        let backup = BackupFile(babies: [baby], events: [unchanged, edited, deleted])
+
+        var editedNow = edited
+        editedNow.amountML = 999
+        editedNow.updatedAt = t.addingTimeInterval(60)
+        let addedLater = EventRecord(babyID: baby.id, kind: .diaper, startDate: t.addingTimeInterval(100))
+        let otherBabyEvent = EventRecord(babyID: other.id, kind: .diaper, startDate: t)
+
+        let now = t.addingTimeInterval(3600)
+        let plan = BackupRollback.plan(
+            backup: backup,
+            currentBabies: [baby, other],
+            currentEvents: [unchanged, editedNow, addedLater, otherBabyEvent],
+            babyIDs: [baby.id],
+            now: now
+        )
+        XCTAssertTrue(plan.upsertBabies.isEmpty)
+        XCTAssertEqual(Set(plan.upsertEvents.map(\.id)), [edited.id, deleted.id])
+        XCTAssertEqual(plan.upsertEvents.first { $0.id == edited.id }?.amountML, 120)
+        XCTAssertTrue(plan.upsertEvents.allSatisfy { $0.updatedAt == now })
+        XCTAssertEqual(plan.deleteEventIDs, [addedLater.id])
+        XCTAssertEqual(plan.unchangedEvents, 1)
+    }
+
+    func testRollbackRecreatesDeletedBaby() {
+        let baby = BabyRecord(name: "Mia", birthDate: t)
+        let plan = BackupRollback.plan(backup: BackupFile(babies: [baby], events: []), currentBabies: [], currentEvents: [], babyIDs: [baby.id])
+        XCTAssertEqual(plan.upsertBabies.map(\.id), [baby.id])
+    }
+
+    func testRoundTripThroughFileIsUnchanged() throws {
+        let baby = BabyRecord(name: "Mia", birthDate: Date(timeIntervalSince1970: 1_700_000_000.123456))
+        let event = EventRecord(babyID: baby.id, kind: .sleep, startDate: Date(timeIntervalSince1970: 1_700_000_100.987654), endDate: Date(timeIntervalSince1970: 1_700_003_000.5))
+        let file = try BackupCodec.decode(BackupCodec.encode(BackupFile(babies: [baby], events: [event])))
+        let plan = BackupRollback.plan(backup: file, currentBabies: [baby], currentEvents: [event], babyIDs: [baby.id])
+        XCTAssertEqual(plan.changeCount, 0)
+    }
+
+    func testDailyScheduleAndRetention() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC")!
+        let morning = Date(timeIntervalSince1970: 1_700_000_000) // 22:13 UTC
+        XCTAssertTrue(AutoBackupPolicy.isDue(lastBackup: nil, now: morning, calendar: calendar))
+        XCTAssertFalse(AutoBackupPolicy.isDue(lastBackup: morning.addingTimeInterval(-3600), now: morning, calendar: calendar))
+        XCTAssertTrue(AutoBackupPolicy.isDue(lastBackup: morning, now: morning.addingTimeInterval(3 * 3600), calendar: calendar))
+
+        let dates = (0..<12).map { morning.addingTimeInterval(Double($0) * 86_400) }
+        let pruned = AutoBackupPolicy.toPrune(dates.shuffled(), date: { $0 })
+        XCTAssertEqual(pruned.sorted(), Array(dates.prefix(2)))
+    }
+}
+
+final class TimerAlarmTests: XCTestCase {
+    private let t = Date(timeIntervalSince1970: 1_700_000_000)
+
+    func testTimerAlarmCountsFromStart() {
+        let nap = EventRecord(babyID: UUID(), kind: .sleep, startDate: t)
+        XCTAssertEqual(TimerAlarm.fireDate(for: nap, after: 45 * 60, now: t.addingTimeInterval(60)), t.addingTimeInterval(45 * 60))
+        XCTAssertNil(TimerAlarm.fireDate(for: nap, after: 45 * 60, now: t.addingTimeInterval(46 * 60)), "Already passed")
+        var stopped = nap
+        stopped.endDate = t.addingTimeInterval(600)
+        XCTAssertNil(TimerAlarm.fireDate(for: stopped, after: 45 * 60, now: t))
+    }
+
+    func testNursingAlarmIsPerSide() {
+        var feed = EventRecord(babyID: UUID(), kind: .nursing, startDate: t)
+        feed.startNursing(.left, at: t)
+        XCTAssertEqual(TimerAlarm.fireDate(for: feed, after: 600, now: t), t.addingTimeInterval(600))
+
+        // Switch after 4 minutes: the right side gets its own 10 minutes.
+        feed.startNursing(.right, at: t.addingTimeInterval(240))
+        XCTAssertEqual(TimerAlarm.fireDate(for: feed, after: 600, now: t.addingTimeInterval(240)), t.addingTimeInterval(840))
+
+        // Back to the left side, which already has 4 minutes banked.
+        feed.startNursing(.left, at: t.addingTimeInterval(900))
+        XCTAssertEqual(TimerAlarm.fireDate(for: feed, after: 600, now: t.addingTimeInterval(900)), t.addingTimeInterval(900 + 360))
+
+        feed.pauseNursing(at: t.addingTimeInterval(1000))
+        XCTAssertNil(TimerAlarm.fireDate(for: feed, after: 600, now: t.addingTimeInterval(1000)), "Paused")
+    }
+}
+
 final class WidgetSnapshotTests: XCTestCase {
     func testSnapshotSummarisesLatestState() throws {
         let now = Date()

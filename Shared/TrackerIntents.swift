@@ -105,6 +105,54 @@ struct StartNursingIntent: LiveActivityIntent {
     }
 }
 
+struct FinishNursingIntent: LiveActivityIntent {
+    static var title: LocalizedStringResource = "Finish Nursing"
+    static var description = IntentDescription("Stops the running breastfeeding timer.")
+
+    @Parameter(title: "Baby ID")
+    var babyID: String?
+
+    init() {}
+    init(babyID: UUID?) { self.babyID = babyID?.uuidString }
+
+    func perform() async throws -> some IntentResult & ProvidesDialog {
+        #if WIDGET_EXTENSION
+        return .result(dialog: "")
+        #else
+        let total = await IntentActions.finishNursing(babyID: babyID.flatMap(UUID.init(uuidString:)))
+        let message = total.map { String(localized: "Nursed for \(Fmt.duration($0)).") }
+            ?? String(localized: "No nursing timer is running.")
+        return .result(dialog: "\(message)")
+        #endif
+    }
+}
+
+struct LogBottleIntent: LiveActivityIntent {
+    static var title: LocalizedStringResource = "Log Bottle"
+    static var description = IntentDescription("Logs a bottle feed now, in the units chosen in the app.")
+
+    @Parameter(title: "Baby ID")
+    var babyID: String?
+
+    @Parameter(title: "Amount", requestValueDialog: "How much did the baby drink?")
+    var amount: Double
+
+    init() {}
+
+    func perform() async throws -> some IntentResult & ProvidesDialog {
+        #if WIDGET_EXTENSION
+        return .result(dialog: "")
+        #else
+        let ml = AppSettings.unitSystem == .metric ? amount : UnitConversion.ml(fromOunces: amount)
+        let ok = await IntentActions.logBottle(babyID: babyID.flatMap(UUID.init(uuidString:)), amountML: ml)
+        let message = ok
+            ? String(localized: "Logged a \(Fmt.volume(ml)) bottle.")
+            : String(localized: "Add a baby in the app first.")
+        return .result(dialog: "\(message)")
+        #endif
+    }
+}
+
 struct LogDiaperIntent: LiveActivityIntent {
     static var title: LocalizedStringResource = "Log Diaper"
     static var description = IntentDescription("Logs a diaper change now.")

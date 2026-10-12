@@ -107,6 +107,7 @@ struct BabyHeader: View {
 
 struct TimerCard: View {
     @EnvironmentObject private var store: TrackerStore
+    @ObservedObject private var alarms = TimerAlarms.shared
     @ObservedObject var event: Event
     var onEdit: () -> Void
 
@@ -118,6 +119,11 @@ struct TimerCard: View {
                 VStack(alignment: .leading) {
                     Text(record.kind == .sleep ? String(localized: "Sleeping") : record.displayTitle).font(.headline)
                     Text("Started \(Fmt.time(record.startDate))").font(.caption).foregroundStyle(.secondary)
+                    if let ring = alarms.fireDate(for: record) {
+                        Label(String(localized: "Rings at \(Fmt.time(ring))"), systemImage: "bell.fill")
+                            .font(.caption)
+                            .foregroundStyle(record.kind.color)
+                    }
                 }
                 Spacer()
                 Button(action: onEdit) { Image(systemName: "pencil.circle.fill").font(.title2) }
