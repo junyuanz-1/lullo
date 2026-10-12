@@ -338,7 +338,7 @@ struct EventEditorView: View {
                     if let existing { store.stopTimer(existing) }
                 }
             } else if kind == .nursing {
-                DatePicker("Start", selection: $draft.startDate)
+                DatePicker("Start", selection: toTheMinute($draft.startDate))
                 minutesField(BreastSide.left.title, value: $draft.leftDuration)
                 minutesField(BreastSide.right.title, value: $draft.rightDuration)
                 // Which side to suggest next only needs asking when both were used.
@@ -346,7 +346,7 @@ struct EventEditorView: View {
                     ChipPicker(title: String(localized: "Ended On"), options: BreastSide.allCases, selection: $draft.lastSide, label: \.title)
                 }
             } else {
-                DatePicker(draft.hasTimeRange ? String(localized: "Start") : String(localized: "Time"), selection: $draft.startDate)
+                DatePicker(draft.hasTimeRange ? String(localized: "Start") : String(localized: "Time"), selection: toTheMinute($draft.startDate))
             }
             if kind.allowsOptionalEnd {
                 optionalEndRows
@@ -365,7 +365,7 @@ struct EventEditorView: View {
                 } else {
                     DatePicker("End", selection: Binding(
                         get: { draft.endDate ?? draft.startDate },
-                        set: { draft.endDate = $0 }
+                        set: { draft.endDate = $0.flooredToMinute }
                     ), in: draft.startDate...)
                     LabeledContent("Duration", value: Fmt.duration(draft.duration()))
                 }
@@ -391,7 +391,8 @@ struct EventEditorView: View {
             get: { draft.endDate != nil },
             set: { on in
                 guard on else { draft.endDate = nil; return }
-                let now = AppClock.now
+                let now = AppClock.now.flooredToMinute
+                draft.startDate = draft.startDate.flooredToMinute
                 if now.timeIntervalSince(draft.startDate) < 60 {
                     // Started "now" and already over: most likely it just ended,
                     // so offer a range ending now rather than one in the future.
@@ -405,10 +406,17 @@ struct EventEditorView: View {
         if draft.endDate != nil {
             DatePicker("End", selection: Binding(
                 get: { draft.endDate ?? draft.startDate },
-                set: { draft.endDate = $0 }
+                set: { draft.endDate = $0.flooredToMinute }
             ), in: draft.startDate...)
             LabeledContent("Duration", value: Fmt.duration(draft.duration()))
         }
+    }
+
+    /// What a time picker shows is what is kept: picking 09:54 means 09:54:00,
+    /// not 09:54 plus the seconds of the time that was there, which made
+    /// 09:54–10:05 come out as 10 min instead of 11.
+    private func toTheMinute(_ date: Binding<Date>) -> Binding<Date> {
+        Binding(get: { date.wrappedValue }, set: { date.wrappedValue = $0.flooredToMinute })
     }
 
     /// One row per side: type the minutes, or nudge them with the stepper.
@@ -779,10 +787,19 @@ struct EventEditorView: View {
             break
         }
         if record.kind.hasDuration && record.kind != .nursing {
-            // For "log past", default to a range ending now.
+            // For "log past", default to a range ending now, in whole minutes
+            // like the time pickers show it.
             let minutes: Double = record.kind == .bottle ? 15 : 30
-            record.startDate = now.addingTimeInterval(-minutes * 60)
-            record.endDate = now
+            let end = now.flooredToMinute
+            record.startDate = end.addingTimeInterval(-minutes * 60)
+            record.endDate = end
         }
+    }
+}
+
+private extension Date {
+    /// Without the seconds, as the time pickers show it.
+    var flooredToMinute: Date {
+        Calendar.current.dateInterval(of: .minute, for: self)?.start ?? self
     }
 }
