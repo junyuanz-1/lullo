@@ -472,3 +472,135 @@ extension UIApplication {
         return top
     }
 }
+
+// MARK: - Undo toast
+
+/// A short "done" message with Undo, shown after one-tap actions and deletions.
+struct UndoToast: Identifiable {
+    let id = UUID()
+    var message: String
+    var undo: () -> Void
+    /// Optional second button, e.g. "Add Amount" after a pumping timer stops.
+    var action: (title: String, perform: () -> Void)?
+}
+
+struct UndoToastView: View {
+    var toast: UndoToast
+    var dismiss: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+            Text(toast.message)
+                .font(.subheadline.weight(.medium))
+                .lineLimit(2)
+            Spacer(minLength: 8)
+            if let action = toast.action {
+                Button(action.title) {
+                    action.perform()
+                    dismiss()
+                }
+                .font(.subheadline.bold())
+            }
+            Button("Undo") {
+                toast.undo()
+                dismiss()
+            }
+            .font(.subheadline.bold())
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .shadow(color: .black.opacity(0.12), radius: 12, y: 4)
+        .padding(.horizontal)
+        .padding(.bottom, 8)
+    }
+}
+
+private struct UndoToastModifier: ViewModifier {
+    @Binding var toast: UndoToast?
+
+    func body(content: Content) -> some View {
+        content
+            .safeAreaInset(edge: .bottom) {
+                if let toast {
+                    UndoToastView(toast: toast) { self.toast = nil }
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .animation(.snappy(duration: 0.25), value: toast?.id)
+            // Each toast stays for a few seconds; a newer one restarts the clock.
+            .task(id: toast?.id) {
+                guard toast != nil else { return }
+                try? await Task.sleep(for: .seconds(6))
+                toast = nil
+            }
+    }
+}
+
+extension View {
+    /// Shows the toast above the tab bar until it times out or is tapped.
+    func undoToast(_ toast: Binding<UndoToast?>) -> some View {
+        modifier(UndoToastModifier(toast: toast))
+    }
+}
+
+// MARK: - Swipe to delete
+
+/// Swipe left to reveal Delete, for rows that are not in a List (which has
+/// swipeActions built in). Tap the row to open it, or to close the swipe.
+struct SwipeToDeleteRow<Content: View>: View {
+    var onTap: () -> Void
+    var onDelete: () -> Void
+    @ViewBuilder var content: Content
+
+    @State private var offset: CGFloat = 0
+    @State private var revealed = false
+    private let buttonWidth: CGFloat = 72
+
+    var body: some View {
+        content
+            .contentShape(Rectangle())
+            .onTapGesture {
+                if revealed { close() } else { onTap() }
+            }
+            .offset(x: offset)
+            .background(alignment: .trailing) {
+                Button(role: .destructive) {
+                    close()
+                    onDelete()
+                } label: {
+                    Image(systemName: "trash")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .frame(width: buttonWidth)
+                        .frame(maxHeight: .infinity)
+                        .background(Color.red, in: RoundedRectangle(cornerRadius: 10))
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text("Delete"))
+                .opacity(offset < -8 ? 1 : 0)
+            }
+            .clipped()
+            .gesture(
+                DragGesture(minimumDistance: 20)
+                    .onChanged { value in
+                        let base: CGFloat = revealed ? -buttonWidth : 0
+                        offset = min(0, max(-buttonWidth - 16, base + value.translation.width))
+                    }
+                    .onEnded { _ in
+                        withAnimation(.snappy(duration: 0.2)) {
+                            revealed = offset < -buttonWidth / 2
+                            offset = revealed ? -buttonWidth : 0
+                        }
+                    }
+            )
+    }
+
+    private func close() {
+        withAnimation(.snappy(duration: 0.2)) {
+            revealed = false
+            offset = 0
+        }
+    }
+}

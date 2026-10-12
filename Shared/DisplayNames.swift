@@ -61,7 +61,7 @@ extension EventKind {
     /// Short forms that fit a half-height sheet.
     var prefersCompactSheet: Bool {
         switch self {
-        case .diaper, .bottle, .note: return true
+        case .diaper, .note: return true
         default: return false
         }
     }

@@ -126,49 +126,42 @@ struct ScheduleChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            // A grid sizes the date column to its widest label, so dates never wrap
-            // at larger text sizes.
-            Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
-                GridRow {
-                    Color.clear.gridCellUnsizedAxes([.horizontal, .vertical])
-                    HStack(spacing: 0) {
-                        ForEach([0, 6, 12, 18], id: \.self) { hour in
-                            Text(hourLabel(hour))
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(1)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                    }
-                }
-                ForEach(rows) { row in
-                    GridRow {
-                        Text(row.day.formatted(.dateTime.month(.defaultDigits).day()))
-                            .font(.caption2.monospacedDigit())
+            HStack(spacing: 8) {
+                dateLabel(nil)
+                HStack(spacing: 0) {
+                    ForEach([0, 6, 12, 18], id: \.self) { hour in
+                        Text(hourLabel(hour))
+                            .font(.caption2)
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
-                            .fixedSize()
-                        GeometryReader { geo in
-                            let width = geo.size.width
-                            ZStack(alignment: .leading) {
-                                RoundedRectangle(cornerRadius: 3).fill(Color(.tertiarySystemFill))
-                                ForEach(Array(row.blocks.enumerated()), id: \.offset) { _, block in
-                                    RoundedRectangle(cornerRadius: 2)
-                                        .fill(block.kind.color.opacity(block.kind == .sleep ? 0.85 : 1))
-                                        .frame(width: max(2, width * (block.end - block.start) / row.dayLength),
-                                               height: block.kind == .sleep ? 16 : 8)
-                                        .offset(x: width * block.start / row.dayLength)
-                                }
-                                ForEach(Array(row.marks.enumerated()), id: \.offset) { _, mark in
-                                    Capsule()
-                                        .fill(mark.kind.color)
-                                        .frame(width: 3, height: mark.kind == .diaper ? 8 : 12)
-                                        .offset(x: width * mark.offset / row.dayLength - 1.5)
-                                }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+            }
+            ForEach(rows) { row in
+                HStack(spacing: 8) {
+                    dateLabel(row.day)
+                    GeometryReader { geo in
+                        let width = geo.size.width
+                        ZStack(alignment: .leading) {
+                            RoundedRectangle(cornerRadius: 3).fill(Color(.tertiarySystemFill))
+                            ForEach(Array(row.blocks.enumerated()), id: \.offset) { _, block in
+                                RoundedRectangle(cornerRadius: 2)
+                                    .fill(block.kind.color.opacity(block.kind == .sleep ? 0.85 : 1))
+                                    .frame(width: max(2, width * (block.end - block.start) / row.dayLength),
+                                           height: block.kind == .sleep ? 16 : 8)
+                                    .offset(x: width * block.start / row.dayLength)
+                            }
+                            ForEach(Array(row.marks.enumerated()), id: \.offset) { _, mark in
+                                Capsule()
+                                    .fill(mark.kind.color)
+                                    .frame(width: 3, height: mark.kind == .diaper ? 8 : 12)
+                                    .offset(x: width * mark.offset / row.dayLength - 1.5)
                             }
                         }
-                        .frame(height: 16)
                     }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 16)
                 }
             }
             FlowLayout(spacing: 12, lineSpacing: 6) {
@@ -180,6 +173,27 @@ struct ScheduleChart: View {
             .padding(.top, 4)
         }
     }
+
+    /// The date column is as wide as the widest possible date, so every row's
+    /// bar starts at the same x and the bars take all the remaining width.
+    private func dateLabel(_ day: Date?) -> some View {
+        Text(Self.widestDate)
+            .hidden()
+            .overlay(alignment: .leading) {
+                if let day {
+                    Text(day.formatted(.dateTime.month(.defaultDigits).day()))
+                }
+            }
+            .font(.caption2.monospacedDigit())
+            .foregroundStyle(.secondary)
+            .lineLimit(1)
+            .fixedSize()
+    }
+
+    private static let widestDate: String = {
+        let date = Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 31)) ?? Date()
+        return date.formatted(.dateTime.month(.defaultDigits).day())
+    }()
 
     private func legend(_ kind: EventKind) -> some View {
         HStack(spacing: 4) {

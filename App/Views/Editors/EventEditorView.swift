@@ -233,16 +233,32 @@ struct EventEditorView: View {
     @ViewBuilder
     private var timeSection: some View {
         Section {
-            DatePicker(kind.hasDuration ? String(localized: "Start") : String(localized: "Time"), selection: $draft.startDate)
-            if kind == .nursing {
-                durationField(String(localized: "Left"), value: $draft.leftDuration)
-                durationField(String(localized: "Right"), value: $draft.rightDuration)
-                ChipPicker(title: String(localized: "Last Side"), options: BreastSide.allCases, selection: $draft.lastSide, tint: .pink, label: \.title)
-                if draft.isOngoing && !isNew {
-                    alarmPicker(selection: runningAlarm)
-                    alarmTimeNote
+            if kind == .nursing && draft.isOngoing && !isNew {
+                // A running session: show what is happening, don't offer to edit
+                // minutes that are still counting. The timer card has the controls.
+                LabeledContent("Started", value: Fmt.time(draft.startDate))
+                ForEach(BreastSide.allCases, id: \.self) { side in
+                    TimelineView(.periodic(from: .now, by: 1)) { context in
+                        LabeledContent(side.title, value: Fmt.duration(draft.nursingElapsed(side, at: context.date)))
+                    }
                 }
-            } else if kind.hasDuration {
+                Button("Stop Now") {
+                    if let existing { store.stopTimer(existing) }
+                }
+                alarmPicker(selection: runningAlarm)
+                alarmTimeNote
+            } else if kind == .nursing {
+                DatePicker("Start", selection: $draft.startDate)
+                minutesField(BreastSide.left.title, value: $draft.leftDuration)
+                minutesField(BreastSide.right.title, value: $draft.rightDuration)
+                // Which side to suggest next only needs asking when both were used.
+                if draft.leftDuration > 0 && draft.rightDuration > 0 {
+                    ChipPicker(title: String(localized: "Ended On"), options: BreastSide.allCases, selection: $draft.lastSide, tint: .pink, label: \.title)
+                }
+            } else {
+                DatePicker(kind.hasDuration ? String(localized: "Start") : String(localized: "Time"), selection: $draft.startDate)
+            }
+            if kind != .nursing && kind.hasDuration {
                 if draft.endDate == nil && !isNew {
                     LabeledContent("End", value: String(localized: "Running"))
                     Button("Stop Now") {
@@ -281,27 +297,23 @@ struct EventEditorView: View {
         }
     }
 
-    /// Minutes per side: common lengths are one tap, the stepper fine-tunes.
-    private func durationField(_ title: String, value: Binding<TimeInterval>) -> some View {
-        let minutes = Binding<Int?>(
+    /// One row per side: type the minutes, or nudge them with the stepper.
+    private func minutesField(_ title: String, value: Binding<TimeInterval>) -> some View {
+        let minutes = Binding<Int>(
             get: { Int((value.wrappedValue / 60).rounded()) },
-            set: { if let m = $0 { value.wrappedValue = TimeInterval(m * 60) } }
+            set: { value.wrappedValue = TimeInterval(max(0, min(180, $0)) * 60) }
         )
-        return VStack(alignment: .leading, spacing: 4) {
-            Stepper(value: Binding(
-                get: { (value.wrappedValue / 60).rounded() },
-                set: { value.wrappedValue = $0 * 60 }
-            ), in: 0...180) {
-                LabeledContent(title, value: Fmt.duration(value.wrappedValue))
-            }
-            ChipPicker(
-                title: nil,
-                options: [5, 10, 15, 20, 30],
-                selection: minutes,
-                allowsDeselect: false,
-                tint: .pink,
-                label: { Fmt.duration(TimeInterval($0 * 60), style: .short) }
-            )
+        let placeholder = "0"
+        return HStack(spacing: 8) {
+            Text(title)
+            Spacer()
+            TextField(placeholder, value: minutes, format: .number)
+                .keyboardType(.numberPad)
+                .multilineTextAlignment(.trailing)
+                .frame(width: 56)
+            Text("min").foregroundStyle(.secondary)
+            Stepper(title, value: minutes, in: 0...180)
+                .labelsHidden()
         }
     }
 
@@ -317,7 +329,7 @@ struct EventEditorView: View {
         case .nursing:
             EmptyView()
         case .bottle:
-            Section("Amount") {
+            Section {
                 MeasurementField(title: String(localized: "Amount"), metricValue: $draft.amountML, quantity: .volume)
                 VolumePresets(metricValue: $draft.amountML)
                 ChipPicker(title: String(localized: "Contents"), options: BottleContent.allCases, selection: $draft.bottleContent, tint: .orange, label: \.title)
@@ -540,6 +552,8 @@ struct EventEditorView: View {
         guard let event else { return }
         var record = event.record
         if let location = draft.sleepLocation { record.sleepLocation = location }
+        if let amount = draft.amountML { record.amountML = amount }
+        if let contents = draft.bottleContent { record.bottleContent = contents }
         if let left = draft.leftAmountML { record.leftAmountML = left }
         if let right = draft.rightAmountML { record.rightAmountML = right }
         if let note = draft.note?.nilIfBlank { record.note = note }
@@ -561,6 +575,8 @@ struct EventEditorView: View {
             if kind == .nursing {
                 record.activeSide = nil
                 record.activeSideStartedAt = nil
+                if record.leftDuration > 0 && record.rightDuration == 0 { record.lastSide = .left }
+                if record.rightDuration > 0 && record.leftDuration == 0 { record.lastSide = .right }
                 record.endDate = record.startDate.addingTimeInterval(record.leftDuration + record.rightDuration)
             } else if record.endDate == nil {
                 record.endDate = record.startDate
@@ -595,7 +611,8 @@ struct EventEditorView: View {
         }
         if record.kind.hasDuration && record.kind != .nursing {
             // For "log past", default to a range ending now.
-            record.startDate = now.addingTimeInterval(-30 * 60)
+            let minutes: Double = record.kind == .bottle ? 15 : 30
+            record.startDate = now.addingTimeInterval(-minutes * 60)
             record.endDate = now
         }
     }

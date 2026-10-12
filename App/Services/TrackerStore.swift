@@ -234,6 +234,7 @@ final class TrackerStore: ObservableObject {
 
     /// Rebuilds the widget snapshot, then updates widgets, Live Activities and reminders from it.
     func refreshSideEffects() {
+        closeStaleBottles()
         let snapshot = makeSnapshot()
         SharedContainer.saveSnapshot(snapshot)
         WidgetCenter.shared.reloadAllTimelines()
@@ -267,6 +268,27 @@ final class TrackerStore: ObservableObject {
             babies: babies,
             unitSystem: AppSettings.unitSystem
         )
+    }
+
+    /// Bottles logged before bottle timers existed have no end date, which now
+    /// reads as "running". Anything that old is given a zero duration. Only the
+    /// owner's data is touched; read-only shared babies are left alone.
+    private func closeStaleBottles(now: Date = Date()) {
+        let request = Event.request()
+        request.predicate = NSPredicate(
+            format: "kind == %@ AND endDate == nil AND startDate < %@",
+            EventKind.bottle.rawValue, now.addingTimeInterval(-4 * 3600) as NSDate
+        )
+        guard let stale = try? context.fetch(request), !stale.isEmpty else { return }
+        var changed = false
+        for event in stale {
+            guard let baby = event.baby, persistence.canEdit(baby) else { continue }
+            var record = event.record
+            record.endDate = record.startDate
+            event.apply(record)
+            changed = true
+        }
+        if changed { persistence.save() }
     }
 
     func appBecameActive() {
