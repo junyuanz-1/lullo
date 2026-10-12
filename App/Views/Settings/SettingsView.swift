@@ -89,30 +89,56 @@ struct SettingsView: View {
     // MARK: Sections
 
     private var babiesSection: some View {
-        Section("Babies") {
+        Section {
             ForEach(babies) { baby in
-                Button {
-                    editingBaby = baby
-                } label: {
-                    HStack {
-                        BabyAvatar(photoData: baby.photoData, name: baby.displayName, size: 36)
-                        VStack(alignment: .leading) {
-                            Text(baby.displayName).foregroundStyle(.primary)
-                            Text(Fmt.age(birthDate: baby.birthDate ?? Date())).font(.caption).foregroundStyle(.secondary)
+                let selected = baby.id == store.selectedBabyID || (store.selectedBabyID == nil && baby == babies.first)
+                HStack {
+                    // Tapping the row switches to that baby, matching the checkmark;
+                    // the pencil opens the profile.
+                    Button {
+                        store.selectedBabyID = baby.id
+                    } label: {
+                        HStack {
+                            BabyAvatar(photoData: baby.photoData, name: baby.displayName, size: 36)
+                            VStack(alignment: .leading) {
+                                Text(baby.displayName).foregroundStyle(.primary)
+                                HStack(spacing: 6) {
+                                    Text(Fmt.age(birthDate: baby.birthDate ?? Date()))
+                                    if store.persistence.isParticipant(baby) {
+                                        Text("Shared with You").foregroundStyle(.blue)
+                                    }
+                                }
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            if selected {
+                                Image(systemName: "checkmark").foregroundStyle(.tint)
+                            }
                         }
-                        Spacer()
-                        if store.persistence.isParticipant(baby) {
-                            Text("Shared with You").font(.caption).foregroundStyle(.blue)
-                        } else if baby.id == store.selectedBabyID || (store.selectedBabyID == nil && baby == babies.first) {
-                            Image(systemName: "checkmark").foregroundStyle(.tint)
-                        }
+                        .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityAddTraits(selected ? .isSelected : [])
+                    Button {
+                        editingBaby = baby
+                    } label: {
+                        Image(systemName: "pencil.circle").font(.title3)
+                    }
+                    .buttonStyle(.borderless)
+                    .accessibilityLabel(Text("Edit Baby"))
                 }
             }
             Button {
                 addingBaby = true
             } label: {
                 Label("Add Baby", systemImage: "plus")
+            }
+        } header: {
+            Text("Babies")
+        } footer: {
+            if babies.count > 1 {
+                Text("Tap a baby to switch to them. Every tab shows the selected baby.")
             }
         }
     }
@@ -304,18 +330,16 @@ struct SettingsView: View {
     }
 
     private var aboutSection: some View {
-        Section("About") {
-            LabeledContent("Version", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—")
-            Text("Sleep predictions, growth percentiles and alerts are general guidance, not medical advice. Always consult your pediatrician about your baby's health.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Text("Growth charts use the WHO Child Growth Standards.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Link("Help & FAQ", destination: AppLinks.supportPage)
-            Link("Contact Support", destination: AppLinks.supportEmail)
-            Link("Privacy Policy", destination: AppLinks.privacyPolicy)
-            Link("Terms of Use", destination: AppLinks.termsOfUse)
+        Section {
+            NavigationLink {
+                AboutView()
+            } label: {
+                Label {
+                    Text("About")
+                } icon: {
+                    Image(systemName: "info.circle.fill").foregroundStyle(.secondary)
+                }
+            }
         }
     }
 
@@ -377,5 +401,30 @@ struct SettingsView: View {
                 errorMessage = String(localized: "Could not start sharing. Make sure you are signed in to iCloud. (\(error.localizedDescription))")
             }
         }
+    }
+}
+
+/// Version, disclaimers and support links, kept off the main More screen.
+struct AboutView: View {
+    var body: some View {
+        Form {
+            Section {
+                LabeledContent("Version", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—")
+                Link("Help & FAQ", destination: AppLinks.supportPage)
+                Link("Contact Support", destination: AppLinks.supportEmail)
+                Link("Privacy Policy", destination: AppLinks.privacyPolicy)
+                Link("Terms of Use", destination: AppLinks.termsOfUse)
+            }
+            Section {
+                Text("Sleep predictions, growth percentiles and alerts are general guidance, not medical advice. Always consult your pediatrician about your baby's health.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                Text("Growth charts use the WHO Child Growth Standards.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .navigationTitle("About")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

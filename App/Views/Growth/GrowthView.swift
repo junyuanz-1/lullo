@@ -81,7 +81,9 @@ struct GrowthView: View {
                 }
             }
             .navigationTitle("Growth")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) { BabySwitcher(baby: baby) }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         editor = EditorRoute(kind: .growth)
@@ -92,9 +94,7 @@ struct GrowthView: View {
                 }
             }
             .sheet(item: $editor) { route in
-                NavigationStack {
-                    EventEditorView(baby: baby, kind: route.kind, existing: route.existing)
-                }
+                EditorSheet(baby: baby, route: route)
             }
         }
     }

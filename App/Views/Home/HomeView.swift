@@ -1,12 +1,37 @@
 import BabyCore
 import CoreData
 import SwiftUI
+import UIKit
 
 /// Identifies what the entry editor sheet should show.
 struct EditorRoute: Identifiable {
     let id = UUID()
     var kind: EventKind
     var existing: Event?
+    /// Forces the editor into timer or "log past" mode; nil picks the default.
+    var mode: EventEditorView.Mode?
+}
+
+/// The entry editor in a sheet, sized to the kind of entry.
+struct EditorSheet: View {
+    @ObservedObject var baby: Baby
+    let route: EditorRoute
+
+    var body: some View {
+        NavigationStack {
+            EventEditorView(baby: baby, kind: route.kind, existing: route.existing, mode: route.mode)
+        }
+        // Short forms (diaper, bottle, note) open half-height so the Save button
+        // is close at hand; drag up for more room.
+        .presentationDetents(route.kind.prefersCompactSheet ? [.medium, .large] : [.large])
+    }
+}
+
+/// A short "done" message with a single Undo button, shown after one-tap actions.
+struct UndoToast: Identifiable {
+    let id = UUID()
+    var message: String
+    var undo: () -> Void
 }
 
 struct HomeView: View {
@@ -14,6 +39,7 @@ struct HomeView: View {
     @ObservedObject var baby: Baby
     @FetchRequest private var recent: FetchedResults<Event>
     @State private var editor: EditorRoute?
+    @State private var toast: UndoToast?
 
     init(baby: Baby) {
         self.baby = baby
@@ -39,14 +65,27 @@ struct HomeView: View {
                     BabyHeader(baby: baby)
 
                     ForEach(running) { event in
-                        TimerCard(event: event) { editor = EditorRoute(kind: event.eventKind, existing: event) }
+                        TimerCard(event: event, onEdit: { editor = EditorRoute(kind: event.eventKind, existing: event) }, onStop: { stop(event) })
                     }
 
-                    QuickActionsGrid(baby: baby, editor: $editor)
+                    // What a tired parent checks first: how long since the last feed,
+                    // diaper and sleep. The one-tap buttons come right after.
+                    TimelineView(.periodic(from: .now, by: 30)) { context in
+                        StatusCards(records: records, now: context.date)
+                    }
+
+                    QuickActionsGrid(
+                        records: records,
+                        running: running.map(\.record),
+                        editor: $editor,
+                        startTimer: startTimer,
+                        startNursing: startNursing,
+                        stopRunning: stopRunning,
+                        logDiaper: logDiaper
+                    )
 
                     TimelineView(.periodic(from: .now, by: 30)) { context in
                         VStack(spacing: 16) {
-                            StatusCards(records: records, now: context.date)
                             SweetSpotCard(baby: baby.record, records: records, now: context.date)
                             TodayCard(records: records, now: context.date)
                         }
@@ -59,16 +98,116 @@ struct HomeView: View {
                 .padding()
             }
             .background(Color(.systemGroupedBackground))
+            .safeAreaInset(edge: .bottom) {
+                if let toast {
+                    UndoToastView(toast: toast) {
+                        toast.undo()
+                        self.toast = nil
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .animation(.snappy(duration: 0.25), value: toast?.id)
+            // Each toast stays for a few seconds; a newer one restarts the clock.
+            .task(id: toast?.id) {
+                guard toast != nil else { return }
+                try? await Task.sleep(for: .seconds(6))
+                toast = nil
+            }
             .toolbar {
                 ToolbarItem(placement: .principal) { BabySwitcher(baby: baby) }
             }
             .navigationBarTitleDisplayMode(.inline)
             .sheet(item: $editor) { route in
-                NavigationStack {
-                    EventEditorView(baby: baby, kind: route.kind, existing: route.existing)
-                }
+                EditorSheet(baby: baby, route: route)
             }
         }
+    }
+
+    // MARK: One-tap actions
+
+    private func startTimer(_ kind: EventKind, activityType: ActivityType?) {
+        guard let event = store.startTimer(kind, for: baby, activityType: activityType) else { return }
+        haptic()
+        let message: String
+        switch kind {
+        case .sleep: message = String(localized: "Sleep started")
+        case .pumping: message = String(localized: "Pumping started")
+        case .activity: message = String(localized: "\((activityType ?? .play).title) started")
+        default: message = String(localized: "Timer started")
+        }
+        show(message) { store.delete(event) }
+    }
+
+    private func startNursing(_ side: BreastSide?) {
+        guard let event = store.startNursing(for: baby, side: side) else { return }
+        haptic()
+        let chosen = event.record.activeSide ?? side ?? .left
+        show(String(localized: "Nursing started · \(chosen.title)")) { store.delete(event) }
+    }
+
+    /// Stops the running timer of `kind` (the oldest one if several are running).
+    private func stopRunning(_ kind: EventKind) {
+        guard let event = running.first(where: { $0.eventKind == kind }) else { return }
+        stop(event)
+    }
+
+    private func stop(_ event: Event) {
+        let before = event.record
+        store.stopTimer(event)
+        haptic()
+        if before.kind == .pumping {
+            // Amounts are usually known only once pumping ends; ask for them now
+            // instead of making the user find the entry again.
+            editor = EditorRoute(kind: .pumping, existing: event)
+            return
+        }
+        let message: String
+        switch before.kind {
+        case .sleep: message = String(localized: "Sleep ended")
+        case .nursing: message = String(localized: "Nursing finished")
+        case .activity: message = String(localized: "Activity finished")
+        default: message = String(localized: "Timer stopped")
+        }
+        // Saving the earlier record puts the timer back exactly as it was.
+        show(message) { store.save(before) }
+    }
+
+    private func logDiaper(_ type: DiaperType) {
+        guard let event = store.logDiaper(type, for: baby) else { return }
+        haptic()
+        show(String(localized: "Logged a \(type.title) diaper.")) { store.delete(event) }
+    }
+
+    private func show(_ message: String, undo: @escaping () -> Void) {
+        toast = UndoToast(message: message, undo: undo)
+    }
+
+    private func haptic() {
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+    }
+}
+
+struct UndoToastView: View {
+    var toast: UndoToast
+    var onUndo: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+            Text(toast.message)
+                .font(.subheadline.weight(.medium))
+                .lineLimit(2)
+            Spacer(minLength: 8)
+            Button("Undo", action: onUndo)
+                .font(.subheadline.bold())
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .shadow(color: .black.opacity(0.12), radius: 12, y: 4)
+        .padding(.horizontal)
+        .padding(.bottom, 8)
     }
 }
 
@@ -110,6 +249,7 @@ struct TimerCard: View {
     @ObservedObject private var alarms = TimerAlarms.shared
     @ObservedObject var event: Event
     var onEdit: () -> Void
+    var onStop: () -> Void
 
     var body: some View {
         let record = event.record
@@ -133,16 +273,14 @@ struct TimerCard: View {
 
             TimelineView(.periodic(from: .now, by: 1)) { context in
                 if record.kind == .nursing {
-                    NursingControls(event: event, record: record, now: context.date)
+                    NursingControls(event: event, record: record, now: context.date, onStop: onStop)
                 } else {
                     HStack {
                         Text(Fmt.clock(record.duration(at: context.date)))
                             .font(.system(size: 44, weight: .semibold, design: .rounded))
                             .monospacedDigit()
                         Spacer()
-                        Button {
-                            store.stopTimer(event)
-                        } label: {
+                        Button(action: onStop) {
                             Label(record.kind == .sleep ? String(localized: "Wake Up") : String(localized: "Stop"), systemImage: "stop.fill")
                                 .font(.headline)
                         }
@@ -160,6 +298,7 @@ struct NursingControls: View {
     var event: Event
     var record: EventRecord
     var now: Date
+    var onStop: () -> Void
 
     var body: some View {
         VStack(spacing: 14) {
@@ -191,9 +330,7 @@ struct NursingControls: View {
                     Text("Paused").foregroundStyle(.secondary)
                 }
                 Spacer()
-                Button {
-                    store.stopTimer(event)
-                } label: {
+                Button(action: onStop) {
                     Label("Done", systemImage: "checkmark")
                         .font(.headline)
                 }
@@ -206,23 +343,146 @@ struct NursingControls: View {
 
 // MARK: - Quick actions
 
+/// Two rows of big buttons. The frequent ones act on a single tap: sleep,
+/// nursing and pumping start (or stop) their timer, a diaper is logged from a
+/// short menu. Long-press a tile to log something from earlier or to start
+/// with details.
 struct QuickActionsGrid: View {
-    @EnvironmentObject private var store: TrackerStore
-    @ObservedObject var baby: Baby
+    /// Recent entries, newest first; used for the suggested nursing side.
+    var records: [EventRecord]
+    var running: [EventRecord]
     @Binding var editor: EditorRoute?
+    var startTimer: (EventKind, ActivityType?) -> Void
+    var startNursing: (BreastSide?) -> Void
+    var stopRunning: (EventKind) -> Void
+    var logDiaper: (DiaperType) -> Void
 
     private let columns = [GridItem(.adaptive(minimum: 76), spacing: 12)]
 
+    private func isRunning(_ kind: EventKind) -> Bool { running.contains { $0.kind == kind } }
+
+    private var suggestedSide: BreastSide {
+        EventRecord.suggestedNextSide(after: records.first { $0.kind == .nursing })
+    }
+
     var body: some View {
         LazyVGrid(columns: columns, spacing: 12) {
-            tile(.sleep)
-            tile(.nursing)
-            tile(.bottle)
-            tile(.diaper)
-            tile(.pumping)
-            tile(.solids)
-            tile(.growth)
-            Menu {
+            sleepTile
+            nursingTile
+            editorTile(.bottle)
+            diaperTile
+            pumpingTile
+            editorTile(.solids)
+            activityTile
+            moreTile
+        }
+    }
+
+    // MARK: Tiles
+
+    private var sleepTile: some View {
+        timerTile(.sleep, stopTitle: String(localized: "Wake Up"), stopImage: "sun.max.fill") {
+            startTimer(.sleep, nil)
+        }
+    }
+
+    private var nursingTile: some View {
+        Group {
+            if isRunning(.nursing) {
+                Button {
+                    stopRunning(.nursing)
+                } label: {
+                    QuickActionTile(title: String(localized: "Done"), systemImage: "checkmark", color: EventKind.nursing.color)
+                }
+                .buttonStyle(.plain)
+            } else {
+                Button {
+                    startNursing(suggestedSide)
+                } label: {
+                    QuickActionTile(
+                        title: EventKind.nursing.title,
+                        subtitle: String(localized: "Next side: \(suggestedSide.shortTitle)"),
+                        systemImage: EventKind.nursing.systemImage,
+                        color: EventKind.nursing.color
+                    )
+                }
+                .buttonStyle(.plain)
+                .contextMenu {
+                    ForEach([BreastSide.left, .right], id: \.self) { side in
+                        Button {
+                            startNursing(side)
+                        } label: {
+                            Label(String(localized: "Start \(side.title)"), systemImage: "play.fill")
+                        }
+                    }
+                    Divider()
+                    logPastButton(.nursing)
+                }
+            }
+        }
+    }
+
+    private var pumpingTile: some View {
+        timerTile(.pumping, stopTitle: String(localized: "Stop"), stopImage: "stop.fill") {
+            startTimer(.pumping, nil)
+        }
+    }
+
+    private var diaperTile: some View {
+        Menu {
+            ForEach(DiaperType.allCases, id: \.self) { type in
+                Button {
+                    logDiaper(type)
+                } label: {
+                    Label(type.title, systemImage: type.systemImage)
+                }
+            }
+            Divider()
+            Button {
+                editor = EditorRoute(kind: .diaper, mode: .manual)
+            } label: {
+                Label("More Details", systemImage: "square.and.pencil")
+            }
+        } label: {
+            QuickActionTile(title: EventKind.diaper.title, systemImage: EventKind.diaper.systemImage, color: EventKind.diaper.color)
+        }
+    }
+
+    private var activityTile: some View {
+        Group {
+            if isRunning(.activity) {
+                Button {
+                    stopRunning(.activity)
+                } label: {
+                    QuickActionTile(title: String(localized: "Stop"), systemImage: "stop.fill", color: EventKind.activity.color)
+                }
+                .buttonStyle(.plain)
+            } else {
+                Menu {
+                    ForEach(ActivityType.allCases, id: \.self) { type in
+                        Button {
+                            startTimer(.activity, type)
+                        } label: {
+                            Label(type.title, systemImage: type.systemImage)
+                        }
+                    }
+                    Divider()
+                    logPastButton(.activity)
+                } label: {
+                    QuickActionTile(title: EventKind.activity.title, systemImage: EventKind.activity.systemImage, color: EventKind.activity.color)
+                }
+            }
+        }
+    }
+
+    private var moreTile: some View {
+        Menu {
+            Button {
+                editor = EditorRoute(kind: .growth)
+            } label: {
+                Label(EventKind.growth.title, systemImage: EventKind.growth.systemImage)
+            }
+            Section(String(localized: "Health")) {
                 ForEach([EventKind.medication, .temperature, .symptom, .vaccine]) { kind in
                     Button {
                         editor = EditorRoute(kind: kind)
@@ -230,15 +490,47 @@ struct QuickActionsGrid: View {
                         Label(kind.title, systemImage: kind.systemImage)
                     }
                 }
-            } label: {
-                QuickActionTile(title: String(localized: "Health"), systemImage: "cross.case.fill", color: .red)
             }
-            tile(.activity)
-            tile(.note)
+            Button {
+                editor = EditorRoute(kind: .note)
+            } label: {
+                Label(EventKind.note.title, systemImage: EventKind.note.systemImage)
+            }
+        } label: {
+            QuickActionTile(title: String(localized: "More"), systemImage: "ellipsis", color: .gray)
         }
     }
 
-    private func tile(_ kind: EventKind) -> some View {
+    // MARK: Helpers
+
+    /// Starts `kind` on tap, or stops it when it is already running.
+    private func timerTile(_ kind: EventKind, stopTitle: String, stopImage: String, start: @escaping () -> Void) -> some View {
+        Group {
+            if isRunning(kind) {
+                Button {
+                    stopRunning(kind)
+                } label: {
+                    QuickActionTile(title: stopTitle, systemImage: stopImage, color: kind.color)
+                }
+                .buttonStyle(.plain)
+            } else {
+                Button(action: start) {
+                    QuickActionTile(title: kind.title, systemImage: kind.systemImage, color: kind.color)
+                }
+                .buttonStyle(.plain)
+                .contextMenu {
+                    Button {
+                        editor = EditorRoute(kind: kind, mode: .timer)
+                    } label: {
+                        Label("Start with Details", systemImage: "timer")
+                    }
+                    logPastButton(kind)
+                }
+            }
+        }
+    }
+
+    private func editorTile(_ kind: EventKind) -> some View {
         Button {
             editor = EditorRoute(kind: kind)
         } label: {
@@ -246,25 +538,43 @@ struct QuickActionsGrid: View {
         }
         .buttonStyle(.plain)
     }
+
+    private func logPastButton(_ kind: EventKind) -> some View {
+        Button {
+            editor = EditorRoute(kind: kind, mode: .manual)
+        } label: {
+            Label("Log Past", systemImage: "clock.arrow.circlepath")
+        }
+    }
 }
 
 struct QuickActionTile: View {
     var title: String
+    var subtitle: String?
     var systemImage: String
     var color: Color
 
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 4) {
             KindIcon(systemImage: systemImage, color: color, size: 40)
+                .padding(.bottom, 2)
             Text(title)
                 .font(.caption)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
                 .foregroundStyle(.primary)
+            // Always laid out so every tile in a row is the same height.
+            Text(subtitle ?? " ")
+                .font(.caption2)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .foregroundStyle(.secondary)
+                .accessibilityHidden(subtitle == nil)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 10)
         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
 }
 

@@ -21,13 +21,18 @@ struct HistoryView: View {
                     .background(Color(.systemGroupedBackground))
             }
             .toolbar {
+                ToolbarItem(placement: .principal) { BabySwitcher(baby: baby) }
                 ToolbarItem(placement: .topBarTrailing) {
+                    // Grouped the same way as the filter chips, so the 13 kinds
+                    // read as a few short lists instead of one long one.
                     Menu {
-                        ForEach(EventKind.allCases) { kind in
-                            Button {
-                                editor = EditorRoute(kind: kind)
-                            } label: {
-                                Label(kind.title, systemImage: kind.systemImage)
+                        ForEach(EventCategory.allCases) { category in
+                            if category.kinds.count == 1, let kind = category.kinds.first {
+                                addButton(kind)
+                            } else {
+                                Section(category.title) {
+                                    ForEach(category.kinds) { kind in addButton(kind) }
+                                }
                             }
                         }
                     } label: {
@@ -37,10 +42,20 @@ struct HistoryView: View {
                 }
             }
             .sheet(item: $editor) { route in
-                NavigationStack {
-                    EventEditorView(baby: baby, kind: route.kind, existing: route.existing)
-                }
+                EditorSheet(baby: baby, route: route)
             }
+        }
+    }
+}
+
+extension HistoryView {
+    /// Entries added from the Log are things that already happened, so timer
+    /// kinds open in "Log Past" rather than starting a timer.
+    fileprivate func addButton(_ kind: EventKind) -> some View {
+        Button {
+            editor = EditorRoute(kind: kind, mode: .manual)
+        } label: {
+            Label(kind.title, systemImage: kind.systemImage)
         }
     }
 }

@@ -57,6 +57,16 @@ extension EventKind {
     }
 }
 
+extension EventKind {
+    /// Short forms that fit a half-height sheet.
+    var prefersCompactSheet: Bool {
+        switch self {
+        case .diaper, .bottle, .note: return true
+        default: return false
+        }
+    }
+}
+
 extension EventCategory {
     var title: String {
         switch self {

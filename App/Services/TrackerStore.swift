@@ -201,9 +201,10 @@ final class TrackerStore: ObservableObject {
         }
     }
 
-    func logDiaper(_ type: DiaperType, for baby: Baby, at date: Date = Date()) {
-        guard let babyID = baby.id else { return }
-        save(EventRecord(babyID: babyID, kind: .diaper, startDate: date, diaperType: type))
+    @discardableResult
+    func logDiaper(_ type: DiaperType, for baby: Baby, at date: Date = Date()) -> Event? {
+        guard let babyID = baby.id else { return nil }
+        return save(EventRecord(babyID: babyID, kind: .diaper, startDate: date, diaperType: type))
     }
 
     private func mutate(_ event: Event, _ change: (inout EventRecord) -> Void) {
