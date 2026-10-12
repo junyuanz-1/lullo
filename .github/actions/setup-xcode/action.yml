@@ -1,0 +1,104 @@
+name: Set up Xcode project
+description: Selects the pinned Xcode, installs XcodeGen and xcbeautify, and generates the project.
+
+inputs:
+  xcode-version:
+    description: >
+      Xcode to use. Pinned because snapshot reference images depend on the exact
+      Xcode and simulator; after changing it, re-record them.
+    default: "26.3"
+
+outputs:
+  cache-key:
+    description: Key to save build/DerivedData under (see "Save build cache" in ci.yml).
+    value: ${{ steps.keys.outputs.key }}
+
+runs:
+  using: composite
+  steps:
+    - name: Select Xcode ${{ inputs.xcode-version }}
+      shell: bash
+      run: |
+        XCODE=$(ls -d /Applications/Xcode_${{ inputs.xcode-version }}*.app 2>/dev/null | grep -v -i beta | sort -V | head -1 || true)
+        if [ -z "$XCODE" ]; then
+          echo "::error::Xcode ${{ inputs.xcode-version }} is not installed on this runner. Available:"
+          ls -d /Applications/Xcode_*.app
+          exit 1
+        fi
+        echo "Using $XCODE"
+        sudo xcode-select -s "$XCODE/Contents/Developer"
+        xcodebuild -version
+
+    # The first simctl call can find no simulators while CoreSimulator is still
+    # starting, so wait for the pinned device (creating it if this runner image
+    # lacks it), boot it now, and hand its id to later steps as $DESTINATION.
+    - name: Prepare iPhone 17 Pro simulator
+      shell: bash
+      run: |
+        NAME="iPhone 17 Pro"
+        find_device() {
+          xcrun simctl list devices available -j | python3 -c '
+        import json, sys
+        devices = json.load(sys.stdin)["devices"]
+        for runtime in sorted((r for r in devices if "iOS" in r), key=lambda r: [int(x) for x in r.rsplit("iOS-", 1)[-1].split("-") if x.isdigit()], reverse=True):
+            for d in devices[runtime]:
+                if d["name"] == sys.argv[1]:
+                    print(d["udid"]); sys.exit(0)
+        ' "$NAME"
+        }
+        UDID=""
+        for attempt in $(seq 1 12); do
+          UDID=$(find_device || true)
+          [ -n "$UDID" ] && break
+          RUNTIME=$(xcrun simctl list runtimes available -j | python3 -c '
+        import json, sys
+        ios = [r for r in json.load(sys.stdin)["runtimes"] if r.get("platform") == "iOS"]
+        print(ios[-1]["identifier"] if ios else "")
+        ' || true)
+          if [ -n "$RUNTIME" ]; then
+            echo "Creating $NAME on $RUNTIME"
+            xcrun simctl create "$NAME" com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro "$RUNTIME" || true
+          else
+            echo "No iOS simulator runtime yet (attempt $attempt); waiting for CoreSimulator..."
+            sleep 10
+          fi
+        done
+        if [ -z "$UDID" ]; then
+          echo "::error::No $NAME simulator available on this runner."
+          xcrun simctl list
+          exit 1
+        fi
+        xcrun simctl bootstatus "$UDID" -b
+        echo "Using $NAME ($UDID)"
+        echo "DESTINATION=platform=iOS Simulator,id=$UDID" >> "$GITHUB_ENV"
+
+    - name: Install tools
+      shell: bash
+      run: brew install xcodegen xcbeautify
+
+    - name: Generate project
+      shell: bash
+      run: |
+        xcodegen generate --spec project.yml
+        if ! git diff --quiet -- Tinytide.xcodeproj; then
+          echo "::notice::Tinytide.xcodeproj differs from what this XcodeGen version generates (usually just tool version noise)."
+        fi
+
+    # Swift packages and earlier build products, saved by CI on main. Reusing
+    # them skips fetching and compiling the dependencies (swift-snapshot-testing,
+    # swift-syntax); the app's own files are still recompiled.
+    - name: Cache keys
+      id: keys
+      shell: bash
+      run: |
+        echo "prefix=derived-data-xcode${{ inputs.xcode-version }}-${{ hashFiles('project.yml', 'Packages/BabyCore/Package.swift') }}-" >> "$GITHUB_OUTPUT"
+        echo "key=derived-data-xcode${{ inputs.xcode-version }}-${{ hashFiles('project.yml', 'Packages/BabyCore/Package.swift') }}-${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
+    - name: Restore build cache
+      uses: actions/cache/restore@v4
+      with:
+        path: build/DerivedData
+        key: ${{ steps.keys.outputs.key }}
+        restore-keys: |
+          ${{ steps.keys.outputs.prefix }}
+          derived-data-xcode${{ inputs.xcode-version }}-

@@ -14,3 +14,11 @@ Packages/BabyCore/.swiftpm/
 
 # macOS
 .DS_Store
+
+# fastlane
+fastlane/screenshots/
+fastlane/report.xml
+fastlane/test_output/
+fastlane/asc_api_key.json
+*.p8
+vendor/bundle/

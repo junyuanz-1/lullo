@@ -10,6 +10,10 @@ struct TinytideApp: App {
     @StateObject private var syncMonitor = SyncMonitor()
     @Environment(\.scenePhase) private var scenePhase
 
+    init() {
+        if DemoMode.isEnabled { DemoMode.start() }
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -23,13 +27,13 @@ struct TinytideApp: App {
                 }
         }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active {
-                store.appBecameActive()
-                Task {
-                    // Give iCloud a moment to bring in changes before the daily snapshot.
-                    try? await Task.sleep(for: .seconds(10))
-                    AutoBackup.shared.backUpIfDue(store: store)
-                }
+            // Demo mode is a still life: no widgets, Live Activities or backups.
+            guard phase == .active, !DemoMode.isEnabled else { return }
+            store.appBecameActive()
+            Task {
+                // Give iCloud a moment to bring in changes before the daily snapshot.
+                try? await Task.sleep(for: .seconds(10))
+                AutoBackup.shared.backUpIfDue(store: store)
             }
         }
     }

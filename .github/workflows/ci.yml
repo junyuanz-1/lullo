@@ -27,57 +27,75 @@ jobs:
   ios:
     name: Build and test iOS app
     runs-on: macos-15
-    timeout-minutes: 45
+    timeout-minutes: 60
+    env:
+      # DESTINATION (the booted iPhone 17 Pro the reference images are recorded
+      # on) is set by the setup-xcode action.
+      DERIVED_DATA: build/DerivedData
     steps:
       - uses: actions/checkout@v4
+        with:
+          # A pull request is checked out as a merge commit; its first parent is
+          # the base branch, which is what the change list below compares with.
+          fetch-depth: 2
 
-      # The newest Xcode on the runner, so code behind `#if canImport(AlarmKit)`
-      # (iOS 26 SDK) is compiled too.
-      - name: Select Xcode
+      - id: setup
+        uses: ./.github/actions/setup-xcode
+
+      # Screenshot diffs take the longest, so skip them when a pull request
+      # can't have changed how a screen looks (tests, docs, scripts...).
+      - name: Check whether screens may have changed
+        id: scope
         run: |
-          ls -d /Applications/Xcode_*.app
-          XCODE=$(ls -d /Applications/Xcode_*.app | grep -v -i beta | sort -V | tail -1)
-          echo "Using $XCODE"
-          sudo xcode-select -s "$XCODE/Contents/Developer"
-          xcodebuild -version
-
-      - name: Install tools
-        run: brew install xcodegen xcbeautify
-
-      - name: Generate project
-        run: |
-          xcodegen generate --spec project.yml
-          if ! git diff --quiet -- Tinytide.xcodeproj; then
-            echo "::warning::Tinytide.xcodeproj is out of date with project.yml. Run 'xcodegen generate' and commit the result."
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "snapshots=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          changed=$(git diff --name-only HEAD^1 HEAD)
+          echo "$changed"
+          if echo "$changed" | grep -qE '^(App/|Shared/|Packages/BabyCore/Sources/|Tests/TinytideSnapshotTests/|Config/|project\.yml|scripts/snapshots\.sh|\.github/)'; then
+            echo "snapshots=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No app UI files changed; skipping screenshot diffs."
+            echo "snapshots=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Pick a simulator
-        id: sim
-        run: |
-          UDID=$(xcrun simctl list devices available -j | python3 -c '
-          import json, sys
-          devices = json.load(sys.stdin)["devices"]
-          for runtime in sorted(devices, reverse=True):
-              if "iOS" not in runtime:
-                  continue
-              for d in devices[runtime]:
-                  if d["name"].startswith("iPhone"):
-                      print(d["udid"]); sys.exit(0)
-          sys.exit("No iPhone simulator found")
-          ')
-          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
-          xcrun simctl list devices | grep "$UDID"
-
-      - name: Build and test
+      # Both test schemes share one DerivedData, so the app is compiled once.
+      - name: Build
         run: |
           set -o pipefail
-          xcodebuild test \
-            -project Tinytide.xcodeproj \
-            -scheme Tinytide \
-            -destination "id=${{ steps.sim.outputs.udid }}" \
-            -resultBundlePath TestResults.xcresult \
+          xcodebuild build-for-testing \
+            -project Tinytide.xcodeproj -scheme Tinytide \
+            -destination "$DESTINATION" -derivedDataPath "$DERIVED_DATA" \
             CODE_SIGNING_ALLOWED=NO \
             | tee xcodebuild.log | xcbeautify --renderer github-actions
+          if [ "${{ steps.scope.outputs.snapshots }}" = "true" ]; then
+            xcodebuild build-for-testing \
+              -project Tinytide.xcodeproj -scheme TinytideSnapshots \
+              -destination "$DESTINATION" -derivedDataPath "$DERIVED_DATA" \
+              CODE_SIGNING_ALLOWED=NO \
+              | tee -a xcodebuild.log | xcbeautify --renderer github-actions
+          fi
+
+      - name: Unit tests
+        run: |
+          set -o pipefail
+          xcodebuild test-without-building \
+            -project Tinytide.xcodeproj -scheme Tinytide \
+            -destination "$DESTINATION" -derivedDataPath "$DERIVED_DATA" \
+            -resultBundlePath TestResults.xcresult \
+            | tee -a xcodebuild.log | xcbeautify --renderer github-actions
+
+      - name: Screenshot diffs
+        if: steps.scope.outputs.snapshots == 'true'
+        env:
+          SKIP_BUILD: "1"
+        run: |
+          if [ -z "$(find Tests/TinytideSnapshotTests/__Snapshots__ -name '*.png' 2>/dev/null)" ]; then
+            echo "::warning::No reference screenshots yet. Add the 'record-snapshots' label to the pull request."
+            exit 0
+          fi
+          scripts/snapshots.sh
 
       - name: Upload test results
         if: always()
@@ -88,3 +106,20 @@ jobs:
             TestResults.xcresult
             xcodebuild.log
           if-no-files-found: ignore
+
+      - name: Upload screenshot differences
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-diffs
+          path: build/snapshot-diffs
+          if-no-files-found: ignore
+
+      # Only main saves the cache, so pull requests (which can read it) don't
+      # fill the 10 GB cache quota with one copy each.
+      - name: Save build cache
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/cache/save@v4
+        with:
+          path: build/DerivedData
+          key: ${{ steps.setup.outputs.cache-key }}

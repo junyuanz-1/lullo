@@ -359,6 +359,33 @@ final class TimerAlarmTests: XCTestCase {
     }
 }
 
+final class DemoDataTests: XCTestCase {
+    func testDemoWeekLooksLikeARealBaby() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC")!
+        let now = calendar.date(from: DateComponents(year: 2026, month: 3, day: 15, hour: 9, minute: 41))!
+        let data = DemoData.make(now: now, calendar: calendar)
+
+        XCTAssertTrue(data.events.allSatisfy { $0.startDate <= now && ($0.endDate ?? now) <= now })
+        XCTAssertEqual(data.events.filter(\.isOngoing).map(\.kind), [.nursing], "One feed in progress")
+        XCTAssertEqual(Set(data.events.map(\.id)).count, data.events.count)
+        XCTAssertEqual(data.events.filter { $0.kind == .growth }.count, 4)
+        XCTAssertEqual(data.baby.ageInDays(at: now, calendar: calendar), 98)
+
+        // Yesterday should look like a typical day for a three-month-old.
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: calendar.startOfDay(for: now))!
+        let summary = try XCTUnwrap(Statistics.dailySummaries(
+            events: data.events, from: yesterday, to: yesterday, now: now, calendar: calendar
+        ).first)
+        XCTAssertEqual(summary.totalSleep / 3600, 14.5, accuracy: 1.5)
+        XCTAssertGreaterThanOrEqual(summary.feedCount, 6)
+        XCTAssertGreaterThanOrEqual(summary.wetDiapers, 5)
+
+        // Same input, same output.
+        XCTAssertEqual(DemoData.make(now: now, calendar: calendar).events, data.events)
+    }
+}
+
 final class WidgetSnapshotTests: XCTestCase {
     func testSnapshotSummarisesLatestState() throws {
         let now = Date()

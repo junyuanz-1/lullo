@@ -307,6 +307,7 @@ struct PillSegmentedControl<Value: Hashable>: View {
     @Binding var selection: Value
     var tint: Color = .accentColor
     @Namespace private var highlight
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         HStack(spacing: 4) {
@@ -315,19 +316,30 @@ struct PillSegmentedControl<Value: Hashable>: View {
                 Button {
                     withAnimation(.snappy(duration: 0.25)) { selection = segment.value }
                 } label: {
-                    Label(segment.title, systemImage: segment.systemImage)
-                        .font(.subheadline.weight(.semibold))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
-                        .foregroundStyle(selected ? Color.white : Color.secondary)
-                        .background {
-                            if selected {
-                                Capsule().fill(tint.gradient).matchedGeometryEffect(id: "highlight", in: highlight)
-                            }
+                    // At accessibility text sizes two segments can't fit an icon and
+                    // a word each, so drop the icon and let the title wrap rather
+                    // than truncate ("Ti…").
+                    Group {
+                        if typeSize.isAccessibilitySize {
+                            Text(segment.title)
+                        } else {
+                            Label(segment.title, systemImage: segment.systemImage)
                         }
-                        .contentShape(Capsule())
+                    }
+                    .font(.subheadline.weight(.semibold))
+                    .lineLimit(typeSize.isAccessibilitySize ? 2 : 1)
+                    .multilineTextAlignment(.center)
+                    .minimumScaleFactor(0.7)
+                    .padding(.horizontal, 6)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .foregroundStyle(selected ? Color.white : Color.secondary)
+                    .background {
+                        if selected {
+                            Capsule().fill(tint.gradient).matchedGeometryEffect(id: "highlight", in: highlight)
+                        }
+                    }
+                    .contentShape(Capsule())
                 }
                 .buttonStyle(.plain)
                 .accessibilityAddTraits(selected ? .isSelected : [])
@@ -601,6 +613,28 @@ struct SwipeToDeleteRow<Content: View>: View {
         withAnimation(.snappy(duration: 0.2)) {
             revealed = false
             offset = 0
+        }
+    }
+}
+
+/// A `TimelineView` that follows `AppClock`: it ticks normally, and renders a
+/// single frame at the pinned time when the clock is fixed.
+struct ClockTimeline<Content: View>: View {
+    var interval: TimeInterval
+    @ViewBuilder var content: (Date) -> Content
+
+    init(every interval: TimeInterval, @ViewBuilder content: @escaping (Date) -> Content) {
+        self.interval = interval
+        self.content = content
+    }
+
+    var body: some View {
+        if let fixed = AppClock.fixed {
+            content(fixed)
+        } else {
+            TimelineView(.periodic(from: .now, by: interval)) { context in
+                content(context.date)
+            }
         }
     }
 }

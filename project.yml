@@ -23,6 +23,9 @@ settings:
 packages:
   BabyCore:
     path: Packages/BabyCore
+  SnapshotTesting:
+    url: https://github.com/pointfreeco/swift-snapshot-testing
+    from: 1.19.6
 
 targets:
   Tinytide:
@@ -119,6 +122,35 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID).Tests
         GENERATE_INFOPLIST_FILE: YES
 
+  TinytideSnapshotTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests/TinytideSnapshotTests
+        excludes:
+          - "__Snapshots__/**"
+    dependencies:
+      - target: Tinytide
+      - package: BabyCore
+      - package: SnapshotTesting
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID).SnapshotTests
+        GENERATE_INFOPLIST_FILE: YES
+
+  TinytideUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: Tests/TinytideUITests
+    dependencies:
+      - target: Tinytide
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID).UITests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Tinytide
+
 schemes:
   Tinytide:
     build:
@@ -139,3 +171,25 @@ schemes:
         - package: BabyCore/BabyCoreTests
     archive:
       config: Release
+
+  # Screenshot diff tests: scripts/snapshots.sh
+  TinytideSnapshots:
+    build:
+      targets:
+        Tinytide: all
+    test:
+      config: Debug
+      targets:
+        - TinytideSnapshotTests
+      environmentVariables:
+        TZ: UTC
+
+  # App Store screenshots: bundle exec fastlane screenshots
+  TinytideScreenshots:
+    build:
+      targets:
+        Tinytide: all
+    test:
+      config: Debug
+      targets:
+        - TinytideUITests

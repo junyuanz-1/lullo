@@ -26,7 +26,7 @@ enum Fmt {
         return h > 0 ? String(format: "%d:%02d:%02d", h, m, s) : String(format: "%d:%02d", m, s)
     }
 
-    static func ago(_ date: Date, now: Date = Date()) -> String {
+    static func ago(_ date: Date, now: Date = AppClock.now) -> String {
         let seconds = now.timeIntervalSince(date)
         if seconds < 60 { return String(localized: "just now") }
         return String(localized: "\(duration(seconds)) ago")
@@ -87,7 +87,7 @@ enum Fmt {
     }
 
     /// "3 months, 2 weeks" / "3个月2周"
-    static func age(birthDate: Date, at now: Date = Date(), calendar: Calendar = .current) -> String {
+    static func age(birthDate: Date, at now: Date = AppClock.now, calendar: Calendar = .current) -> String {
         guard now >= birthDate else { return String(localized: "Not born yet") }
         let components = calendar.dateComponents([.year, .month, .weekOfMonth, .day], from: birthDate, to: now)
         let formatter = DateComponentsFormatter()
@@ -103,7 +103,7 @@ enum Fmt {
 
 extension EventRecord {
     /// One-line summary of the details, e.g. "120 ml · Formula" or "L 8m · R 6m".
-    func detailText(now: Date = Date()) -> String {
+    func detailText(now: Date = AppClock.now) -> String {
         var parts: [String] = []
         switch kind {
         case .sleep:

@@ -42,7 +42,7 @@ private struct TrendsContent: View {
         self.baby = baby
         self.range = range
         let calendar = Calendar.current
-        to = Date()
+        to = AppClock.now
         from = calendar.date(byAdding: .day, value: -(range - 1), to: calendar.startOfDay(for: to))!
         // Start a day early so night sleep that began the evening before is counted.
         let fetchFrom = calendar.date(byAdding: .day, value: -1, to: from)!
@@ -57,12 +57,12 @@ private struct TrendsContent: View {
 
     var body: some View {
         let records = events.map(\.record)
-        let now = Date()
+        let now = AppClock.now
         let classifier = AppSettings.sleepClassifier
         let days = Statistics.dailySummaries(events: records, from: from, to: to, now: now, classifier: classifier)
         let average = Statistics.average(days)
         let schedules = Statistics.schedules(events: records, from: from, to: to, now: now)
-        let ageMonths = baby.record.ageInMonths()
+        let ageMonths = baby.record.ageInMonths(at: AppClock.now)
 
         ScrollView {
             VStack(spacing: 16) {

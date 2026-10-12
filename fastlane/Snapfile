@@ -1,0 +1,36 @@
+# App Store screenshots: `bundle exec fastlane screenshots`
+# The UI test (Tests/TinytideUITests/AppStoreScreenshots.swift) launches the app
+# in demo mode, which fills it with a sample week and pins the clock to 9:41.
+
+project("./Tinytide.xcodeproj")
+scheme("TinytideScreenshots")
+
+# 6.9" is the only size App Store Connect requires; it scales down for smaller iPhones.
+devices([
+  "iPhone 17 Pro Max",
+])
+
+# App Store Connect locale codes. Each sets the simulator's language and region.
+languages([
+  "en-US",
+  "zh-Hans",
+  "zh-Hant",
+  "ja",
+  "ko",
+  "es-ES",
+  "pt-BR",
+  "fr-FR",
+  "de-DE",
+])
+
+localize_simulator(true)
+override_status_bar(true)
+clear_previous_screenshots(true)
+reinstall_app(true)
+output_directory("./fastlane/screenshots")
+skip_open_summary(true)
+# Reuse the CI build cache (and keep builds out of ~/Library on your Mac).
+derived_data_path("./build/DerivedData")
+concurrent_simulators(true)
+# Simulator builds don't need signing, so this also works on CI.
+xcargs("CODE_SIGNING_ALLOWED=NO")

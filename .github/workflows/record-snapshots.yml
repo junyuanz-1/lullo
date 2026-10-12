@@ -1,0 +1,75 @@
+name: Record snapshots
+
+# Re-records the reference images for the screenshot diff tests and commits them
+# to the pull request's branch. After an intentional UI change, either add the
+# `record-snapshots` label to the pull request, or run this workflow on the
+# branch (Actions → Record snapshots → Run workflow). When the images are
+# committed, approve the CI run that appears on the pull request to check them.
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  BRANCH: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  record:
+    name: Record reference images
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'record-snapshots'
+    # At job level, so runs for other labels or new pushes (which skip this job)
+    # don't take the group and cancel a recording in progress.
+    concurrency:
+      group: record-snapshots-${{ github.head_ref || github.ref_name }}
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH }}
+
+      - uses: ./.github/actions/setup-xcode
+
+      - name: Record
+        run: scripts/snapshots.sh record
+
+      - name: Upload images
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-references
+          path: Tests/TinytideSnapshotTests/__Snapshots__
+
+      - name: Commit to ${{ env.BRANCH }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$BRANCH" = "main" ]; then
+            echo "::error::Run this on a pull request branch, not main."
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A Tests/TinytideSnapshotTests/__Snapshots__
+          if git diff --cached --quiet; then
+            echo "Reference images are unchanged."
+            exit 0
+          fi
+          git commit -m "Record snapshot reference images"
+          # Drop everything else the build touched (the regenerated project), then
+          # catch up with anything pushed while this ran; the commit only adds images.
+          git reset --hard HEAD
+          git pull --rebase origin "$BRANCH"
+          git push origin "HEAD:$BRANCH"
+          # This push opens a CI run on the pull request that waits for approval
+          # ("Approve and run" on the PR), because the workflow token made it.
+          # That run is the check of the new images; nothing else is started here.
+
+      - name: Remove the label
+        if: always() && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr edit ${{ github.event.pull_request.number }} --repo "${{ github.repository }}" --remove-label record-snapshots || true
