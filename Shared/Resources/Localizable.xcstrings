@@ -5563,6 +5563,64 @@
         }
       }
     },
+    "Choose a side to start the timer.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle eine Seite, um den Timer zu starten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a side to start the timer."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un lado para iniciar el cronómetro."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez un côté pour démarrer le chrono."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "左右を選んでタイマーを開始します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방향을 골라 타이머를 시작해요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha um lado para iniciar o cronômetro."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择一侧开始计时。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇一側開始計時。"
+          }
+        }
+      }
+    },
     "Choose which baby this widget shows.": {
       "localizations": {
         "de": {
@@ -10494,60 +10552,60 @@
         }
       }
     },
-    "Hold a timer to pick a side, add details before starting, or log one from earlier.": {
+    "Hold a timer to add details before starting, or log one from earlier.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Halte einen Timer gedrückt, um eine Seite zu wählen, vor dem Start Details hinzuzufügen oder etwas nachzutragen."
+            "value": "Halte einen Timer gedrückt, um vor dem Start Details hinzuzufügen oder etwas nachzutragen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hold a timer to pick a side, add details before starting, or log one from earlier."
+            "value": "Hold a timer to add details before starting, or log one from earlier."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mantén pulsado un cronómetro para elegir el lado, añadir detalles antes de empezar o registrar uno anterior."
+            "value": "Mantén pulsado un cronómetro para añadir detalles antes de empezar o registrar uno anterior."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Touchez longuement un chrono pour choisir le côté, ajouter des détails avant de démarrer ou noter une entrée passée."
+            "value": "Touchez longuement un chrono pour ajouter des détails avant de démarrer ou noter une entrée passée."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "タイマーを長押しすると、左右を選んだり、詳細を入力してから開始したり、あとから記録したりできます。"
+            "value": "タイマーを長押しすると、詳細を入力してから開始したり、あとから記録したりできます。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "타이머를 길게 누르면 방향을 고르거나, 세부 정보를 입력하고 시작하거나, 지난 기록을 추가할 수 있어요."
+            "value": "타이머를 길게 누르면 세부 정보를 입력하고 시작하거나, 지난 기록을 추가할 수 있어요."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Toque e segure um cronômetro para escolher o lado, adicionar detalhes antes de começar ou registrar um anterior."
+            "value": "Toque e segure um cronômetro para adicionar detalhes antes de começar ou registrar um anterior."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "长按计时按钮，可以选择喂奶侧、填写详情后开始，或补录之前的记录。"
+            "value": "长按计时按钮，可以填写详情后开始，或补录之前的记录。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "長按計時按鈕，可以選擇餵奶側、填寫詳情後開始，或補登之前的紀錄。"
+            "value": "長按計時按鈕，可以填寫詳情後開始，或補登之前的紀錄。"
           }
         }
       }
@@ -17282,60 +17340,60 @@
         }
       }
     },
-    "On Today, touch and hold a timer to pick a nursing side, add details before starting, or log one from earlier.": {
+    "On Today, tap Nursing to pick a side. Touch and hold a timer to add details before starting, or log one from earlier.": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Halte unter „Heute“ einen Timer gedrückt, um eine Stillseite zu wählen, vor dem Start Details hinzuzufügen oder etwas nachzutragen."
+            "value": "Tippe unter „Heute“ auf Stillen, um die Seite zu wählen. Halte einen Timer gedrückt, um vor dem Start Details hinzuzufügen oder etwas nachzutragen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "On Today, touch and hold a timer to pick a nursing side, add details before starting, or log one from earlier."
+            "value": "On Today, tap Nursing to pick a side. Touch and hold a timer to add details before starting, or log one from earlier."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "En Hoy, mantén pulsado un cronómetro para elegir el lado, añadir detalles antes de empezar o registrar uno anterior."
+            "value": "En Hoy, toca Lactancia para elegir el lado. Mantén pulsado un cronómetro para añadir detalles antes de empezar o registrar uno anterior."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dans Aujourd’hui, touchez longuement un chrono pour choisir le côté, ajouter des détails avant de démarrer ou noter une entrée passée."
+            "value": "Dans Aujourd’hui, touchez Allaitement pour choisir le côté. Touchez longuement un chrono pour ajouter des détails avant de démarrer ou noter une entrée passée."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "「今日」でタイマーを長押しすると、授乳の左右を選んだり、詳細を入力してから開始したり、あとから記録したりできます。"
+            "value": "「今日」で「授乳」をタップすると左右を選べます。タイマーを長押しすると、詳細を入力してから開始したり、あとから記録したりできます。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "오늘 화면에서 타이머를 길게 누르면 수유 방향을 고르거나, 세부 정보를 입력하고 시작하거나, 지난 기록을 추가할 수 있어요."
+            "value": "오늘 화면에서 모유 수유를 탭하면 방향을 고를 수 있어요. 타이머를 길게 누르면 세부 정보를 입력하고 시작하거나, 지난 기록을 추가할 수 있어요."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Em Hoje, toque e segure um cronômetro para escolher o lado, adicionar detalhes antes de começar ou registrar um anterior."
+            "value": "Em Hoje, toque em Amamentação para escolher o lado. Toque e segure um cronômetro para adicionar detalhes antes de começar ou registrar um anterior."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "在“今天”页长按计时按钮，可以选择喂奶侧、填写详情后再开始，或补录之前的记录。"
+            "value": "在“今天”页点按“亲喂”可以选择喂奶侧。长按计时按钮，可以填写详情后再开始，或补录之前的记录。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "在「今天」頁長按計時按鈕，可以選擇餵奶側、填寫詳情後再開始，或補登之前的紀錄。"
+            "value": "在「今天」頁點按「親餵」可以選擇餵奶側。長按計時按鈕，可以填寫詳情後再開始，或補登之前的紀錄。"
           }
         }
       }

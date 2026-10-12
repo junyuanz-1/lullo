@@ -511,7 +511,7 @@ struct FeatureGuideView: View {
                 guideRow(
                     String(localized: "Touch and Hold"),
                     systemImage: "hand.tap.fill",
-                    text: String(localized: "On Today, touch and hold a timer to pick a nursing side, add details before starting, or log one from earlier.")
+                    text: String(localized: "On Today, tap Nursing to pick a side. Touch and hold a timer to add details before starting, or log one from earlier.")
                 )
             }
         }

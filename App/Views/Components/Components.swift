@@ -756,7 +756,7 @@ enum TinytideTips {
 /// Shown on the timer buttons once the user has logged a few things with a tap.
 struct HoldForMoreTip: Tip {
     var title: Text { Text("Touch and Hold for More") }
-    var message: Text? { Text("Hold a timer to pick a side, add details before starting, or log one from earlier.") }
+    var message: Text? { Text("Hold a timer to add details before starting, or log one from earlier.") }
     var image: Image? { Image(systemName: "hand.tap.fill") }
 
     var rules: [Rule] {

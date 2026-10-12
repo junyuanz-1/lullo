@@ -420,7 +420,8 @@ struct NursingControls: View {
 /// predictable:
 /// - Timers (sleep, nursing, pumping) start on a single tap and stop on the
 ///   next one. A ▶ badge marks them; while running the tile is outlined and
-///   counts up. Long-press for "Start with Details" or to pick a side.
+///   counts up. Long-press for "Start with Details". Nursing asks which side
+///   first, in a menu on the tap, rather than guessing and needing a switch.
 /// - Add Entry tiles always open a form (prefilled, so most entries are just
 ///   Save). A ＋ badge marks them.
 /// Entries from earlier are one tap away under "Log Past" in the header.
@@ -547,37 +548,22 @@ struct QuickActionsGrid: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityHint(kind == .sleep ? Text("Ends the sleep") : Text("Stops the timer"))
+            } else if kind == .nursing {
+                nursingStartMenu
             } else {
                 Button {
-                    if kind == .nursing { startNursing(suggestedSide) } else { startTimer(kind, nil) }
+                    startTimer(kind, nil)
                 } label: {
-                    QuickActionTile(
-                        title: kind.title,
-                        subtitle: kind == .nursing ? String(localized: "Next Side: \(suggestedSide.shortTitle)") : nil,
-                        systemImage: kind.systemImage,
-                        color: kind.color,
-                        badge: .start
-                    )
+                    QuickActionTile(title: kind.title, systemImage: kind.systemImage, color: kind.color, badge: .start)
                 }
                 .buttonStyle(.plain)
                 .accessibilityHint(Text("Starts a timer. Touch and hold for more options."))
                 .contextMenu {
-                    if kind == .nursing {
-                        ForEach([BreastSide.left, .right], id: \.self) { side in
-                            Button {
-                                usedHold()
-                                startNursing(side)
-                            } label: {
-                                Label(String(localized: "Start \(side.title)"), systemImage: "play.fill")
-                            }
-                        }
-                    } else {
-                        Button {
-                            usedHold()
-                            editor = EditorRoute(kind: kind, mode: .timer)
-                        } label: {
-                            Label("Start with Details", systemImage: "timer")
-                        }
+                    Button {
+                        usedHold()
+                        editor = EditorRoute(kind: kind, mode: .timer)
+                    } label: {
+                        Label("Start with Details", systemImage: "timer")
                     }
                     Button {
                         usedHold()
@@ -588,6 +574,45 @@ struct QuickActionsGrid: View {
                 }
             }
         }
+    }
+
+    /// The Nursing tile when nothing is running: a tap asks which side, with the
+    /// suggested one first, so the timer never starts on the wrong side.
+    private var nursingStartMenu: some View {
+        Menu {
+            ForEach([suggestedSide, suggestedSide.other], id: \.self) { side in
+                Button {
+                    startNursing(side)
+                } label: {
+                    Label(String(localized: "Start \(side.title)"), systemImage: "play.fill")
+                    if side == suggestedSide { Text("Suggested") }
+                }
+            }
+            Divider()
+            Button {
+                editor = EditorRoute(kind: .nursing, mode: .timer)
+            } label: {
+                Label("Start with Details", systemImage: "timer")
+            }
+            Button {
+                editor = EditorRoute(kind: .nursing, mode: .manual)
+            } label: {
+                Label("Log Past", systemImage: "clock.arrow.circlepath")
+            }
+        } label: {
+            QuickActionTile(
+                title: EventKind.nursing.title,
+                subtitle: String(localized: "Next Side: \(suggestedSide.shortTitle)"),
+                systemImage: EventKind.nursing.systemImage,
+                color: EventKind.nursing.color,
+                badge: .start
+            )
+        }
+        .menuStyle(.button)
+        .buttonStyle(.plain)
+        // Keep the suggested side first even when the menu opens upwards.
+        .menuOrder(.fixed)
+        .accessibilityHint(Text("Choose a side to start the timer."))
     }
 
     /// Opens the form for `kind` in Timer or Log Past, whichever was last chosen

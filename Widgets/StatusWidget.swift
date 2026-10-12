@@ -197,8 +197,17 @@ private struct QuickButtons: View {
             if let nursing = baby.runningNursing {
                 button(intent: StopTimerIntent(eventID: nursing.id), title: String(localized: "Done"), image: "checkmark", color: .pink)
             } else {
-                button(intent: StartNursingIntent(babyID: baby.id, side: baby.suggestedSide),
-                       title: String(localized: "Nurse \(baby.suggestedSide.shortTitle)"), image: EventKind.nursing.systemImage, color: .pink)
+                // One button per side in the same cell: a tap starts the side
+                // asked for, not a guess. The suggested side is the stronger one.
+                HStack(spacing: 4) {
+                    ForEach([BreastSide.left, .right], id: \.self) { side in
+                        // Half a cell is too narrow for "Nurse L": the heart says nursing.
+                        button(intent: StartNursingIntent(babyID: baby.id, side: side),
+                               title: side.shortTitle, image: EventKind.nursing.systemImage, color: .pink,
+                               emphasized: side == baby.suggestedSide)
+                            .accessibilityLabel(Text("Nurse \(side.shortTitle)"))
+                    }
+                }
             }
             button(intent: LogDiaperIntent(babyID: baby.id, type: .wet), title: DiaperType.wet.title, image: DiaperType.wet.systemImage, color: .teal)
             button(intent: LogDiaperIntent(babyID: baby.id, type: .dirty), title: DiaperType.dirty.title, image: DiaperType.dirty.systemImage, color: .brown)
@@ -212,7 +221,7 @@ private struct QuickButtons: View {
         }
     }
 
-    private func button(intent: some AppIntent, title: String, image: String, color: Color) -> some View {
+    private func button(intent: some AppIntent, title: String, image: String, color: Color, emphasized: Bool = false) -> some View {
         Button(intent: intent) {
             VStack(spacing: 2) {
                 Image(systemName: image).font(.system(size: compact ? 13 : 15, weight: .semibold))
@@ -222,7 +231,7 @@ private struct QuickButtons: View {
         }
         .buttonStyle(.plain)
         .foregroundStyle(color)
-        .background(color.opacity(0.15), in: RoundedRectangle(cornerRadius: 10))
+        .background(color.opacity(emphasized ? 0.3 : 0.15), in: RoundedRectangle(cornerRadius: 10))
     }
 }
 
