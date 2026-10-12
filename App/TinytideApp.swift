@@ -31,6 +31,8 @@ struct TinytideApp: App {
             // Demo mode is a still life: no widgets, Live Activities or backups.
             guard phase == .active, !DemoMode.isEnabled else { return }
             store.appBecameActive()
+            // A subscription can lapse without a transaction update; check on each return.
+            Task { await Supporter.shared.refresh() }
             Task {
                 // Give iCloud a moment to bring in changes before the daily snapshot.
                 try? await Task.sleep(for: .seconds(10))

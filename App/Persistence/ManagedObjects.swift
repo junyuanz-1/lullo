@@ -32,13 +32,13 @@ final class Baby: NSManagedObject, Identifiable {
     }
 
     func apply(_ r: BabyRecord) {
-        id = r.id
-        name = r.name
-        birthDate = r.birthDate
-        sex = r.sex.rawValue
-        photoData = r.photoData
-        createdAt = r.createdAt
-        updatedAt = r.updatedAt
+        assign(self, \.id, r.id)
+        assign(self, \.name, r.name)
+        assign(self, \.birthDate, r.birthDate)
+        assign(self, \.sex, r.sex.rawValue)
+        assign(self, \.photoData, r.photoData)
+        assign(self, \.createdAt, r.createdAt)
+        assign(self, \.updatedAt, r.updatedAt)
     }
 }
 
@@ -129,43 +129,54 @@ final class Event: NSManagedObject, Identifiable {
     }
 
     /// Copies every field except the baby relationship, which the caller sets.
+    /// Only fields whose value differs are assigned (see `assign`).
     func apply(_ r: EventRecord) {
-        id = r.id
-        kind = r.kind.rawValue
-        startDate = r.startDate
-        endDate = r.endDate
-        note = r.note?.nilIfBlank
-        createdAt = r.createdAt
-        updatedAt = r.updatedAt
-        authorName = r.authorName
-        sleepLocation = r.sleepLocation?.rawValue
-        leftDuration = r.leftDuration
-        rightDuration = r.rightDuration
-        activeSide = r.activeSide?.rawValue
-        activeSideStartedAt = r.activeSideStartedAt
-        lastSide = r.lastSide?.rawValue
-        amountML = r.amountML.map(NSNumber.init(value:))
-        leftAmountML = r.leftAmountML.map(NSNumber.init(value:))
-        rightAmountML = r.rightAmountML.map(NSNumber.init(value:))
-        bottleContent = r.bottleContent?.rawValue
-        foodName = r.foodName?.nilIfBlank
-        foodReaction = r.foodReaction?.rawValue
-        diaperType = r.diaperType?.rawValue
-        peeAmount = r.peeAmount?.rawValue
-        poopColor = r.poopColor?.rawValue
-        poopConsistency = r.poopConsistency?.rawValue
-        hasRash = r.hasRash
-        weightKg = r.weightKg.map(NSNumber.init(value:))
-        heightCm = r.heightCm.map(NSNumber.init(value:))
-        headCm = r.headCm.map(NSNumber.init(value:))
-        medicationName = r.medicationName?.nilIfBlank
-        dosage = r.dosage?.nilIfBlank
-        temperatureC = r.temperatureC.map(NSNumber.init(value:))
-        symptoms = r.symptoms?.nilIfBlank
-        vaccineName = r.vaccineName?.nilIfBlank
-        activityType = r.activityType?.rawValue
-        photoData = r.photoData
+        assign(self, \.id, r.id)
+        assign(self, \.kind, r.kind.rawValue)
+        assign(self, \.startDate, r.startDate)
+        assign(self, \.endDate, r.endDate)
+        assign(self, \.note, r.note?.nilIfBlank)
+        assign(self, \.createdAt, r.createdAt)
+        assign(self, \.updatedAt, r.updatedAt)
+        assign(self, \.authorName, r.authorName)
+        assign(self, \.sleepLocation, r.sleepLocation?.rawValue)
+        assign(self, \.leftDuration, r.leftDuration)
+        assign(self, \.rightDuration, r.rightDuration)
+        assign(self, \.activeSide, r.activeSide?.rawValue)
+        assign(self, \.activeSideStartedAt, r.activeSideStartedAt)
+        assign(self, \.lastSide, r.lastSide?.rawValue)
+        assign(self, \.amountML, r.amountML.map(NSNumber.init(value:)))
+        assign(self, \.leftAmountML, r.leftAmountML.map(NSNumber.init(value:)))
+        assign(self, \.rightAmountML, r.rightAmountML.map(NSNumber.init(value:)))
+        assign(self, \.bottleContent, r.bottleContent?.rawValue)
+        assign(self, \.foodName, r.foodName?.nilIfBlank)
+        assign(self, \.foodReaction, r.foodReaction?.rawValue)
+        assign(self, \.diaperType, r.diaperType?.rawValue)
+        assign(self, \.peeAmount, r.peeAmount?.rawValue)
+        assign(self, \.poopColor, r.poopColor?.rawValue)
+        assign(self, \.poopConsistency, r.poopConsistency?.rawValue)
+        assign(self, \.hasRash, r.hasRash)
+        assign(self, \.weightKg, r.weightKg.map(NSNumber.init(value:)))
+        assign(self, \.heightCm, r.heightCm.map(NSNumber.init(value:)))
+        assign(self, \.headCm, r.headCm.map(NSNumber.init(value:)))
+        assign(self, \.medicationName, r.medicationName?.nilIfBlank)
+        assign(self, \.dosage, r.dosage?.nilIfBlank)
+        assign(self, \.temperatureC, r.temperatureC.map(NSNumber.init(value:)))
+        assign(self, \.symptoms, r.symptoms?.nilIfBlank)
+        assign(self, \.vaccineName, r.vaccineName?.nilIfBlank)
+        assign(self, \.activityType, r.activityType?.rawValue)
+        assign(self, \.photoData, r.photoData)
     }
+}
+
+/// Sets a managed property only when the value actually changes. Assigning an
+/// unchanged value still marks it dirty, and a dirty field wins the merge
+/// against a newer value from another device (e.g. a stopped timer would start
+/// again) and is uploaded to iCloud again (photos included).
+private func assign<Object: NSManagedObject, Value: Equatable>(
+    _ object: Object, _ keyPath: ReferenceWritableKeyPath<Object, Value>, _ value: Value
+) {
+    if object[keyPath: keyPath] != value { object[keyPath: keyPath] = value }
 }
 
 extension String {

@@ -74,12 +74,16 @@ public enum NapPredictor {
         sleeps: [EventRecord],
         since: Date,
         classifier: SleepClassifier,
+        now: Date = Date(),
         calendar: Calendar = .current
     ) -> [TimeInterval] {
         let sorted = sleeps.filter { $0.kind == .sleep }.sorted { $0.startDate < $1.startDate }
         var result: [TimeInterval] = []
         for (previous, next) in zip(sorted, sorted.dropFirst()) {
             guard let end = previous.endDate, end >= since else { continue }
+            // By start hour, not overlap: a sleep resumed after a night waking
+            // (04:40–08:00) is mostly outside the night window, but the gap before
+            // it is a night waking, not a daytime wake window.
             guard !classifier.isNight(next.startDate, calendar: calendar) else { continue }
             let gap = next.startDate.timeIntervalSince(end)
             if gap >= 10 * 60 && gap <= 8 * 3600 { result.append(gap) }
@@ -102,7 +106,7 @@ public enum NapPredictor {
         var window = typicalWakeWindow(ageInMonths: age)
 
         let weekAgo = now.addingTimeInterval(-7 * 86_400)
-        let observed = observedWakeWindows(sleeps: sorted, since: weekAgo, classifier: classifier, calendar: calendar)
+        let observed = observedWakeWindows(sleeps: sorted, since: weekAgo, classifier: classifier, now: now, calendar: calendar)
         let personalized = observed.count >= 5
         if personalized {
             let median = observed.sorted()[observed.count / 2]

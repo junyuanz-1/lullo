@@ -29,6 +29,18 @@ public struct BabyRecord: Codable, Identifiable, Hashable, Sendable {
         self.updatedAt = updatedAt
     }
 
+    /// Tolerant decoding: a `sex` value this version does not know becomes `.unspecified`.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(UUID.self, forKey: .id)
+        name = try c.decode(String.self, forKey: .name)
+        birthDate = try c.decode(Date.self, forKey: .birthDate)
+        sex = (try? c.decodeIfPresent(Sex.self, forKey: .sex)) ?? .unspecified
+        photoData = try c.decodeIfPresent(Data.self, forKey: .photoData)
+        createdAt = try c.decode(Date.self, forKey: .createdAt)
+        updatedAt = try c.decode(Date.self, forKey: .updatedAt)
+    }
+
     public func ageInDays(at date: Date = Date(), calendar: Calendar = .current) -> Int {
         let start = calendar.startOfDay(for: birthDate)
         let end = calendar.startOfDay(for: date)

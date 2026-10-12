@@ -63,6 +63,48 @@ final class StatisticsTests: XCTestCase {
         XCTAssertEqual(days[0].napCount, 0)
     }
 
+    func testSleepMostlyInNightWindowIsNightSleep() {
+        // Starts at 18:50, before the 19:00 night window, but is mostly inside it.
+        let night = EventRecord(babyID: baby, kind: .sleep, startDate: date(1, 18, 50), endDate: date(2, 6, 30))
+        let days = Statistics.dailySummaries(events: [night], from: date(1, 0), to: date(2, 0), calendar: calendar)
+        XCTAssertEqual(days[0].napCount, 0)
+        XCTAssertEqual(days[0].nightSleep, 5 * 3600 + 600)
+        XCTAssertEqual(days[1].nightSleep, 6 * 3600 + 1800)
+        XCTAssertEqual(days[0].napSleep + days[1].napSleep, 0)
+    }
+
+    func testDaysAreKeyedAtStartOfDayAcrossSkippedMidnight() throws {
+        // Chile starts DST on 2026-09-06: 00:00 jumps to 01:00, so that day starts at 01:00.
+        var santiago = Calendar(identifier: .gregorian)
+        santiago.timeZone = try XCTUnwrap(TimeZone(identifier: "America/Santiago"))
+        func local(_ day: Int, _ hour: Int) -> Date {
+            santiago.date(from: DateComponents(year: 2026, month: 9, day: day, hour: hour))!
+        }
+        let diapers = (5...8).map { EventRecord(babyID: baby, kind: .diaper, startDate: local($0, 12), diaperType: .wet) }
+        let sleep = EventRecord(babyID: baby, kind: .sleep, startDate: local(6, 20), endDate: local(7, 6))
+
+        let days = Statistics.dailySummaries(
+            events: diapers + [sleep], from: local(5, 12), to: local(8, 12), now: local(9, 0), calendar: santiago
+        )
+        XCTAssertEqual(days.count, 4)
+        XCTAssertEqual(days.map(\.day), (5...8).map { santiago.startOfDay(for: local($0, 12)) })
+        XCTAssertEqual(santiago.component(.hour, from: days[1].day), 1)
+        XCTAssertEqual(days.map(\.diaperCount), [1, 1, 1, 1])
+        // 20:00 to midnight, then midnight to 06:00 (both at UTC-3).
+        XCTAssertEqual(days[1].totalSleep, 4 * 3600)
+        XCTAssertEqual(days[2].totalSleep, 6 * 3600)
+        XCTAssertEqual(days[1].nightSleep, 4 * 3600)
+        XCTAssertEqual(days[2].nightSleep, 6 * 3600)
+
+        let rows = Statistics.schedules(events: [sleep], from: local(5, 12), to: local(8, 12), now: local(9, 0), calendar: santiago)
+        XCTAssertEqual(rows.map(\.dayLength), [24, 23, 24, 24].map { Double($0) * 3600 })
+        // 20:00 is 19 h after the 01:00 start of that day.
+        XCTAssertEqual(rows[1].blocks.first?.start, 19 * 3600)
+        XCTAssertEqual(rows[1].blocks.first?.end, 23 * 3600)
+        XCTAssertEqual(rows[2].blocks.first?.start, 0)
+        XCTAssertEqual(rows[2].blocks.first?.end, 6 * 3600)
+    }
+
     func testFeedsAndDiapers() {
         let events = [
             EventRecord(babyID: baby, kind: .bottle, startDate: date(3, 8), amountML: 120),
@@ -96,6 +138,48 @@ final class StatisticsTests: XCTestCase {
         let avg = Statistics.average([a, b, c])
         XCTAssertEqual(avg?.feedCount, 7)
         XCTAssertEqual(avg?.totalSleep, 5400)
+    }
+}
+
+final class SleepClassifierTests: XCTestCase {
+    var calendar: Calendar = {
+        var c = Calendar(identifier: .gregorian)
+        c.timeZone = TimeZone(identifier: "UTC")!
+        return c
+    }()
+
+    func date(_ day: Int, _ hour: Int, _ minute: Int = 0) -> Date {
+        calendar.date(from: DateComponents(year: 2026, month: 3, day: day, hour: hour, minute: minute))!
+    }
+
+    func testMostOfTheSleepDecides() {
+        let c = SleepClassifier(nightStartHour: 19, nightEndHour: 6)
+        XCTAssertTrue(c.isNight(start: date(1, 18, 50), end: date(2, 6, 30), calendar: calendar))
+        XCTAssertFalse(c.isNight(date(1, 18, 50), calendar: calendar), "The start hour alone says nap")
+        XCTAssertFalse(c.isNight(start: date(2, 13), end: date(2, 15), calendar: calendar))
+        // 05:00–07:30: one of two and a half hours is before 06:00, so a nap.
+        XCTAssertEqual(c.nightOverlap(start: date(2, 5), end: date(2, 7, 30), calendar: calendar), 3600)
+        XCTAssertFalse(c.isNight(start: date(2, 5), end: date(2, 7, 30), calendar: calendar))
+        // 04:00–07:00: two of three hours, so night.
+        XCTAssertTrue(c.isNight(start: date(2, 4), end: date(2, 7), calendar: calendar))
+        // No duration: the start hour decides.
+        XCTAssertTrue(c.isNight(start: date(1, 20), end: date(1, 20), calendar: calendar))
+    }
+
+    func testRunningSleepCountsUpToNow() {
+        let c = SleepClassifier()
+        let sleep = EventRecord(babyID: UUID(), kind: .sleep, startDate: date(1, 17))
+        XCTAssertFalse(c.isNight(sleep, now: date(1, 20), calendar: calendar), "1 of 3 h")
+        XCTAssertTrue(c.isNight(sleep, now: date(2, 1), calendar: calendar), "6 of 8 h")
+    }
+
+    func testNonWrappingWindow() {
+        let c = SleepClassifier(nightStartHour: 0, nightEndHour: 6)
+        XCTAssertTrue(c.isNight(date(2, 3), calendar: calendar))
+        XCTAssertFalse(c.isNight(date(2, 12), calendar: calendar))
+        XCTAssertFalse(c.isNight(date(1, 23), calendar: calendar))
+        XCTAssertTrue(c.isNight(start: date(1, 23), end: date(2, 5), calendar: calendar), "5 of 6 h")
+        XCTAssertFalse(c.isNight(start: date(2, 4), end: date(2, 9), calendar: calendar), "2 of 5 h")
     }
 }
 
@@ -195,6 +279,33 @@ final class BackupTests: XCTestCase {
         }
     }
 
+    func testUnknownEventKindAndSexDoNotFailTheFile() throws {
+        let babyID = UUID()
+        let json = """
+        {"formatVersion":1,"exportedAt":"2026-01-01T00:00:00Z",
+         "babies":[{"id":"\(babyID.uuidString)","name":"Mia","birthDate":"2025-10-01T00:00:00Z","sex":"other",
+                    "createdAt":"2025-10-01T00:00:00Z","updatedAt":"2025-10-01T00:00:00Z"}],
+         "events":[
+           {"id":"\(UUID().uuidString)","babyID":"\(babyID.uuidString)","kind":"diaper","startDate":"2026-01-01T08:00:00Z","diaperType":"wet"},
+           {"id":"\(UUID().uuidString)","babyID":"\(babyID.uuidString)","kind":"teething","startDate":"2026-01-01T09:00:00Z"},
+           {"id":"\(UUID().uuidString)","babyID":"\(babyID.uuidString)","kind":"bottle","startDate":"2026-01-01T10:00:00Z","amountML":90}]}
+        """
+        let file = try BackupCodec.decode(Data(json.utf8))
+        XCTAssertEqual(file.babies.map(\.id), [babyID])
+        XCTAssertEqual(file.babies.first?.sex, .unspecified)
+        XCTAssertEqual(file.events.map(\.kind), [.diaper, .bottle])
+    }
+
+    func testNewerFormatIsReportedEvenIfItsPayloadDiffers() {
+        let json = #"{"formatVersion":2,"exportedAt":1767225600,"profiles":{}}"#
+        XCTAssertThrowsError(try BackupCodec.decode(Data(json.utf8))) { error in
+            XCTAssertEqual(error as? BackupError, .unsupportedVersion(2))
+        }
+        XCTAssertThrowsError(try BackupCodec.decode(Data("not a backup".utf8))) { error in
+            guard case .corrupt? = error as? BackupError else { return XCTFail("Expected corrupt, got \(error)") }
+        }
+    }
+
     func testMergePlanKeepsNewest() {
         let babyID = UUID()
         let t = Date(timeIntervalSince1970: 1_700_000_000)
@@ -215,6 +326,28 @@ final class BackupTests: XCTestCase {
         XCTAssertEqual(lines[0].split(separator: ",").count, CSVExporter.header.count)
         XCTAssertTrue(lines[1].contains("\"said \"\"hi\"\", smiled\""))
         XCTAssertTrue(lines[1].contains("1970-01-01 00:00:00"))
+    }
+
+    func testCSVNeutralizesFormulasInTextOnly() throws {
+        let baby = BabyRecord(name: "@Leo", birthDate: Date())
+        let t = Date(timeIntervalSince1970: 0)
+        let events = [
+            EventRecord(babyID: baby.id, kind: .note, startDate: t, note: "=1+1"),
+            EventRecord(babyID: baby.id, kind: .note, startDate: t.addingTimeInterval(60), note: "-fussy"),
+            EventRecord(babyID: baby.id, kind: .temperature, startDate: t.addingTimeInterval(120), note: "fussy", temperatureC: -0.5),
+            EventRecord(babyID: baby.id, kind: .note, startDate: t.addingTimeInterval(180), note: "=SUM(A1,B1)"),
+        ]
+        let lines = CSVExporter.csv(events: events, babies: [baby], timeZone: TimeZone(identifier: "UTC")!)
+            .components(separatedBy: "\r\n")
+        let note = try XCTUnwrap(CSVExporter.header.firstIndex(of: "note"))
+        let name = try XCTUnwrap(CSVExporter.header.firstIndex(of: "baby"))
+        let temperature = try XCTUnwrap(CSVExporter.header.firstIndex(of: "temperature_c"))
+        XCTAssertEqual(lines[1].components(separatedBy: ",")[note], "'=1+1")
+        XCTAssertEqual(lines[1].components(separatedBy: ",")[name], "'@Leo")
+        XCTAssertEqual(lines[2].components(separatedBy: ",")[note], "'-fussy")
+        XCTAssertEqual(lines[3].components(separatedBy: ",")[note], "fussy")
+        XCTAssertEqual(lines[3].components(separatedBy: ",")[temperature], "-0.5")
+        XCTAssertTrue(lines[4].contains("\"'=SUM(A1,B1)\""))
     }
 }
 
@@ -277,12 +410,15 @@ final class RollbackTests: XCTestCase {
         let unchanged = EventRecord(babyID: baby.id, kind: .diaper, startDate: t, diaperType: .wet)
         let edited = EventRecord(babyID: baby.id, kind: .bottle, startDate: t, amountML: 120)
         let deleted = EventRecord(babyID: baby.id, kind: .note, startDate: t, note: "hi")
-        let backup = BackupFile(babies: [baby], events: [unchanged, edited, deleted])
+        let backup = BackupFile(exportedAt: t.addingTimeInterval(50), babies: [baby], events: [unchanged, edited, deleted])
 
         var editedNow = edited
         editedNow.amountML = 999
         editedNow.updatedAt = t.addingTimeInterval(60)
-        let addedLater = EventRecord(babyID: baby.id, kind: .diaper, startDate: t.addingTimeInterval(100))
+        let addedLater = EventRecord(
+            babyID: baby.id, kind: .diaper, startDate: t.addingTimeInterval(100),
+            createdAt: t.addingTimeInterval(100), updatedAt: t.addingTimeInterval(100)
+        )
         let otherBabyEvent = EventRecord(babyID: other.id, kind: .diaper, startDate: t)
 
         let now = t.addingTimeInterval(3600)
@@ -299,6 +435,30 @@ final class RollbackTests: XCTestCase {
         XCTAssertTrue(plan.upsertEvents.allSatisfy { $0.updatedAt == now })
         XCTAssertEqual(plan.deleteEventIDs, [addedLater.id])
         XCTAssertEqual(plan.unchangedEvents, 1)
+    }
+
+    func testRollbackOnlyDeletesEntriesChangedAfterTheBackup() {
+        let baby = BabyRecord(name: "Mia", birthDate: t)
+        let backup = BackupFile(exportedAt: t.addingTimeInterval(3600), babies: [baby], events: [])
+        // Logged on another device before the backup, synced after it: kept.
+        let syncedLate = EventRecord(babyID: baby.id, kind: .diaper, startDate: t, createdAt: t, updatedAt: t)
+        let addedAfter = EventRecord(
+            babyID: baby.id, kind: .diaper, startDate: t.addingTimeInterval(7200),
+            createdAt: t.addingTimeInterval(7200), updatedAt: t.addingTimeInterval(7200)
+        )
+        // Put back by a later restore: old createdAt but a new updatedAt, so undoing
+        // that restore removes it.
+        let restoredLater = EventRecord(
+            babyID: baby.id, kind: .bottle, startDate: t,
+            createdAt: t, updatedAt: t.addingTimeInterval(7200), amountML: 90
+        )
+        let plan = BackupRollback.plan(
+            backup: backup,
+            currentBabies: [baby],
+            currentEvents: [syncedLate, addedAfter, restoredLater],
+            babyIDs: [baby.id]
+        )
+        XCTAssertEqual(Set(plan.deleteEventIDs), [addedAfter.id, restoredLater.id])
     }
 
     func testRollbackRecreatesDeletedBaby() {
@@ -418,5 +578,16 @@ final class UnitTests: XCTestCase {
         let lbOz = UnitConversion.poundsAndOunces(fromKg: 3.5)
         XCTAssertEqual(lbOz.pounds, 7)
         XCTAssertEqual(lbOz.ounces, 11.46, accuracy: 0.01)
+    }
+
+    func testPoundsAndOuncesSurviveBadInput() {
+        for kg in [Double.nan, Double.infinity, -Double.infinity, -3] {
+            let lbOz = UnitConversion.poundsAndOunces(fromKg: kg)
+            XCTAssertEqual(lbOz.pounds, 0)
+            XCTAssertEqual(lbOz.ounces, 0)
+        }
+        let huge = UnitConversion.poundsAndOunces(fromKg: 1e20)
+        XCTAssertEqual(huge.pounds, 10_000)
+        XCTAssertEqual(huge.ounces, 0)
     }
 }

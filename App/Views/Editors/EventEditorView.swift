@@ -17,7 +17,10 @@ struct EventEditorView: View {
     @State private var baseline: EventRecord?
     @State private var mode: Mode
     @State private var medicationReminderHours: Double = 0
-    @State private var timerStart = AppClock.now
+    @State private var timerStart: Date
+    /// When the sheet opened. A start left at this value means "now", taken
+    /// when Start is tapped rather than when the sheet appeared.
+    @State private var openedAt: Date
     @State private var confirmingDelete = false
     @State private var closing = false
     @State private var newTimerAlarm: Int?
@@ -44,6 +47,8 @@ struct EventEditorView: View {
             && TrackerStore.shared.runningTimer(kind, for: baby) != nil
         timerAlreadyRunning = running
         _draft = State(initialValue: record)
+        _timerStart = State(initialValue: now)
+        _openedAt = State(initialValue: now)
         _baseline = State(initialValue: existing?.record)
         _newTimerAlarm = State(initialValue: TimerAlarms.shared.lastUsed(for: kind).map { Int($0 / 60) })
         _mode = State(initialValue: running ? .manual : mode ?? (existing == nil && kind.supportsTimer ? .timer : .manual))
@@ -245,11 +250,12 @@ struct EventEditorView: View {
         let options: [Int] = [0, 5, 10, 15]
         let selected = Binding<Int?>(
             get: {
+                if timerStart == openedAt { return 0 }
                 let ago = AppClock.now.timeIntervalSince(timerStart)
                 return options.first { abs(ago - Double($0 * 60)) < 30 }
             },
             set: { minutes in
-                if let minutes { timerStart = AppClock.now.addingTimeInterval(-Double(minutes * 60)) }
+                if let minutes { timerStart = minutes == 0 ? openedAt : AppClock.now.addingTimeInterval(-Double(minutes * 60)) }
             }
         )
         let label: (Int) -> String = { minutes in
@@ -401,6 +407,12 @@ struct EventEditorView: View {
                     ) { hours in
                         hours == 0 ? String(localized: "Off") : String(localized: "In \(Fmt.duration(hours * 3600, style: .full))")
                     }
+                    if medicationReminderHours > 0,
+                       draft.startDate.addingTimeInterval(medicationReminderHours * 3600) <= AppClock.now {
+                        Text("That time has already passed, so no reminder will be set.")
+                            .font(.footnote)
+                            .foregroundStyle(.orange)
+                    }
                 }
             }
         case .temperature:
@@ -547,7 +559,8 @@ struct EventEditorView: View {
         case .growth: return draft.weightKg != nil || draft.heightCm != nil || draft.headCm != nil
         case .medication: return draft.medicationName?.nilIfBlank != nil
         case .temperature: return draft.temperatureC != nil
-        case .nursing: return draft.leftDuration + draft.rightDuration > 0 || draft.isOngoing
+        // A new entry is "ongoing" only because it has no end yet; it still needs minutes.
+        case .nursing: return draft.leftDuration + draft.rightDuration > 0 || (!isNew && draft.isOngoing)
         default:
             if kind.hasDuration, let end = draft.endDate { return end >= draft.startDate }
             return true
@@ -555,11 +568,12 @@ struct EventEditorView: View {
     }
 
     private func startTimer() {
+        let start = timerStart == openedAt ? AppClock.now : timerStart
         let event: Event?
         if kind == .activity {
-            event = store.startTimer(.activity, for: baby, activityType: draft.activityType ?? .play, at: timerStart)
+            event = store.startTimer(.activity, for: baby, activityType: draft.activityType ?? .play, at: start)
         } else {
-            event = store.startTimer(kind, for: baby, at: timerStart)
+            event = store.startTimer(kind, for: baby, at: start)
         }
         applyDraftDetails(to: event)
         applyNewTimerAlarm(to: event)
@@ -613,18 +627,36 @@ struct EventEditorView: View {
                 }
             }
         }
-        if isNew && kind.hasDuration {
-            if kind == .nursing {
-                record.activeSide = nil
-                record.activeSideStartedAt = nil
-                if record.leftDuration > 0 && record.rightDuration == 0 { record.lastSide = .left }
-                if record.rightDuration > 0 && record.leftDuration == 0 { record.lastSide = .right }
-                record.endDate = record.startDate.addingTimeInterval(record.leftDuration + record.rightDuration)
-            } else if record.endDate == nil {
-                record.endDate = record.startDate
+        let total = record.leftDuration + record.rightDuration
+        if kind == .nursing && isNew {
+            // Logged after the fact: a start left at "now" means it just ended,
+            // so the feed is placed before now instead of running into the future.
+            if record.startDate == openedAt { record.startDate = record.startDate.addingTimeInterval(-total) }
+            record.activeSide = nil
+            record.activeSideStartedAt = nil
+        }
+        if kind == .nursing && !(baseline?.isOngoing ?? false) {
+            // A finished feed (new, or edited): the side used alone is the side it
+            // ended on, and changed minutes or start move the end with them.
+            if record.leftDuration > 0 && record.rightDuration == 0 { record.lastSide = .left }
+            if record.rightDuration > 0 && record.leftDuration == 0 { record.lastSide = .right }
+            if let base = baseline, base.leftDuration == record.leftDuration, base.rightDuration == record.rightDuration {
+                // Only the start moved: the whole feed moves with it, pauses included.
+                if record.startDate != base.startDate, let end = base.endDate {
+                    record.endDate = end.addingTimeInterval(record.startDate.timeIntervalSince(base.startDate))
+                }
+            } else {
+                record.endDate = record.startDate.addingTimeInterval(total)
             }
+        } else if isNew && kind.hasDuration && kind != .nursing && record.endDate == nil {
+            record.endDate = record.startDate
         }
         store.save(record)
+        if kind == .medication, !isNew, let base = baseline, record.startDate != base.startDate {
+            // "Next dose in 4 h" counts from the dose, so the reminder moves with it.
+            let delta = record.startDate.timeIntervalSince(base.startDate)
+            Task { await NotificationManager.shiftMedicationReminder(eventID: record.id, by: delta) }
+        }
         if isNew { TinytideTips.logged() }
         if kind == .medication, isNew, medicationReminderHours > 0, let name = record.medicationName {
             NotificationManager.scheduleMedicationReminder(

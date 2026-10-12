@@ -68,7 +68,13 @@ struct BackupsView: View {
             Button("Restore", role: .destructive) { restore(entry) }
             Button("Cancel", role: .cancel) {}
         } message: { entry in
-            Text("Everything goes back to how it was on \(Fmt.backupDate(entry.date)): entries added since then are removed, and changed or deleted entries come back. This also changes the data for everyone you share with. Your current data is backed up first, so you can undo this.")
+            if AppSettings.awaitingFirstCloudImport {
+                Text("Everything goes back to how it was on \(Fmt.backupDate(entry.date)): entries added since then are removed, and changed or deleted entries come back. This also changes the data for everyone you share with. Your current data is backed up first, so you can undo this.")
+                    + Text(verbatim: "\n\n")
+                    + Text("iCloud hasn't finished downloading this iPhone's data yet. Restoring now may add a second copy of a baby that is still on its way.")
+            } else {
+                Text("Everything goes back to how it was on \(Fmt.backupDate(entry.date)): entries added since then are removed, and changed or deleted entries come back. This also changes the data for everyone you share with. Your current data is backed up first, so you can undo this.")
+            }
         }
         .alert(
             "Restore Complete",

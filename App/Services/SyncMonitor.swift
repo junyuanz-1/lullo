@@ -31,7 +31,12 @@ final class SyncMonitor: ObservableObject {
             .store(in: &cancellables)
         NotificationCenter.default.publisher(for: .CKAccountChanged)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in Task { await self?.refreshAccount() } }
+            .sink { [weak self] _ in
+                // Another account's data will be downloaded from scratch.
+                AppSettings.initialCloudImportDone = false
+                AppSettings.firstCloudImportWaitStart = nil
+                Task { await self?.refreshAccount() }
+            }
             .store(in: &cancellables)
     }
 
@@ -49,6 +54,10 @@ final class SyncMonitor: ObservableObject {
         } catch {
             account = .unknown
         }
+        AppSettings.cloudAccountAvailable = account == .available
+        if account == .available, !AppSettings.initialCloudImportDone, AppSettings.firstCloudImportWaitStart == nil {
+            AppSettings.firstCloudImportWaitStart = Date()
+        }
     }
 
     private func handle(_ event: NSPersistentCloudKitContainer.Event) {
@@ -59,6 +68,11 @@ final class SyncMonitor: ObservableObject {
         isSyncing = false
         if event.succeeded {
             if event.type != .setup { lastSync = event.endDate }
+            // The private store's import is the user's own data; the shared
+            // store's (often empty and quick) doesn't mean that has arrived.
+            if event.type == .import, event.storeIdentifier == persistence.privateStore?.identifier {
+                AppSettings.initialCloudImportDone = true
+            }
             lastError = nil
         } else if let error = event.error {
             lastError = error.localizedDescription

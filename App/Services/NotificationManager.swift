@@ -72,6 +72,30 @@ enum NotificationManager {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["med-\(eventID.uuidString)"])
     }
 
+    /// Entries that have a pending medication reminder.
+    static func pendingMedicationReminderEventIDs() async -> [UUID] {
+        await UNUserNotificationCenter.current().pendingNotificationRequests().compactMap { request in
+            guard request.identifier.hasPrefix("med-") else { return nil }
+            return UUID(uuidString: String(request.identifier.dropFirst(4)))
+        }
+    }
+
+    /// Moves a pending medication reminder by `delta` after the dose's time was
+    /// edited, so "next dose in 4 h" still counts from the dose.
+    static func shiftMedicationReminder(eventID: UUID, by delta: TimeInterval) async {
+        let id = "med-\(eventID.uuidString)"
+        let center = UNUserNotificationCenter.current()
+        // `nextTriggerDate()` of a time-interval trigger is "now + interval", not
+        // when it was set to fire, so the stored absolute time is used.
+        guard delta != 0,
+              let request = await center.pendingNotificationRequests().first(where: { $0.identifier == id }),
+              let seconds = request.content.userInfo["fireDate"] as? TimeInterval
+        else { return }
+        let fireDate = Date(timeIntervalSince1970: seconds)
+        center.removePendingNotificationRequests(withIdentifiers: [id])
+        schedule(id: id, title: request.content.title, body: request.content.body, at: fireDate.addingTimeInterval(delta), now: Date())
+    }
+
     private static func schedule(id: String, title: String, body: String, at date: Date, now: Date) {
         let interval = date.timeIntervalSince(now)
         guard interval > 5 else { return }
@@ -79,6 +103,8 @@ enum NotificationManager {
         content.title = title
         content.body = body
         content.sound = .default
+        // The absolute time: a time-interval trigger only knows "in N seconds".
+        content.userInfo = ["fireDate": date.timeIntervalSince1970]
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
         UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: id, content: content, trigger: trigger))
     }

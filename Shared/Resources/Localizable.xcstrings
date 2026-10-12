@@ -175,6 +175,64 @@
         }
       }
     },
+    "%@ is shared with you to view only, so nothing was logged.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ wurde nur zum Ansehen mit dir geteilt, daher wurde nichts eingetragen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is shared with you to view only, so nothing was logged."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ se compartió contigo solo para ver, así que no se registró nada."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ est partagé avec vous en lecture seule, rien n’a donc été noté."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ は閲覧のみで共有されているため、何も記録されませんでした。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@님은 보기 전용으로 공유되어 아무것도 기록되지 않았어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ foi compartilhado com você apenas para visualização, então nada foi registrado."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 是以“仅查看”方式共享给你的，所以没有记录任何内容。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 是以「僅檢視」方式共享給你的，所以沒有記錄任何內容。"
+          }
+        }
+      }
+    },
     "%@ kg": {
       "localizations": {
         "de": {
@@ -577,64 +635,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@：%@ 到了。"
-          }
-        }
-      }
-    },
-    "%@th percentile": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@. Perzentile"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@th percentile"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "percentil %@"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@e percentile"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@パーセンタイル"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@백분위"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "percentil %@"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "第 %@ 百分位"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "第 %@ 百分位"
           }
         }
       }
@@ -16296,6 +16296,64 @@
         }
       }
     },
+    "Percentile: %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perzentile: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Percentile: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Percentil: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Percentile : %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パーセンタイル：%@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "백분위: %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Percentil: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "百分位：%@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "百分位：%@"
+          }
+        }
+      }
+    },
     "Play": {
       "localizations": {
         "de": {
@@ -22735,6 +22793,64 @@
         }
       }
     },
+    "That time has already passed, so no reminder will be set.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Zeitpunkt ist schon vorbei, daher wird keine Erinnerung gesetzt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That time has already passed, so no reminder will be set."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esa hora ya pasó, así que no se programará ningún recordatorio."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette heure est déjà passée, aucun rappel ne sera programmé."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その時刻はすでに過ぎているため、リマインダーは設定されません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미 지난 시간이라 알림이 설정되지 않아요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esse horário já passou, então nenhum lembrete será definido."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这个时间已经过了，所以不会设置提醒。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "這個時間已經過了，所以不會設定提醒。"
+          }
+        }
+      }
+    },
     "The file contains %lld babies and %lld entries. Entries you already have are kept; newer copies replace older ones.": {
       "localizations": {
         "de": {
@@ -27235,6 +27351,122 @@
           "stringUnit": {
             "state": "translated",
             "value": "iCloud 同步"
+          }
+        }
+      }
+    },
+    "iCloud hasn't finished downloading this iPhone's data yet. Importing now may add a second copy of a baby that is still on its way.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud hat die Daten dieses iPhones noch nicht vollständig geladen. Ein Import jetzt kann ein Baby doppelt anlegen, das gerade noch ankommt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud hasn't finished downloading this iPhone's data yet. Importing now may add a second copy of a baby that is still on its way."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud aún no ha terminado de descargar los datos de este iPhone. Si importas ahora, podría duplicarse un bebé que todavía está llegando."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud n’a pas fini de télécharger les données de cet iPhone. Importer maintenant peut créer un doublon d’un bébé encore en cours de synchronisation."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud はこの iPhone のデータをまだダウンロードし終えていません。今読み込むと、同期中の赤ちゃんが重複する可能性があります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud가 아직 이 iPhone의 데이터를 다 내려받지 못했어요. 지금 가져오면 동기화 중인 아기가 중복될 수 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O iCloud ainda não terminou de baixar os dados deste iPhone. Importar agora pode criar uma cópia extra de um bebê que ainda está chegando."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud 还没把这台 iPhone 的数据下载完。现在导入可能会多出一份正在同步中的宝宝。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud 還沒把這台 iPhone 的資料下載完。現在匯入可能會多出一份正在同步中的寶寶。"
+          }
+        }
+      }
+    },
+    "iCloud hasn't finished downloading this iPhone's data yet. Restoring now may add a second copy of a baby that is still on its way.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud hat die Daten dieses iPhones noch nicht vollständig geladen. Eine Wiederherstellung jetzt kann ein Baby doppelt anlegen, das gerade noch ankommt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud hasn't finished downloading this iPhone's data yet. Restoring now may add a second copy of a baby that is still on its way."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud aún no ha terminado de descargar los datos de este iPhone. Si restauras ahora, podría duplicarse un bebé que todavía está llegando."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud n’a pas fini de télécharger les données de cet iPhone. Restaurer maintenant peut créer un doublon d’un bébé encore en cours de synchronisation."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud はこの iPhone のデータをまだダウンロードし終えていません。今復元すると、同期中の赤ちゃんが重複する可能性があります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud가 아직 이 iPhone의 데이터를 다 내려받지 못했어요. 지금 복원하면 동기화 중인 아기가 중복될 수 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O iCloud ainda não terminou de baixar os dados deste iPhone. Restaurar agora pode criar uma cópia extra de um bebê que ainda está chegando."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud 还没把这台 iPhone 的数据下载完。现在恢复可能会多出一份正在同步中的宝宝。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud 還沒把這台 iPhone 的資料下載完。現在回復可能會多出一份正在同步中的寶寶。"
           }
         }
       }

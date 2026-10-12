@@ -73,7 +73,15 @@ struct SettingsView: View {
                 Button("Cancel", role: .cancel) { pendingImport = nil }
             } message: {
                 if let file = pendingImport {
-                    Text("The file contains \(file.babies.count) babies and \(file.events.count) entries. Entries you already have are kept; newer copies replace older ones.")
+                    // Allowed, but with a warning: blocking would also block the
+                    // recovery path when sync never finishes.
+                    if AppSettings.awaitingFirstCloudImport {
+                        Text("The file contains \(file.babies.count) babies and \(file.events.count) entries. Entries you already have are kept; newer copies replace older ones.")
+                            + Text(verbatim: "\n\n")
+                            + Text("iCloud hasn't finished downloading this iPhone's data yet. Importing now may add a second copy of a baby that is still on its way.")
+                    } else {
+                        Text("The file contains \(file.babies.count) babies and \(file.events.count) entries. Entries you already have are kept; newer copies replace older ones.")
+                    }
                 }
             }
             .alert("Import Finished", isPresented: Binding(get: { importResult != nil }, set: { if !$0 { importResult = nil } })) {

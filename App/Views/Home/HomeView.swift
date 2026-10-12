@@ -63,7 +63,7 @@ struct HomeView: View {
                     BabyHeader(baby: baby)
 
                     ForEach(running) { event in
-                        TimerCard(event: event, onEdit: { editor = EditorRoute(kind: event.eventKind, existing: event) }, onStop: { stop(event) })
+                        TimerCard(event: event, onEdit: { editor = EditorRoute(kind: event.eventKind, existing: event) }, onStop: { stop(event) }, canEdit: canEdit)
                     }
                     if !running.isEmpty && AppSettings.liveActivitiesEnabled {
                         TipView(TinytideTips.lockScreen)
@@ -83,6 +83,9 @@ struct HomeView: View {
                         startNursing: startNursing,
                         stop: stop
                     )
+                    // Read-only caregivers can look at entries (from Recent and the
+                    // timer card) but not log new ones.
+                    .disabled(!canEdit)
 
                     ClockTimeline(every: 30) { now in
                         VStack(spacing: 16) {
@@ -98,7 +101,7 @@ struct HomeView: View {
                     RecentCard(
                         events: Array(recent.prefix(6)),
                         onSelect: { event in editor = EditorRoute(kind: event.eventKind, existing: event) },
-                        onDelete: delete
+                        onDelete: canEdit ? delete : nil
                     )
                 }
                 .padding()
@@ -114,6 +117,8 @@ struct HomeView: View {
             }
         }
     }
+
+    private var canEdit: Bool { store.canEdit(baby) }
 
     // MARK: One-tap actions
 
@@ -132,7 +137,15 @@ struct HomeView: View {
         case .activity: message = String(localized: "\((activityType ?? .play).title) started")
         default: message = String(localized: "Timer started")
         }
-        show(message) { store.delete(event) }
+        let version = event.updatedAt
+        show(message) { undoStart(event, startedVersion: version) }
+    }
+
+    /// Takes back a timer just started from Today, unless it has been changed
+    /// (or deleted) since, in which case Undo leaves it alone.
+    private func undoStart(_ event: Event, startedVersion: Date?) {
+        guard !event.isDeleted, event.managedObjectContext != nil, event.updatedAt == startedVersion else { return }
+        store.delete(event)
     }
 
     private func startNursing(_ side: BreastSide?) {
@@ -142,7 +155,8 @@ struct HomeView: View {
         haptic()
         TinytideTips.logged()
         let chosen = event.record.activeSide ?? side ?? .left
-        show(String(localized: "Nursing started · \(chosen.title)")) { store.delete(event) }
+        let version = event.updatedAt
+        show(String(localized: "Nursing started · \(chosen.title)")) { undoStart(event, startedVersion: version) }
     }
 
     private func stop(_ event: Event) {
@@ -161,7 +175,11 @@ struct HomeView: View {
         // Stopping clears the timer's alarm; Undo puts the timer and its alarm
         // back exactly as they were.
         let alarm = TimerAlarms.shared.duration(for: before.id)
+        let stoppedVersion = event.updatedAt
         var toast = UndoToast(message: message) {
+            // Only if the entry is still exactly as the stop left it: an edit or a
+            // delete made since (here or on another phone) wins over the Undo.
+            guard let current = store.event(id: before.id), current.updatedAt == stoppedVersion else { return }
             store.save(before)
             if let alarm { TimerAlarms.shared.setDuration(alarm, for: before.id) }
         }
@@ -175,9 +193,13 @@ struct HomeView: View {
 
     private func delete(_ event: Event) {
         let record = event.record
+        let alarm = TimerAlarms.shared.duration(for: record.id)
         store.delete(event)
         haptic()
-        show(String(localized: "Entry deleted")) { store.save(record) }
+        show(String(localized: "Entry deleted")) {
+            store.save(record)
+            if let alarm, record.isOngoing { TimerAlarms.shared.setDuration(alarm, for: record.id) }
+        }
     }
 
     private func show(_ message: String, undo: @escaping () -> Void) {
@@ -229,6 +251,9 @@ struct TimerCard: View {
     @Environment(\.dynamicTypeSize) private var typeSize
     var onEdit: () -> Void
     var onStop: () -> Void
+    /// False for a read-only caregiver: the card shows the timer but its
+    /// controls are disabled (the pencil still opens the entry to look at).
+    var canEdit = true
 
     var body: some View {
         let record = event.record
@@ -252,22 +277,25 @@ struct TimerCard: View {
             }
 
             ClockTimeline(every: 1) { now in
-                if record.kind == .nursing {
-                    NursingControls(event: event, record: record, now: now, onStop: onStop)
-                } else {
-                    HStack {
-                        Text(Fmt.clock(record.duration(at: now)))
-                            .font(.system(size: 44, weight: .semibold, design: .rounded))
-                            .monospacedDigit()
-                        Spacer()
-                        Button(action: onStop) {
-                            Label(record.kind == .sleep ? String(localized: "Wake Up") : String(localized: "Stop"), systemImage: "stop.fill")
-                                .font(.headline)
+                Group {
+                    if record.kind == .nursing {
+                        NursingControls(event: event, record: record, now: now, onStop: onStop)
+                    } else {
+                        HStack {
+                            Text(Fmt.clock(record.duration(at: now)))
+                                .font(.system(size: 44, weight: .semibold, design: .rounded))
+                                .monospacedDigit()
+                            Spacer()
+                            Button(action: onStop) {
+                                Label(record.kind == .sleep ? String(localized: "Wake Up") : String(localized: "Stop"), systemImage: "stop.fill")
+                                    .font(.headline)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(record.kind.color)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(record.kind.color)
                     }
                 }
+                .disabled(!canEdit)
             }
         }
     }
@@ -292,7 +320,7 @@ extension TimerCard {
     @ViewBuilder
     fileprivate func controls(_ record: EventRecord) -> some View {
         if TimerAlarm.supportedKinds.contains(record.kind) {
-            alarmMenu(for: record)
+            alarmMenu(for: record).disabled(!canEdit)
         }
         Button(action: onEdit) { Image(systemName: "pencil.circle.fill").font(.title2) }
             .buttonStyle(.borderless)
@@ -860,33 +888,47 @@ struct TodayCard: View {
 struct RecentCard: View {
     var events: [Event]
     var onSelect: (Event) -> Void
-    var onDelete: (Event) -> Void
+    /// Nil when the entries can't be deleted (a read-only caregiver).
+    var onDelete: ((Event) -> Void)?
 
     var body: some View {
         if !events.isEmpty {
             Card(title: String(localized: "Recent"), systemImage: "clock.fill", tint: .gray) {
                 VStack(spacing: 0) {
                     ForEach(events) { event in
-                        SwipeToDeleteRow(onTap: { onSelect(event) }, onDelete: { onDelete(event) }) {
-                            EventRow(event: event)
-                                .padding(.vertical, 6)
-                        }
+                        row(event)
                         .contextMenu {
                             Button {
                                 onSelect(event)
                             } label: {
                                 Label("Edit", systemImage: "pencil")
                             }
-                            Button(role: .destructive) {
-                                onDelete(event)
-                            } label: {
-                                Label("Delete", systemImage: "trash")
+                            if let onDelete {
+                                Button(role: .destructive) {
+                                    onDelete(event)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
                             }
                         }
                         if event != events.last { Divider() }
                     }
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private func row(_ event: Event) -> some View {
+        if let onDelete {
+            SwipeToDeleteRow(onTap: { onSelect(event) }, onDelete: { onDelete(event) }) {
+                EventRow(event: event)
+                    .padding(.vertical, 6)
+            }
+        } else {
+            EventRow(event: event)
+                .padding(.vertical, 6)
+                .onTapGesture { onSelect(event) }
         }
     }
 }

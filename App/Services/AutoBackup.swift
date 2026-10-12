@@ -67,6 +67,9 @@ final class AutoBackup: ObservableObject {
     func backUpIfDue(store: TrackerStore, now: Date = Date()) {
         let lastDaily = entries.first { $0.reason == .daily }?.date
         guard AutoBackupPolicy.isDue(lastBackup: lastDaily, now: now), !store.babies().isEmpty else { return }
+        // On a new phone the first babies can arrive before their history; a
+        // backup now would hold only part of it (and restoring it would remove the rest).
+        guard store.persistence.inMemory || !AppSettings.awaitingFirstCloudImport else { return }
         do {
             try backUp(store: store, reason: .daily, now: now)
         } catch {
@@ -86,8 +89,12 @@ final class AutoBackup: ObservableObject {
         return entries.first { $0.url == url } ?? Entry(url: url, date: now, reason: reason, size: Int64(data.count))
     }
 
+    /// Keeps the newest daily backups and, separately, the newest manual and
+    /// before-restore ones, so a run of restores can't push out the daily history.
     private func prune() {
-        for entry in AutoBackupPolicy.toPrune(entries, date: \.date) {
+        let daily = entries.filter { $0.reason == .daily }
+        let others = entries.filter { $0.reason != .daily }
+        for entry in AutoBackupPolicy.toPrune(daily, date: \.date) + AutoBackupPolicy.toPrune(others, date: \.date) {
             try? FileManager.default.removeItem(at: entry.url)
         }
         reload()

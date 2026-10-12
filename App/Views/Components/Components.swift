@@ -110,16 +110,53 @@ struct MeasurementField: View {
         }
     }
 
+    /// What's in the field. Parsed on every keystroke (a value-based TextField
+    /// only commits on Return, which the decimal pad doesn't have, so a number
+    /// typed just before Save was lost) and in the user's locale ("3,5").
+    @State private var text = ""
+
     var body: some View {
         let placeholder = "0"
         HStack {
             Text(title)
             Spacer()
-            TextField(placeholder, value: displayBinding, format: .number.precision(.fractionLength(0...2)))
+            TextField(placeholder, text: $text)
                 .keyboardType(.decimalPad)
                 .multilineTextAlignment(.trailing)
                 .frame(maxWidth: 110)
             unitToggle
+        }
+        .onAppear { text = formatted(metricValue) }
+        .onChange(of: text) { _, newText in
+            // Reformatting after a unit switch isn't an edit: rounding the shown
+            // value back into metric would nudge it.
+            guard newText != formatted(metricValue) else { return }
+            displayBinding.wrappedValue = Self.parse(newText)
+        }
+        // Set from elsewhere (a preset, a unit switch): show it, unless the
+        // field already says the same thing.
+        .onChange(of: metricValue) { _, newValue in syncText(with: newValue) }
+        .onChange(of: unitSystem) { _, _ in text = formatted(metricValue) }
+        .onChange(of: temperatureUnit) { _, _ in text = formatted(metricValue) }
+    }
+
+    private static func parse(_ text: String) -> Double? {
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty, let value = try? Double(trimmed, format: .number), value.isFinite else { return nil }
+        return value
+    }
+
+    private func formatted(_ value: Double?) -> String {
+        guard let value else { return "" }
+        return toDisplay(value).formatted(.number.precision(.fractionLength(0...2)).grouping(.never))
+    }
+
+    private func syncText(with value: Double?) {
+        let shown = Self.parse(text).map(toMetric)
+        switch (shown, value) {
+        case (nil, nil): return
+        case let (a?, b?) where abs(a - b) < 0.005: return
+        default: text = formatted(value)
         }
     }
 
@@ -437,9 +474,12 @@ struct PhotoField: View {
         .onChange(of: item) { _, newItem in
             guard let newItem else { return }
             Task {
-                if let raw = try? await newItem.loadTransferable(type: Data.self) {
-                    data = ImageCompressor.jpeg(from: raw)
-                }
+                // A photo that can't be read keeps the current one, and an older
+                // pick that finishes late doesn't replace a newer one.
+                guard let raw = try? await newItem.loadTransferable(type: Data.self),
+                      let jpeg = ImageCompressor.jpeg(from: raw),
+                      item == newItem else { return }
+                data = jpeg
             }
         }
     }
@@ -544,8 +584,9 @@ private struct UndoToastModifier: ViewModifier {
             .animation(.snappy(duration: 0.25), value: toast?.id)
             // Each toast stays for a few seconds; a newer one restarts the clock.
             .task(id: toast?.id) {
-                guard toast != nil else { return }
-                try? await Task.sleep(for: .seconds(6))
+                guard let shown = toast?.id else { return }
+                // A newer toast cancels this wait; it must not clear the newer one.
+                guard (try? await Task.sleep(for: .seconds(6))) != nil, toast?.id == shown else { return }
                 toast = nil
             }
     }

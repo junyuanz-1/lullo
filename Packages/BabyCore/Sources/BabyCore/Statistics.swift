@@ -1,11 +1,13 @@
 import Foundation
 
-/// Decides whether a sleep counts as a nap or as night sleep, based on the hour
-/// it started.
+/// Decides whether a sleep counts as a nap or as night sleep. A sleep is night
+/// sleep when more than half of it falls inside the night window
+/// `[nightStartHour, nightEndHour)`, which wraps past midnight when the start
+/// hour is later than the end hour (19–6), and does not otherwise (0–6).
 public struct SleepClassifier: Codable, Equatable, Sendable {
-    /// Sleeps starting at or after this hour count as night sleep.
+    /// First hour of the night window.
     public var nightStartHour: Int
-    /// Sleeps starting before this hour count as night sleep.
+    /// First hour after the night window.
     public var nightEndHour: Int
 
     public init(nightStartHour: Int = 19, nightEndHour: Int = 6) {
@@ -13,9 +15,47 @@ public struct SleepClassifier: Codable, Equatable, Sendable {
         self.nightEndHour = nightEndHour
     }
 
-    public func isNight(_ start: Date, calendar: Calendar = .current) -> Bool {
-        let hour = calendar.component(.hour, from: start)
+    /// Whether a wall-clock hour lies in the night window. Equal start and end
+    /// hours make an empty window.
+    public func isNightHour(_ hour: Int) -> Bool {
+        if nightStartHour <= nightEndHour {
+            return hour >= nightStartHour && hour < nightEndHour
+        }
         return hour >= nightStartHour || hour < nightEndHour
+    }
+
+    /// Whether a moment (for example a predicted bedtime) lies in the night window.
+    public func isNight(_ start: Date, calendar: Calendar = .current) -> Bool {
+        isNightHour(calendar.component(.hour, from: start))
+    }
+
+    /// Whether a sleep from `start` to `end` is night sleep: more than half of it
+    /// lies in the night window. A sleep without duration uses its start hour.
+    public func isNight(start: Date, end: Date, calendar: Calendar = .current) -> Bool {
+        let duration = end.timeIntervalSince(start)
+        guard duration > 0 else { return isNight(start, calendar: calendar) }
+        return nightOverlap(start: start, end: end, calendar: calendar) > duration / 2
+    }
+
+    /// Overlap-based classification of a sleep entry; a running sleep counts up to `now`.
+    public func isNight(_ sleep: EventRecord, now: Date = Date(), calendar: Calendar = .current) -> Bool {
+        isNight(start: sleep.startDate, end: sleep.effectiveEnd(at: now), calendar: calendar)
+    }
+
+    /// Seconds of `[start, end)` inside the night window. Walks wall-clock hours,
+    /// so days with a DST change are handled.
+    public func nightOverlap(start: Date, end: Date, calendar: Calendar = .current) -> TimeInterval {
+        var total: TimeInterval = 0
+        var t = start
+        while t < end {
+            guard let slot = calendar.dateInterval(of: .hour, for: t), slot.end > t else { break }
+            let segmentEnd = min(end, slot.end)
+            if isNightHour(calendar.component(.hour, from: t)) {
+                total += segmentEnd.timeIntervalSince(t)
+            }
+            t = segmentEnd
+        }
+        return total
     }
 }
 
@@ -97,7 +137,7 @@ public enum Statistics {
             switch event.kind {
             case .sleep:
                 let end = event.effectiveEnd(at: now)
-                let isNight = classifier.isNight(event.startDate, calendar: calendar)
+                let isNight = classifier.isNight(start: event.startDate, end: end, calendar: calendar)
                 if let i = index[dayOfStart], !isNight {
                     summaries[i].napCount += 1
                 }
@@ -153,7 +193,7 @@ public enum Statistics {
     ) -> [DaySchedule] {
         let days = self.days(from: from, to: to, calendar: calendar)
         var rows = days.map { day -> DaySchedule in
-            let next = calendar.date(byAdding: .day, value: 1, to: day) ?? day.addingTimeInterval(86_400)
+            let next = nextDay(after: day, calendar: calendar) ?? day.addingTimeInterval(86_400)
             return DaySchedule(day: day, dayLength: next.timeIntervalSince(day), blocks: [], marks: [])
         }
         var index: [Date: Int] = [:]
@@ -214,10 +254,23 @@ public enum Statistics {
         var result: [Date] = []
         while day <= last {
             result.append(day)
-            guard let next = calendar.date(byAdding: .day, value: 1, to: day) else { break }
+            guard let next = nextDay(after: day, calendar: calendar) else { break }
             day = next
         }
         return result
+    }
+
+    /// The start of the day after `day`. Always normalised with `startOfDay`: where
+    /// midnight does not exist (a DST change at 00:00) a day starts at 01:00, and
+    /// adding a day to that would key every later day at 01:00 too.
+    static func nextDay(after day: Date, calendar: Calendar) -> Date? {
+        guard let later = calendar.date(byAdding: .day, value: 1, to: day) else { return nil }
+        let next = calendar.startOfDay(for: later)
+        if next > day { return next }
+        // If adding a day landed back on the same day (a calendar that resolves a
+        // skipped hour backwards), step past it by elapsed time instead.
+        let fallback = calendar.startOfDay(for: day.addingTimeInterval(25 * 3600))
+        return fallback > day ? fallback : nil
     }
 
     /// Splits `[start, end)` into per-day overlaps.
@@ -226,7 +279,7 @@ public enum Statistics {
         var result: [(Date, TimeInterval)] = []
         var day = calendar.startOfDay(for: start)
         while day < end {
-            guard let next = calendar.date(byAdding: .day, value: 1, to: day) else { break }
+            guard let next = nextDay(after: day, calendar: calendar) else { break }
             let overlap = min(end, next).timeIntervalSince(max(start, day))
             if overlap > 0 { result.append((day, overlap)) }
             day = next
