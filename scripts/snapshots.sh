@@ -37,18 +37,22 @@ if [ "${SKIP_BUILD:-0}" != "1" ]; then
     CODE_SIGNING_ALLOWED=NO | pretty
 fi
 
+XCTESTRUN=$(find "$DERIVED/Build/Products" -maxdepth 1 -name 'TinytideSnapshots_*.xctestrun' | head -1)
+if [ -z "$XCTESTRUN" ]; then
+  echo "No TinytideSnapshots .xctestrun in $DERIVED/Build/Products; build first (without SKIP_BUILD)." >&2
+  exit 1
+fi
+
 status=0
 for pair in $LANGUAGES; do
   language="${pair%%:*}"
   region="${pair##*:}"
   echo "▸ Snapshots: $language ($region), $MODE"
-  # TEST_RUNNER_ variables are passed (without the prefix) to the test process.
-  TEST_RUNNER_SNAPSHOT_TESTING_RECORD="$RECORD" \
-  TEST_RUNNER_SNAPSHOT_ARTIFACTS="$ARTIFACTS" \
+  run="$RESULTS/$language.xctestrun"
+  scripts/xctestrun_language.py "$XCTESTRUN" "$run" "$language" "$region" \
+    "SNAPSHOT_TESTING_RECORD=$RECORD" "SNAPSHOT_ARTIFACTS=$ARTIFACTS" "TZ=UTC"
   xcodebuild test-without-building \
-    -project Tinytide.xcodeproj -scheme TinytideSnapshots \
-    -destination "$DESTINATION" -derivedDataPath "$DERIVED" \
-    -testLanguage "$language" -testRegion "$region" \
+    -xctestrun "$run" -destination "$DESTINATION" \
     -resultBundlePath "$RESULTS/$language.xcresult" | pretty || status=$?
 done
 
