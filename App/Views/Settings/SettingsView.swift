@@ -439,6 +439,8 @@ struct SettingsView: View {
             defer { sharingBaby = nil }
             do {
                 let share = try await store.persistence.share(baby)
+                // A new share makes the baby Shared already.
+                store.objectWillChange.send()
                 CloudSharingPresenter.present(share: share, baby: baby, persistence: store.persistence)
             } catch {
                 errorMessage = String(localized: "Could not start sharing. Make sure you are signed in to iCloud. (\(error.localizedDescription))")

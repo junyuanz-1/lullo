@@ -31,7 +31,13 @@ final class TrackerStore: ObservableObject {
         // Changes from CloudKit (another device or a caregiver) arrive here.
         NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in self?.scheduleSideEffects() }
+            .sink { [weak self] _ in
+                // Also redraws what reads the container directly rather than
+                // through a fetch, like the Shared badge (sharing stopped or
+                // accepted on another device).
+                self?.objectWillChange.send()
+                self?.scheduleSideEffects()
+            }
             .store(in: &cancellables)
     }
 
