@@ -120,6 +120,16 @@ extension DiaperType {
     }
 }
 
+extension PeeAmount {
+    var title: String {
+        switch self {
+        case .small: return String(localized: "Small")
+        case .medium: return String(localized: "Medium")
+        case .large: return String(localized: "Large")
+        }
+    }
+}
+
 extension PoopColor {
     var title: String {
         switch self {

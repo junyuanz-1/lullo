@@ -33,9 +33,7 @@ struct BabyFormView: View {
                 TextField("Name", text: $record.name)
                     .textContentType(.name)
                 DatePicker("Birthday", selection: $record.birthDate, in: ...Date().addingTimeInterval(270 * 86_400), displayedComponents: [.date, .hourAndMinute])
-                Picker("Sex", selection: $record.sex) {
-                    ForEach(Sex.allCases, id: \.self) { Text($0.title).tag($0) }
-                }
+                ChipPicker(title: String(localized: "Sex"), options: Sex.allCases, value: $record.sex, label: \.title)
             } footer: {
                 Text("Sex is used for WHO growth percentiles.")
             }

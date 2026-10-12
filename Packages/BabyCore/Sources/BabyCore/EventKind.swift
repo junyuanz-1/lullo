@@ -85,6 +85,13 @@ public enum DiaperType: String, Codable, CaseIterable, Sendable {
     public var isDirty: Bool { self == .dirty || self == .mixed }
 }
 
+/// How much a wet diaper held.
+public enum PeeAmount: String, Codable, CaseIterable, Sendable {
+    case small
+    case medium
+    case large
+}
+
 public enum PoopColor: String, Codable, CaseIterable, Sendable {
     case yellow
     case green

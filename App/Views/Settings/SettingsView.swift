@@ -146,12 +146,8 @@ struct SettingsView: View {
 
     private var preferencesSection: some View {
         Section("Preferences") {
-            Picker("Units", selection: $unitSystem) {
-                ForEach(UnitSystem.allCases, id: \.self) { Text($0.title).tag($0) }
-            }
-            Picker("Temperature", selection: $temperatureUnit) {
-                ForEach(TemperatureUnit.allCases, id: \.self) { Text($0.title).tag($0) }
-            }
+            ChipPicker(title: String(localized: "Units"), options: UnitSystem.allCases, value: $unitSystem, label: \.title)
+            ChipPicker(title: String(localized: "Temperature"), options: TemperatureUnit.allCases, value: $temperatureUnit, label: \.title)
             Picker("Night starts", selection: $nightStartHour) {
                 ForEach(17..<24, id: \.self) { Text(hourLabel($0)).tag($0) }
             }

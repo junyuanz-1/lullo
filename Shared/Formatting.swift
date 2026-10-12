@@ -128,6 +128,7 @@ extension EventRecord {
             }
             if duration(at: now) > 0 { parts.append(Fmt.duration(duration(at: now))) }
         case .diaper:
+            if let peeAmount, diaperType?.isWet == true { parts.append(String(localized: "Pee: \(peeAmount.title)")) }
             if let poopColor, diaperType?.isDirty == true { parts.append(poopColor.title) }
             if let poopConsistency, diaperType?.isDirty == true { parts.append(poopConsistency.title) }
             if hasRash { parts.append(String(localized: "Rash")) }

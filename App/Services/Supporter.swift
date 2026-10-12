@@ -63,7 +63,9 @@ enum AppTheme: String, CaseIterable, Identifiable {
 
     var color: Color {
         switch self {
-        case .lullaby: return .accentColor
+        // The asset colour itself: `.accentColor` follows the current tint,
+        // which is whichever theme is selected.
+        case .lullaby: return Color("AccentColor")
         case .rose: return .pink
         case .ocean: return .teal
         case .forest: return .green

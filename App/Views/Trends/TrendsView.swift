@@ -120,44 +120,52 @@ struct ScheduleChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 0) {
-                Color.clear.frame(width: 44, height: 1)
-                ForEach([0, 6, 12, 18], id: \.self) { hour in
-                    Text(hourLabel(hour))
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            }
-            ForEach(rows) { row in
-                HStack(spacing: 0) {
-                    Text(row.day.formatted(.dateTime.month(.defaultDigits).day()))
-                        .font(.caption2.monospacedDigit())
-                        .foregroundStyle(.secondary)
-                        .frame(width: 44, alignment: .leading)
-                    GeometryReader { geo in
-                        let width = geo.size.width
-                        ZStack(alignment: .leading) {
-                            RoundedRectangle(cornerRadius: 3).fill(Color(.tertiarySystemFill))
-                            ForEach(Array(row.blocks.enumerated()), id: \.offset) { _, block in
-                                RoundedRectangle(cornerRadius: 2)
-                                    .fill(block.kind.color.opacity(block.kind == .sleep ? 0.85 : 1))
-                                    .frame(width: max(2, width * (block.end - block.start) / row.dayLength),
-                                           height: block.kind == .sleep ? 16 : 8)
-                                    .offset(x: width * block.start / row.dayLength)
-                            }
-                            ForEach(Array(row.marks.enumerated()), id: \.offset) { _, mark in
-                                Capsule()
-                                    .fill(mark.kind.color)
-                                    .frame(width: 3, height: mark.kind == .diaper ? 8 : 12)
-                                    .offset(x: width * mark.offset / row.dayLength - 1.5)
-                            }
+            // A grid sizes the date column to its widest label, so dates never wrap
+            // at larger text sizes.
+            Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
+                GridRow {
+                    Color.clear.gridCellUnsizedAxes([.horizontal, .vertical])
+                    HStack(spacing: 0) {
+                        ForEach([0, 6, 12, 18], id: \.self) { hour in
+                            Text(hourLabel(hour))
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
-                    .frame(height: 16)
+                }
+                ForEach(rows) { row in
+                    GridRow {
+                        Text(row.day.formatted(.dateTime.month(.defaultDigits).day()))
+                            .font(.caption2.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                            .fixedSize()
+                        GeometryReader { geo in
+                            let width = geo.size.width
+                            ZStack(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: 3).fill(Color(.tertiarySystemFill))
+                                ForEach(Array(row.blocks.enumerated()), id: \.offset) { _, block in
+                                    RoundedRectangle(cornerRadius: 2)
+                                        .fill(block.kind.color.opacity(block.kind == .sleep ? 0.85 : 1))
+                                        .frame(width: max(2, width * (block.end - block.start) / row.dayLength),
+                                               height: block.kind == .sleep ? 16 : 8)
+                                        .offset(x: width * block.start / row.dayLength)
+                                }
+                                ForEach(Array(row.marks.enumerated()), id: \.offset) { _, mark in
+                                    Capsule()
+                                        .fill(mark.kind.color)
+                                        .frame(width: 3, height: mark.kind == .diaper ? 8 : 12)
+                                        .offset(x: width * mark.offset / row.dayLength - 1.5)
+                                }
+                            }
+                        }
+                        .frame(height: 16)
+                    }
                 }
             }
-            HStack(spacing: 12) {
+            FlowLayout(spacing: 12, lineSpacing: 6) {
                 legend(.sleep)
                 legend(.nursing)
                 legend(.bottle)

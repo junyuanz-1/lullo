@@ -75,6 +75,7 @@ public struct EventRecord: Codable, Identifiable, Hashable, Sendable {
 
     // Diaper
     public var diaperType: DiaperType?
+    public var peeAmount: PeeAmount?
     public var poopColor: PoopColor?
     public var poopConsistency: PoopConsistency?
     public var hasRash: Bool
@@ -119,6 +120,7 @@ public struct EventRecord: Codable, Identifiable, Hashable, Sendable {
         foodName: String? = nil,
         foodReaction: FoodReaction? = nil,
         diaperType: DiaperType? = nil,
+        peeAmount: PeeAmount? = nil,
         poopColor: PoopColor? = nil,
         poopConsistency: PoopConsistency? = nil,
         hasRash: Bool = false,
@@ -155,6 +157,7 @@ public struct EventRecord: Codable, Identifiable, Hashable, Sendable {
         self.foodName = foodName
         self.foodReaction = foodReaction
         self.diaperType = diaperType
+        self.peeAmount = peeAmount
         self.poopColor = poopColor
         self.poopConsistency = poopConsistency
         self.hasRash = hasRash
@@ -195,6 +198,7 @@ public struct EventRecord: Codable, Identifiable, Hashable, Sendable {
         foodName = try c.decodeIfPresent(String.self, forKey: .foodName)
         foodReaction = try? c.decodeIfPresent(FoodReaction.self, forKey: .foodReaction)
         diaperType = try? c.decodeIfPresent(DiaperType.self, forKey: .diaperType)
+        peeAmount = try? c.decodeIfPresent(PeeAmount.self, forKey: .peeAmount)
         poopColor = try? c.decodeIfPresent(PoopColor.self, forKey: .poopColor)
         poopConsistency = try? c.decodeIfPresent(PoopConsistency.self, forKey: .poopConsistency)
         hasRash = try c.decodeIfPresent(Bool.self, forKey: .hasRash) ?? false
@@ -208,6 +212,53 @@ public struct EventRecord: Codable, Identifiable, Hashable, Sendable {
         vaccineName = try c.decodeIfPresent(String.self, forKey: .vaccineName)
         activityType = try? c.decodeIfPresent(ActivityType.self, forKey: .activityType)
         photoData = try c.decodeIfPresent(Data.self, forKey: .photoData)
+    }
+
+    /// Three-way merge used while an entry is open in an editor and the stored
+    /// copy changes underneath it (a Live Activity button, a widget, another
+    /// device). Fields the user has edited since `base` keep the user's value;
+    /// everything else takes the value from `latest`.
+    public func rebased(onto latest: EventRecord, from base: EventRecord) -> EventRecord {
+        var result = self
+        func take<T: Equatable>(_ field: WritableKeyPath<EventRecord, T>) {
+            if self[keyPath: field] == base[keyPath: field] {
+                result[keyPath: field] = latest[keyPath: field]
+            }
+        }
+        take(\.kind)
+        take(\.startDate)
+        take(\.endDate)
+        take(\.note)
+        take(\.updatedAt)
+        take(\.authorName)
+        take(\.sleepLocation)
+        take(\.leftDuration)
+        take(\.rightDuration)
+        take(\.activeSide)
+        take(\.activeSideStartedAt)
+        take(\.lastSide)
+        take(\.amountML)
+        take(\.leftAmountML)
+        take(\.rightAmountML)
+        take(\.bottleContent)
+        take(\.foodName)
+        take(\.foodReaction)
+        take(\.diaperType)
+        take(\.peeAmount)
+        take(\.poopColor)
+        take(\.poopConsistency)
+        take(\.hasRash)
+        take(\.weightKg)
+        take(\.heightCm)
+        take(\.headCm)
+        take(\.medicationName)
+        take(\.dosage)
+        take(\.temperatureC)
+        take(\.symptoms)
+        take(\.vaccineName)
+        take(\.activityType)
+        take(\.photoData)
+        return result
     }
 
     public var isOngoing: Bool { kind.supportsTimer && endDate == nil }

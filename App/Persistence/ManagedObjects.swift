@@ -67,6 +67,7 @@ final class Event: NSManagedObject, Identifiable {
     @NSManaged var diaperType: String?
     @NSManaged var poopColor: String?
     @NSManaged var poopConsistency: String?
+    @NSManaged var peeAmount: String?
     @NSManaged var hasRash: Bool
     @NSManaged var weightKg: NSNumber?
     @NSManaged var heightCm: NSNumber?
@@ -110,6 +111,7 @@ final class Event: NSManagedObject, Identifiable {
             foodName: foodName,
             foodReaction: foodReaction.flatMap(FoodReaction.init(rawValue:)),
             diaperType: diaperType.flatMap(DiaperType.init(rawValue:)),
+            peeAmount: peeAmount.flatMap(PeeAmount.init(rawValue:)),
             poopColor: poopColor.flatMap(PoopColor.init(rawValue:)),
             poopConsistency: poopConsistency.flatMap(PoopConsistency.init(rawValue:)),
             hasRash: hasRash,
@@ -149,6 +151,7 @@ final class Event: NSManagedObject, Identifiable {
         foodName = r.foodName?.nilIfBlank
         foodReaction = r.foodReaction?.rawValue
         diaperType = r.diaperType?.rawValue
+        peeAmount = r.peeAmount?.rawValue
         poopColor = r.poopColor?.rawValue
         poopConsistency = r.poopConsistency?.rawValue
         hasRash = r.hasRash

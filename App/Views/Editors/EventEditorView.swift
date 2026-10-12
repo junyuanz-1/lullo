@@ -1,4 +1,5 @@
 import BabyCore
+import CoreData
 import SwiftUI
 
 /// Create or edit any kind of entry. Timer kinds can either start a live timer
@@ -12,10 +13,13 @@ struct EventEditorView: View {
     @ObservedObject var baby: Baby
     let existing: Event?
     @State private var draft: EventRecord
+    /// The stored version `draft` was last reconciled with; see `syncWithStore`.
+    @State private var baseline: EventRecord?
     @State private var mode: Mode
     @State private var medicationReminderHours: Double = 0
     @State private var timerStart = Date()
     @State private var confirmingDelete = false
+    @State private var closing = false
 
     init(baby: Baby, kind: EventKind, existing: Event?) {
         self.baby = baby
@@ -26,6 +30,7 @@ struct EventEditorView: View {
             Self.applyDefaults(to: &record, now: now)
         }
         _draft = State(initialValue: record)
+        _baseline = State(initialValue: existing?.record)
         _mode = State(initialValue: existing == nil && kind.supportsTimer ? .timer : .manual)
     }
 
@@ -37,13 +42,17 @@ struct EventEditorView: View {
         Form {
             if isNew && kind.supportsTimer {
                 Section {
-                    Picker("Mode", selection: $mode) {
-                        Text("Timer").tag(Mode.timer)
-                        Text("Log past").tag(Mode.manual)
-                    }
-                    .pickerStyle(.segmented)
+                    PillSegmentedControl<Mode>(
+                        segments: [
+                            .init(value: Mode.timer, title: String(localized: "Timer"), systemImage: "timer"),
+                            .init(value: Mode.manual, title: String(localized: "Log past"), systemImage: "clock.arrow.circlepath"),
+                        ],
+                        selection: $mode,
+                        tint: kind.color
+                    )
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
                 }
-                .listRowBackground(Color.clear)
             }
 
             if mode == .timer && isNew {
@@ -86,12 +95,37 @@ struct EventEditorView: View {
                 }
             }
         }
+        .listSectionSpacing(.compact)
         .confirmationDialog("Delete this entry?", isPresented: $confirmingDelete, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
+                closing = true
                 if let existing { store.delete(existing) }
                 dismiss()
             }
         }
+        // The entry can change while it is open: stopped from the Lock Screen or a
+        // widget, or edited by a caregiver on another device.
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextObjectsDidChange, object: store.context)) { note in
+            syncWithStore(note)
+        }
+    }
+
+    /// Pulls in changes made to the stored entry since the editor opened, keeping
+    /// whatever the user has edited here.
+    private func syncWithStore(_ note: Notification) {
+        guard !closing, let existing, let base = baseline else { return }
+        let removed = [NSDeletedObjectsKey, NSInvalidatedObjectsKey].contains { key in
+            (note.userInfo?[key] as? Set<NSManagedObject>)?.contains(existing) == true
+        }
+        if removed || existing.isDeleted || existing.managedObjectContext == nil {
+            closing = true
+            dismiss()
+            return
+        }
+        let latest = existing.record
+        guard latest != base else { return }
+        draft = draft.rebased(onto: latest, from: base)
+        baseline = latest
     }
 
     // MARK: Time
@@ -110,9 +144,10 @@ struct EventEditorView: View {
                             VStack(spacing: 6) {
                                 Image(systemName: "play.fill").font(.title2)
                                 Text("Start \(side.title)").font(.headline)
-                                if side == suggested {
-                                    Text("Suggested").font(.caption2.bold())
-                                }
+                                // Always laid out so both buttons are the same height.
+                                Text("Suggested").font(.caption2.bold())
+                                    .opacity(side == suggested ? 1 : 0)
+                                    .accessibilityHidden(side != suggested)
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 18)
@@ -152,21 +187,25 @@ struct EventEditorView: View {
             if kind == .nursing {
                 durationStepper(String(localized: "Left"), value: $draft.leftDuration)
                 durationStepper(String(localized: "Right"), value: $draft.rightDuration)
-                Picker("Last side", selection: $draft.lastSide) {
-                    Text("—").tag(BreastSide?.none)
-                    ForEach(BreastSide.allCases, id: \.self) { Text($0.title).tag(BreastSide?.some($0)) }
-                }
+                ChipPicker(title: String(localized: "Last side"), options: BreastSide.allCases, selection: $draft.lastSide, tint: .pink, label: \.title)
             } else if kind.hasDuration {
                 if draft.endDate == nil && !isNew {
                     LabeledContent("End", value: String(localized: "Running"))
-                    Button("Stop Now") { draft.endDate = Date() }
+                    Button("Stop Now") {
+                        // Stops the stored timer right away (and its Live Activity);
+                        // the end time then shows up here through syncWithStore.
+                        if let existing { store.stopTimer(existing) } else { draft.endDate = Date() }
+                    }
+                    TimelineView(.periodic(from: .now, by: 1)) { context in
+                        LabeledContent("Duration", value: Fmt.duration(draft.duration(at: context.date)))
+                    }
                 } else {
                     DatePicker("End", selection: Binding(
                         get: { draft.endDate ?? draft.startDate },
                         set: { draft.endDate = $0 }
                     ), in: draft.startDate...)
+                    LabeledContent("Duration", value: Fmt.duration(draft.duration()))
                 }
-                LabeledContent("Duration", value: Fmt.duration(draft.duration()))
             }
         }
     }
@@ -187,10 +226,7 @@ struct EventEditorView: View {
         switch kind {
         case .sleep:
             Section("Details") {
-                Picker("Where", selection: $draft.sleepLocation) {
-                    Text("—").tag(SleepLocation?.none)
-                    ForEach(SleepLocation.allCases, id: \.self) { Text($0.title).tag(SleepLocation?.some($0)) }
-                }
+                ChipPicker(title: String(localized: "Where"), options: SleepLocation.allCases, selection: $draft.sleepLocation, tint: .indigo, label: \.title)
             }
         case .nursing:
             EmptyView()
@@ -198,17 +234,14 @@ struct EventEditorView: View {
             Section("Amount") {
                 MeasurementField(title: String(localized: "Amount"), metricValue: $draft.amountML, quantity: .volume)
                 VolumePresets(metricValue: $draft.amountML)
-                Picker("Contents", selection: $draft.bottleContent) {
-                    ForEach(BottleContent.allCases, id: \.self) { Text($0.title).tag(BottleContent?.some($0)) }
-                }
+                ChipPicker(title: String(localized: "Contents"), options: BottleContent.allCases, selection: $draft.bottleContent, tint: .orange, label: \.title)
             }
         case .solids:
             Section("Food") {
                 TextField("What did they eat?", text: optionalText($draft.foodName))
                 MeasurementField(title: String(localized: "Amount"), metricValue: $draft.amountML, quantity: .volume)
-                Picker("Reaction", selection: $draft.foodReaction) {
-                    Text("—").tag(FoodReaction?.none)
-                    ForEach(FoodReaction.allCases, id: \.self) { Text(verbatim: "\($0.emoji) \($0.title)").tag(FoodReaction?.some($0)) }
+                ChipPicker(title: String(localized: "Reaction"), options: FoodReaction.allCases, selection: $draft.foodReaction, tint: EventKind.solids.color) {
+                    "\($0.emoji) \($0.title)"
                 }
             }
             if draft.foodReaction == .allergic {
@@ -235,11 +268,13 @@ struct EventEditorView: View {
                 TextField("Name", text: optionalText($draft.medicationName))
                 TextField("Dose (e.g. 2.5 ml)", text: optionalText($draft.dosage))
                 if isNew {
-                    Picker("Remind next dose", selection: $medicationReminderHours) {
-                        Text("Off").tag(0.0)
-                        ForEach([4.0, 6.0, 8.0, 12.0, 24.0], id: \.self) { hours in
-                            Text("In \(Fmt.duration(hours * 3600, style: .full))").tag(hours)
-                        }
+                    ChipPicker(
+                        title: String(localized: "Remind next dose"),
+                        options: [0.0, 4, 6, 8, 12, 24],
+                        value: $medicationReminderHours,
+                        tint: EventKind.medication.color
+                    ) { hours in
+                        hours == 0 ? String(localized: "Off") : String(localized: "In \(Fmt.duration(hours * 3600, style: .full))")
                     }
                 }
             }
@@ -273,11 +308,15 @@ struct EventEditorView: View {
     }
 
     private var activityTypePicker: some View {
-        Picker("Type", selection: $draft.activityType) {
-            ForEach(ActivityType.allCases, id: \.self) { type in
-                Label(type.title, systemImage: type.systemImage).tag(ActivityType?.some(type))
-            }
-        }
+        ChipPicker(
+            title: String(localized: "Type"),
+            options: ActivityType.allCases,
+            selection: $draft.activityType,
+            allowsDeselect: false,
+            tint: EventKind.activity.color,
+            label: \.title,
+            systemImage: { $0.systemImage }
+        )
     }
 
     @ViewBuilder
@@ -303,6 +342,11 @@ struct EventEditorView: View {
             }
             .listRowBackground(Color.clear)
         }
+        if draft.diaperType?.isWet == true {
+            Section("Pee amount") {
+                ChipPicker(title: nil, options: PeeAmount.allCases, selection: $draft.peeAmount, tint: .teal, label: \.title)
+            }
+        }
         if draft.diaperType?.isDirty == true {
             Section("Poop") {
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -324,10 +368,7 @@ struct EventEditorView: View {
                     }
                     .padding(.vertical, 4)
                 }
-                Picker("Consistency", selection: $draft.poopConsistency) {
-                    Text("—").tag(PoopConsistency?.none)
-                    ForEach(PoopConsistency.allCases, id: \.self) { Text($0.title).tag(PoopConsistency?.some($0)) }
-                }
+                ChipPicker(title: String(localized: "Consistency"), options: PoopConsistency.allCases, selection: $draft.poopConsistency, tint: .brown, label: \.title)
                 if draft.poopColor?.needsAttention == true {
                     Label("Black (after the first days), red or pale/white stool can be a sign of a problem. Consider calling your pediatrician.", systemImage: "exclamationmark.triangle.fill")
                         .font(.callout)
@@ -398,7 +439,9 @@ struct EventEditorView: View {
     }
 
     private func save() {
+        closing = true
         var record = draft
+        if record.diaperType?.isWet != true { record.peeAmount = nil }
         if isNew && kind.hasDuration {
             if kind == .nursing {
                 record.activeSide = nil

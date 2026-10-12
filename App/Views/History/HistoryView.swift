@@ -108,9 +108,6 @@ private struct HistoryList: View {
 
     var body: some View {
         List {
-            if events.isEmpty {
-                ContentUnavailableView("No entries yet", systemImage: "tray", description: Text("Entries you log will appear here."))
-            }
             ForEach(sections, id: \.day) { section in
                 Section {
                     ForEach(section.events) { event in
@@ -142,6 +139,13 @@ private struct HistoryList: View {
             }
         }
         .listStyle(.insetGrouped)
+        // Shown over the empty list (not as a row) so it sits in the middle of the
+        // screen instead of as a card at the top with blank space below it.
+        .overlay {
+            if events.isEmpty {
+                ContentUnavailableView("No entries yet", systemImage: "tray", description: Text("Entries you log will appear here."))
+            }
+        }
     }
 
     private func daySummary(_ events: [Event]) -> String {
