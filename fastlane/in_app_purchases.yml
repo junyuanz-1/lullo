@@ -1,0 +1,24 @@
+# App Store Connect details for `bundle exec fastlane upload_iap` that the
+# StoreKit file doesn't have. Everything else comes from
+# Config/Tinytide.storekit: product IDs, types, prices (in its storefront's
+# currency), subscription groups and periods, and the display name and
+# description in every language.
+#
+# `review` is matched against product IDs (shell-style wildcards). The first
+# matching entry gives the note and screenshot App Review sees for a product.
+# Screenshots live in fastlane/in_app_purchases/: a screenshot of the
+# purchase screen taken in the simulator (see fastlane/README.md).
+
+review:
+  "tinytide.tip.*":
+    note: >-
+      Optional tip in Settings > Support Tinytide > Leave a Tip. It unlocks
+      nothing; after the purchase the app shows a thank-you message.
+    screenshot: tip_jar.png
+  "tinytide.supporter.*":
+    note: >-
+      Optional subscription in Settings > Support Tinytide > Tinytide
+      Supporter. It unlocks only cosmetic extras: alternate app icons and
+      theme colors (Settings > Appearance). Every tracking, sync and sharing
+      feature is free without it.
+    screenshot: supporter.png
