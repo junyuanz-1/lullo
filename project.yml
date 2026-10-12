@@ -53,8 +53,11 @@ targets:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDevelopmentRegion: en
         CFBundleLocalizations: [en, zh-Hans, zh-Hant, ja, ko, es, pt-BR, fr, de]
+        # Matches the Today screen's background, with the app icon in the middle,
+        # so opening the app doesn't flash a full screen of color.
         UILaunchScreen:
-          UIColorName: AccentColor
+          UIColorName: LaunchBackground
+          UIImageName: LaunchIcon
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         # iPhone-only portrait app: opt out of iPad multitasking orientation requirements.
         UIRequiresFullScreen: true
