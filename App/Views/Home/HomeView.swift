@@ -431,10 +431,18 @@ struct QuickActionsGrid: View {
         VStack(alignment: .leading, spacing: 10) {
             // The hint gets its own line so long translations don't crowd Log Past.
             VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .center) {
-                    groupTitle(String(localized: "Timers"))
-                    Spacer()
-                    logPastMenu
+                // Log Past moves under the title when both don't fit on one line
+                // (large text sizes), instead of squeezing "Timers" apart.
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .center) {
+                        groupTitle(String(localized: "Timers"))
+                        Spacer(minLength: 8)
+                        logPastMenu
+                    }
+                    VStack(alignment: .leading, spacing: 0) {
+                        groupTitle(String(localized: "Timers"))
+                        logPastMenu
+                    }
                 }
                 Text("Tap to start or stop").font(.caption).foregroundStyle(.secondary)
             }
