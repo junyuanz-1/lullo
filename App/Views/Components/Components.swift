@@ -1,6 +1,7 @@
 import BabyCore
 import PhotosUI
 import SwiftUI
+import TipKit
 import UIKit
 
 struct BabyAvatar: View {
@@ -636,5 +637,58 @@ struct ClockTimeline<Content: View>: View {
                 content(context.date)
             }
         }
+    }
+}
+
+// MARK: - Tips
+
+/// One-time hints (TipKit) for features that have no visible button of their
+/// own. Each shows once and goes away for good when dismissed. They are off in
+/// demo mode and tests (see `TinytideTips.configure`).
+enum TinytideTips {
+    /// Donated when a timer starts or an entry is added.
+    static let entryLogged = Tips.Event(id: "entryLogged")
+
+    static let holdForMore = HoldForMoreTip()
+    static let lockScreen = LockScreenTip()
+    static let invite = InviteFamilyTip()
+
+    static func configure() {
+        guard !DemoMode.isEnabled, !PersistenceController.isRunningTests else { return }
+        // At most one new tip a day, so a first session isn't a pile of popovers.
+        try? Tips.configure([.displayFrequency(.daily)])
+    }
+
+    static func logged() {
+        Task { await entryLogged.donate() }
+    }
+}
+
+/// Shown on the timer buttons once the user has logged a few things with a tap.
+struct HoldForMoreTip: Tip {
+    var title: Text { Text("Touch and Hold for More") }
+    var message: Text? { Text("Hold a timer to pick a side, add details before starting, or log one from earlier.") }
+    var image: Image? { Image(systemName: "hand.tap.fill") }
+
+    var rules: [Rule] {
+        #Rule(TinytideTips.entryLogged) { $0.donations.count >= 3 }
+    }
+}
+
+/// Shown under the first running timer.
+struct LockScreenTip: Tip {
+    var title: Text { Text("Your Timer Keeps Going") }
+    var message: Text? { Text("Stop it or switch sides from the Lock Screen or Dynamic Island. Add a Tinytide widget to your Home Screen for one-tap logging.") }
+    var image: Image? { Image(systemName: "lock.iphone") }
+}
+
+/// Shown on Today after a few entries, until the baby is shared.
+struct InviteFamilyTip: Tip {
+    var title: Text { Text("Track Together") }
+    var message: Text? { Text("Invite a partner, grandparent or nanny in Settings → Family & Caregivers. Everyone sees the same entries in real time.") }
+    var image: Image? { Image(systemName: "person.2.fill") }
+
+    var rules: [Rule] {
+        #Rule(TinytideTips.entryLogged) { $0.donations.count >= 8 }
     }
 }

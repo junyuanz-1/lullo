@@ -42,7 +42,8 @@ final class ScreenSnapshotTests: XCTestCase {
     // MARK: Tabs
 
     func testToday() {
-        verify(HomeView(baby: baby), height: 1500)
+        // The largest text size needs the extra height to reach the quick actions.
+        verify(HomeView(baby: baby), height: 1500, xxxlHeight: 3600)
     }
 
     func testLog() {
@@ -111,6 +112,7 @@ final class ScreenSnapshotTests: XCTestCase {
     private func verify(
         _ view: some View,
         height: CGFloat = 844,
+        xxxlHeight: CGFloat? = nil,
         file: StaticString = #filePath,
         testName: String = #function,
         line: UInt = #line
@@ -121,10 +123,10 @@ final class ScreenSnapshotTests: XCTestCase {
             .environmentObject(SyncMonitor(persistence: store.persistence))
             .tint(AppTheme.lullaby.color)
 
-        var variants: [(name: String, traits: UITraitCollection)] = [("light", Self.traits(.light))]
+        var variants: [(name: String, traits: UITraitCollection, height: CGFloat)] = [("light", Self.traits(.light), height)]
         if language == "en" {
-            variants.append(("dark", Self.traits(.dark)))
-            variants.append(("xxxl", Self.traits(.light, text: .accessibilityExtraExtraLarge)))
+            variants.append(("dark", Self.traits(.dark), height))
+            variants.append(("xxxl", Self.traits(.light, text: .accessibilityExtraExtraLarge), xxxlHeight ?? height))
         }
         for variant in variants {
             assertSnapshot(
@@ -132,7 +134,7 @@ final class ScreenSnapshotTests: XCTestCase {
                 as: .image(
                     precision: 0.995,
                     perceptualPrecision: 0.98,
-                    layout: .fixed(width: 390, height: height),
+                    layout: .fixed(width: 390, height: variant.height),
                     traits: variant.traits
                 ),
                 named: "\(language)-\(variant.name)",

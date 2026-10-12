@@ -2547,6 +2547,64 @@
         }
       }
     },
+    "All of Tinytide’s actions are also in the Shortcuts app, for automations and the Action button.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Aktionen von Tinytide gibt es auch in der Kurzbefehle-App, für Automationen und die Aktionstaste."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All of Tinytide’s actions are also in the Shortcuts app, for automations and the Action button."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todas las acciones de Tinytide también están en la app Atajos, para automatizaciones y el botón de Acción."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toutes les actions de Tinytide sont aussi dans l’app Raccourcis, pour les automatisations et le bouton Action."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tinytide のすべてのアクションはショートカットアプリにもあり、オートメーションやアクションボタンで使えます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tinytide의 모든 동작은 단축어 앱에도 있어서 자동화와 동작 버튼에 쓸 수 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todas as ações do Tinytide também estão no app Atalhos, para automações e o botão de Ação."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "摇摇的所有操作也都在“快捷指令”App 中，可用于自动化和操作按钮。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搖搖的所有操作也都在「捷徑」App 中，可用於自動化和動作按鈕。"
+          }
+        }
+      }
+    },
     "Allergic reaction": {
       "localizations": {
         "de": {
@@ -2601,6 +2659,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "過敏反應"
+          }
+        }
+      }
+    },
+    "Allow notifications for Tinytide in the Settings app to get reminders.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erlaube Mitteilungen für Tinytide in der Einstellungen-App, um Erinnerungen zu erhalten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow notifications for Tinytide in the Settings app to get reminders."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permite las notificaciones de Tinytide en la app Ajustes para recibir recordatorios."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorisez les notifications de Tinytide dans l’app Réglages pour recevoir les rappels."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リマインダーを受け取るには、設定アプリで Tinytide の通知を許可してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림을 받으려면 설정 앱에서 Tinytide의 알림을 허용하세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permita as notificações do Tinytide no app Ajustes para receber lembretes."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请在系统“设置”中允许摇摇发送通知，才能收到提醒。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請在系統「設定」中允許搖搖傳送通知，才能收到提醒。"
           }
         }
       }
@@ -5621,6 +5737,64 @@
         }
       }
     },
+    "Daily patterns appear here once you start logging sleep, feeds and diapers.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tägliche Muster erscheinen hier, sobald du Schlaf, Mahlzeiten und Windeln einträgst."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily patterns appear here once you start logging sleep, feeds and diapers."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los patrones diarios aparecerán aquí cuando empieces a registrar sueño, tomas y pañales."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les tendances quotidiennes apparaîtront ici dès que vous noterez sommeil, repas et couches."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠・授乳・おむつを記録し始めると、ここに毎日のパターンが表示されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면, 수유, 기저귀를 기록하기 시작하면 여기에 매일의 패턴이 표시돼요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os padrões diários aparecem aqui quando você começar a registrar sono, mamadas e fraldas."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开始记录睡眠、喂奶和尿布后，这里会显示每天的规律。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開始記錄睡眠、餵奶和尿布後，這裡會顯示每天的規律。"
+          }
+        }
+      }
+    },
     "Delete": {
       "localizations": {
         "de": {
@@ -6375,6 +6549,64 @@
         }
       }
     },
+    "Diapers %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windeln: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diapers %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pañales: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couches : %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おむつ %@ 回"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기저귀 %@개"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fraldas: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尿布 %@ 片"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尿布 %@ 片"
+          }
+        }
+      }
+    },
     "Dirty": {
       "localizations": {
         "de": {
@@ -6955,6 +7187,64 @@
         }
       }
     },
+    "Ends the sleep": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beendet den Schlaf"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ends the sleep"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termina el sueño"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termine le sommeil"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠を終了します"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면을 종료해요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Encerra o sono"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "结束睡眠"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "結束睡眠"
+          }
+        }
+      }
+    },
     "Enjoying Tinytide?": {
       "localizations": {
         "de": {
@@ -7361,6 +7651,64 @@
         }
       }
     },
+    "Everything syncs privately through your iCloud. Invite a partner or nanny to log together.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alles wird privat über deine iCloud synchronisiert. Lade Partner oder Babysitter ein, um gemeinsam einzutragen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything syncs privately through your iCloud. Invite a partner or nanny to log together."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todo se sincroniza de forma privada con tu iCloud. Invita a tu pareja o a la niñera a registrar contigo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout se synchronise en privé via votre iCloud. Invitez votre partenaire ou la nounou à noter avec vous."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべてのデータはあなたの iCloud でプライベートに同期されます。パートナーやベビーシッターを招待して一緒に記録できます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모든 데이터는 내 iCloud로 안전하게 동기화돼요. 배우자나 돌보미를 초대해 함께 기록하세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tudo é sincronizado de forma privada pelo seu iCloud. Convide parceiro(a) ou babá para registrar junto."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所有数据通过你的 iCloud 私密同步。可以邀请伴侣或保姆一起记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所有資料透過你的 iCloud 私密同步。可以邀請伴侶或保母一起記錄。"
+          }
+        }
+      }
+    },
     "Export Backup File": {
       "localizations": {
         "de": {
@@ -7763,6 +8111,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "餵奶次數"
+          }
+        }
+      }
+    },
+    "Feeds %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mahlzeiten: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feeds %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomas: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repas : %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "授乳 %@ 回"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수유 %@회"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mamadas: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "喂奶 %@ 次"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "餵奶 %@ 次"
           }
         }
       }
@@ -8870,6 +9276,122 @@
         }
       }
     },
+    "Hold a timer to pick a side, add details before starting, or log one from earlier.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halte einen Timer gedrückt, um eine Seite zu wählen, vor dem Start Details hinzuzufügen oder etwas nachzutragen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold a timer to pick a side, add details before starting, or log one from earlier."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mantén pulsado un cronómetro para elegir el lado, añadir detalles antes de empezar o registrar uno anterior."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez longuement un chrono pour choisir le côté, ajouter des détails avant de démarrer ou noter une entrée passée."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タイマーを長押しすると、左右を選んだり、詳細を入力してから開始したり、あとから記録したりできます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머를 길게 누르면 방향을 고르거나, 세부 정보를 입력하고 시작하거나, 지난 기록을 추가할 수 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque e segure um cronômetro para escolher o lado, adicionar detalhes antes de começar ou registrar um anterior."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "长按计时按钮，可以选择喂奶侧、填写详情后开始，或补录之前的记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "長按計時按鈕，可以選擇餵奶側、填寫詳情後開始，或補登之前的紀錄。"
+          }
+        }
+      }
+    },
+    "Home Screen Widgets": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home-Bildschirm-Widgets"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home Screen Widgets"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets de la pantalla de inicio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets de l’écran d’accueil"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ホーム画面ウィジェット"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "홈 화면 위젯"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets da Tela de Início"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "主屏幕小组件"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "主畫面小工具"
+          }
+        }
+      }
+    },
     "How much did the baby drink?": {
       "localizations": {
         "de": {
@@ -9330,6 +9852,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "抱著"
+          }
+        }
+      }
+    },
+    "Invite a partner, grandparent or nanny in Settings → Family & Caregivers. Everyone sees the same entries in real time.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lade Partner, Großeltern oder Babysitter unter Einstellungen → Familie & Betreuung ein. Alle sehen dieselben Einträge in Echtzeit."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invite a partner, grandparent or nanny in Settings → Family & Caregivers. Everyone sees the same entries in real time."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invita a tu pareja, a los abuelos o a la niñera en Ajustes → Familia y cuidadores. Todos ven los mismos registros en tiempo real."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invitez votre partenaire, les grands-parents ou la nounou dans Réglages → Famille et entourage. Tout le monde voit les mêmes entrées en temps réel."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定 → 家族・お世話する人 から、パートナーや祖父母、ベビーシッターを招待できます。全員が同じ記録をリアルタイムで見られます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정 → 가족 및 돌보미에서 배우자, 조부모, 돌보미를 초대하세요. 모두가 같은 기록을 실시간으로 봐요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convide parceiro(a), avós ou babá em Ajustes → Família e cuidadores. Todos veem os mesmos registros em tempo real."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 设置 → 家人与看护人 中邀请伴侣、长辈或保姆。所有人实时看到同一份记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 設定 → 家人與照顧者 中邀請伴侶、長輩或保母。所有人即時看到同一份紀錄。"
           }
         }
       }
@@ -10263,6 +10843,122 @@
         }
       }
     },
+    "Lock Screen & Dynamic Island": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sperrbildschirm & Dynamic Island"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lock Screen & Dynamic Island"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pantalla bloqueada y Dynamic Island"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écran verrouillé et Dynamic Island"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック画面とダイナミックアイランド"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잠금 화면 및 Dynamic Island"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tela Bloqueada e Dynamic Island"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "锁屏与灵动岛"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "鎖定畫面與動態島"
+          }
+        }
+      }
+    },
+    "Lock Screen Widgets": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sperrbildschirm-Widgets"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lock Screen Widgets"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets de la pantalla bloqueada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets de l’écran verrouillé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック画面ウィジェット"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잠금 화면 위젯"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets da Tela Bloqueada"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "锁屏小组件"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "鎖定畫面小工具"
+          }
+        }
+      }
+    },
     "Log": {
       "localizations": {
         "de": {
@@ -10491,6 +11187,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "補登"
+          }
+        }
+      }
+    },
+    "Log a sleep to get nap-time suggestions based on age and your baby's rhythm.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trage einen Schlaf ein, um Vorschläge für Schlafenszeiten nach Alter und Rhythmus deines Babys zu bekommen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log a sleep to get nap-time suggestions based on age and your baby's rhythm."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra un sueño para recibir sugerencias de siesta según la edad y el ritmo de tu bebé."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notez un sommeil pour obtenir des suggestions de sieste selon l’âge et le rythme de votre bébé."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠を記録すると、月齢と赤ちゃんのリズムにもとづいてお昼寝の時間を提案します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면을 기록하면 월령과 아기의 리듬에 맞춰 낮잠 시간을 추천해 드려요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registre um sono para receber sugestões de soneca com base na idade e no ritmo do seu bebê."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "记录一次睡眠后，这里会根据月龄和宝宝的作息推荐小睡时间。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記錄一次睡眠後，這裡會根據月齡和寶寶的作息推薦小睡時間。"
           }
         }
       }
@@ -13164,6 +13918,64 @@
         }
       }
     },
+    "No Matching Entries": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine passenden Einträge"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Matching Entries"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay registros que coincidan"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune entrée correspondante"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "該当する記録はありません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일치하는 기록이 없어요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum registro correspondente"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有符合的记录"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "沒有符合的紀錄"
+          }
+        }
+      }
+    },
     "No backups yet. One is made automatically each day you open the app.": {
       "localizations": {
         "de": {
@@ -13682,6 +14494,122 @@
           "stringUnit": {
             "state": "translated",
             "value": "備註"
+          }
+        }
+      }
+    },
+    "Nothing of this kind in the days shown.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Einträge dieser Art in den angezeigten Tagen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing of this kind in the days shown."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay registros de este tipo en los días mostrados."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rien de ce type sur les jours affichés."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "表示中の期間にこの種類の記録はありません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "표시된 기간에 이 종류의 기록이 없어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum registro deste tipo nos dias mostrados."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所显示的日期内没有这类记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所顯示的日期內沒有這類紀錄。"
+          }
+        }
+      }
+    },
+    "Notifications Are Off": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitteilungen sind aus"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications Are Off"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las notificaciones están desactivadas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les notifications sont désactivées"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知がオフです"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림이 꺼져 있어요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As notificações estão desativadas"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知已关闭"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知已關閉"
           }
         }
       }
@@ -14324,6 +15252,180 @@
         }
       }
     },
+    "On Today, touch and hold a timer to pick a nursing side, add details before starting, or log one from earlier.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halte unter „Heute“ einen Timer gedrückt, um eine Stillseite zu wählen, vor dem Start Details hinzuzufügen oder etwas nachzutragen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On Today, touch and hold a timer to pick a nursing side, add details before starting, or log one from earlier."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En Hoy, mantén pulsado un cronómetro para elegir el lado, añadir detalles antes de empezar o registrar uno anterior."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dans Aujourd’hui, touchez longuement un chrono pour choisir le côté, ajouter des détails avant de démarrer ou noter une entrée passée."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「今日」でタイマーを長押しすると、授乳の左右を選んだり、詳細を入力してから開始したり、あとから記録したりできます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘 화면에서 타이머를 길게 누르면 수유 방향을 고르거나, 세부 정보를 입력하고 시작하거나, 지난 기록을 추가할 수 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Em Hoje, toque e segure um cronômetro para escolher o lado, adicionar detalhes antes de começar ou registrar um anterior."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在“今天”页长按计时按钮，可以选择喂奶侧、填写详情后再开始，或补录之前的记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在「今天」頁長按計時按鈕，可以選擇餵奶側、填寫詳情後再開始，或補登之前的紀錄。"
+          }
+        }
+      }
+    },
+    "One-Tap Timers": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timer mit einem Tipp"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One-Tap Timers"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cronómetros de un toque"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chronos en un geste"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワンタップタイマー"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "원탭 타이머"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cronômetros de um toque"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一键计时"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一鍵計時"
+          }
+        }
+      }
+    },
+    "Open Settings": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellungen öffnen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir Ajustes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir Réglages"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定を開く"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정 열기"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir Ajustes"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开设置"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打開設定"
+          }
+        }
+      }
+    },
     "Open the app to add your baby.": {
       "localizations": {
         "de": {
@@ -14378,6 +15480,122 @@
           "stringUnit": {
             "state": "translated",
             "value": "打開 App 新增寶寶。"
+          }
+        }
+      }
+    },
+    "Opens a form": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffnet ein Formular"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens a form"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre un formulario"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre un formulaire"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "入力画面を開きます"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "입력 화면을 열어요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre um formulário"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开填写页"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打開填寫頁"
+          }
+        }
+      }
+    },
+    "Opens the running bottle": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffnet das laufende Fläschchen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens the running bottle"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre el biberón en curso"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre le biberon en cours"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "実行中のミルクを開きます"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "진행 중인 젖병 기록을 열어요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre a mamadeira em andamento"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开正在进行的奶瓶记录"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打開進行中的奶瓶紀錄"
           }
         }
       }
@@ -14610,6 +15828,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "可能過度疲累"
+          }
+        }
+      }
+    },
+    "Patterns and Nap Times": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rhythmus und Schlafenszeiten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patterns and Nap Times"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutinas y siestas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rythmes et siestes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生活リズムとお昼寝の時間"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "생활 패턴과 낮잠 시간"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotinas e sonecas"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "作息规律与小睡时间"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "作息規律與小睡時間"
           }
         }
       }
@@ -15199,7 +16475,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Einstellungen"
+            "value": "Allgemein"
           }
         },
         "en": {
@@ -15421,7 +16697,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "吸奶已結束"
+            "value": "擠奶已結束"
           }
         }
       }
@@ -15479,7 +16755,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "吸奶已開始"
+            "value": "擠奶已開始"
           }
         }
       }
@@ -16587,6 +17863,64 @@
         }
       }
     },
+    "Rings with a gentle sound. Choose the sound in Settings → Timer Alarm.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klingelt mit einem sanften Ton. Den Ton wählst du unter Einstellungen → Timer-Wecker."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rings with a gentle sound. Choose the sound in Settings → Timer Alarm."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suena con un tono suave. Elige el sonido en Ajustes → Alarma del temporizador."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonne avec un son doux. Choisissez-le dans Réglages → Alarme du minuteur."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "やさしい音で鳴ります。音は 設定 → タイマーアラーム で選べます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "부드러운 소리로 울려요. 설정 → 타이머 알람에서 소리를 고를 수 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca com um som suave. Escolha o som em Ajustes → Alarme do timer."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "响铃声音很轻柔。可以在 设置 → 计时闹钟 中选择铃声。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "響鈴聲音很輕柔。可以在 設定 → 計時鬧鐘 中選擇鈴聲。"
+          }
+        }
+      }
+    },
     "Rose": {
       "localizations": {
         "de": {
@@ -16699,6 +18033,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "進行中"
+          }
+        }
+      }
+    },
+    "Running timers show on the Lock Screen and in the Dynamic Island. Stop them, pause, or switch nursing sides without unlocking.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laufende Timer erscheinen auf dem Sperrbildschirm und in der Dynamic Island. Stoppen, pausieren oder die Seite wechseln – ohne zu entsperren."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Running timers show on the Lock Screen and in the Dynamic Island. Stop them, pause, or switch nursing sides without unlocking."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los cronómetros en marcha aparecen en la pantalla bloqueada y en la Dynamic Island. Detenlos, pausa o cambia de lado sin desbloquear."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les chronos en cours s’affichent sur l’écran verrouillé et dans la Dynamic Island. Arrêtez, mettez en pause ou changez de côté sans déverrouiller."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "実行中のタイマーはロック画面とダイナミックアイランドに表示されます。ロックを解除せずに停止・一時停止・授乳の左右切り替えができます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "실행 중인 타이머가 잠금 화면과 Dynamic Island에 표시돼요. 잠금을 풀지 않고 중지, 일시 정지하거나 수유 방향을 바꿀 수 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os cronômetros em andamento aparecem na Tela Bloqueada e na Dynamic Island. Pare, pause ou troque o lado sem desbloquear."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在进行的计时会显示在锁屏和灵动岛上。不用解锁就能停止、暂停或切换喂奶侧。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "進行中的計時會顯示在鎖定畫面和動態島上。不用解鎖就能停止、暫停或切換餵奶側。"
           }
         }
       }
@@ -16819,6 +18211,64 @@
         }
       }
     },
+    "Say “Start sleep in Tinytide”, “Baby woke up in Tinytide” or “Log a diaper in Tinytide”.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sag „Schlaf in Tinytide starten“, „Baby ist wach in Tinytide“ oder „Windel in Tinytide eintragen“."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Say “Start sleep in Tinytide”, “Baby woke up in Tinytide” or “Log a diaper in Tinytide”."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Di «Inicia el sueño en Tinytide», «El bebé se despertó en Tinytide» o «Registra un pañal en Tinytide»."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dites « Démarrer le sommeil dans Tinytide », « Noter le réveil de bébé dans Tinytide » ou « Noter une couche dans Tinytide »."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「Tinytideで睡眠を開始」「Tinytideで赤ちゃんが起きた」「Tinytideでおむつを記録」のように話しかけてください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Tinytide에서 수면 시작”, “Tinytide에서 아기가 깼어요”, “Tinytide에서 기저귀 기록”이라고 말해 보세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diga “Iniciar sono no Tinytide”, “Bebê acordou no Tinytide” ou “Registrar fralda no Tinytide”."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可以说“用摇摇开始睡眠”“摇摇宝宝醒了”或“用摇摇记录尿布”。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可以說「用搖搖開始睡眠」「搖搖寶寶醒了」或「用搖搖記錄尿布」。"
+          }
+        }
+      }
+    },
     "Screen Time": {
       "localizations": {
         "de": {
@@ -16873,6 +18323,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "看螢幕"
+          }
+        }
+      }
+    },
+    "See daily trends and when the next nap is due, based on age and your baby's own rhythm.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sieh tägliche Trends und wann der nächste Schlaf fällig ist – nach Alter und dem eigenen Rhythmus deines Babys."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See daily trends and when the next nap is due, based on age and your baby's own rhythm."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta las tendencias diarias y cuándo toca la próxima siesta, según la edad y el ritmo de tu bebé."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez les tendances du jour et l’heure de la prochaine sieste, selon l’âge et le rythme de votre bébé."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "毎日の傾向と、月齢や赤ちゃん自身のリズムにもとづく次のお昼寝の時間がわかります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "매일의 추이와, 월령과 아기만의 리듬에 맞춘 다음 낮잠 시간을 확인해요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veja as tendências diárias e quando é a próxima soneca, com base na idade e no ritmo do seu bebê."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看每日趋势，并根据月龄和宝宝自己的作息预测下次小睡时间。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看每日趨勢，並根據月齡和寶寶自己的作息預測下次小睡時間。"
           }
         }
       }
@@ -17047,6 +18555,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "在寶寶的個人資料中設定性別後，即可與 WHO 生長標準比較。"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "设置"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定"
           }
         }
       }
@@ -17341,6 +18907,64 @@
         }
       }
     },
+    "Share with Family": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mit der Familie teilen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share with Family"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comparte con la familia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partagez en famille"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "家族と共有"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가족과 공유"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compartilhe com a família"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "与家人共享"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "與家人共享"
+          }
+        }
+      }
+    },
     "Shared": {
       "localizations": {
         "de": {
@@ -17573,6 +19197,64 @@
         }
       }
     },
+    "Shown on entries": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wird bei Einträgen angezeigt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shown on entries"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se muestra en los registros"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Affiché sur les entrées"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記録に表示されます"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기록에 표시돼요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aparece nos registros"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "显示在记录上"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "顯示在紀錄上"
+          }
+        }
+      }
+    },
     "Side": {
       "localizations": {
         "de": {
@@ -17747,6 +19429,64 @@
         }
       }
     },
+    "Siri": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri"
+          }
+        }
+      }
+    },
     "Skin to Skin": {
       "localizations": {
         "de": {
@@ -17859,6 +19599,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "睡眠"
+          }
+        }
+      }
+    },
+    "Sleep %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlaf %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sueño %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sommeil %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠 %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수면 %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sono %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠 %@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠 %@"
           }
         }
       }
@@ -18849,6 +20647,64 @@
         }
       }
     },
+    "Start sleep, nursing or pumping with a tap. Timers keep running on the Lock Screen and Dynamic Island.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starte Schlaf, Stillen oder Abpumpen mit einem Tipp. Timer laufen auf dem Sperrbildschirm und in der Dynamic Island weiter."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start sleep, nursing or pumping with a tap. Timers keep running on the Lock Screen and Dynamic Island."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicia sueño, lactancia o extracción con un toque. Los cronómetros siguen en la pantalla bloqueada y la Dynamic Island."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lancez sommeil, allaitement ou tire-lait d’un geste. Les chronos continuent sur l’écran verrouillé et dans la Dynamic Island."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タップひとつで睡眠・授乳・搾乳を開始。タイマーはロック画面とダイナミックアイランドで動き続けます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "탭 한 번으로 수면, 수유, 유축을 시작해요. 타이머는 잠금 화면과 Dynamic Island에서 계속 돌아가요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicie sono, amamentação ou extração com um toque. Os cronômetros continuam na Tela Bloqueada e na Dynamic Island."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点一下即可开始睡眠、亲喂或吸奶计时，计时会持续显示在锁屏和灵动岛上。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "點一下即可開始睡眠、親餵或擠奶計時，計時會持續顯示在鎖定畫面和動態島上。"
+          }
+        }
+      }
+    },
     "Start with Details": {
       "localizations": {
         "de": {
@@ -19135,6 +20991,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "開始睡眠計時。"
+          }
+        }
+      }
+    },
+    "Starts a timer. Touch and hold for more options.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Startet einen Timer. Gedrückt halten für weitere Optionen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starts a timer. Touch and hold for more options."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicia un cronómetro. Mantén pulsado para más opciones."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Démarre un chrono. Touchez longuement pour plus d’options."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タイマーを開始します。長押しでその他のオプション。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머를 시작해요. 길게 누르면 더 많은 옵션이 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicia um cronômetro. Toque e segure para mais opções."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开始计时。长按查看更多选项。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開始計時。長按查看更多選項。"
           }
         }
       }
@@ -19429,6 +21343,64 @@
         }
       }
     },
+    "Stop it or switch sides from the Lock Screen or Dynamic Island. Add a Tinytide widget to your Home Screen for one-tap logging.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stoppe ihn oder wechsle die Seite auf dem Sperrbildschirm oder in der Dynamic Island. Mit einem Tinytide-Widget auf dem Home-Bildschirm trägst du mit einem Tipp ein."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop it or switch sides from the Lock Screen or Dynamic Island. Add a Tinytide widget to your Home Screen for one-tap logging."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detenlo o cambia de lado desde la pantalla bloqueada o la Dynamic Island. Añade un widget de Tinytide a la pantalla de inicio para registrar con un toque."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrêtez-le ou changez de côté depuis l’écran verrouillé ou la Dynamic Island. Ajoutez un widget Tinytide à l’écran d’accueil pour noter en un geste."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック画面やダイナミックアイランドから停止や左右の切り替えができます。ホーム画面に Tinytide ウィジェットを追加すると、ワンタップで記録できます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잠금 화면이나 Dynamic Island에서 중지하거나 방향을 바꿀 수 있어요. 홈 화면에 Tinytide 위젯을 추가하면 한 번에 기록할 수 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pare ou troque o lado na Tela Bloqueada ou na Dynamic Island. Adicione um widget do Tinytide à Tela de Início para registrar com um toque."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可以在锁屏或灵动岛上停止计时或切换喂奶侧。把“摇摇”小组件添加到主屏幕，一键就能记录。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可以在鎖定畫面或動態島上停止計時或切換餵奶側。把「搖搖」小工具加入主畫面，一鍵就能記錄。"
+          }
+        }
+      }
+    },
     "Stops the running breastfeeding timer.": {
       "localizations": {
         "de": {
@@ -19541,6 +21513,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "停止進行中的睡眠計時。"
+          }
+        }
+      }
+    },
+    "Stops the timer": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stoppt den Timer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stops the timer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detiene el cronómetro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrête le chrono"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タイマーを停止します"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머를 중지해요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para o cronômetro"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "停止计时"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "停止計時"
           }
         }
       }
@@ -20411,6 +22441,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "點一下寶寶即可切換。所有分頁都會顯示目前選取的寶寶。"
+          }
+        }
+      }
+    },
+    "Tap to start or stop": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tippen zum Starten oder Stoppen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to start or stop"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca para iniciar o detener"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez pour démarrer ou arrêter"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タップで開始・停止"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "탭하여 시작 또는 중지"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque para iniciar ou parar"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点一下开始或停止"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "點一下開始或停止"
           }
         }
       }
@@ -21570,13 +23658,13 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Temporizador iniciado"
+            "value": "Cronómetro iniciado"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Minuteur démarré"
+            "value": "Chrono démarré"
           }
         },
         "ja": {
@@ -21628,13 +23716,13 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Temporizador detenido"
+            "value": "Cronómetro detenido"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Minuteur arrêté"
+            "value": "Chrono arrêté"
           }
         },
         "ja": {
@@ -21665,6 +23753,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "計時已停止"
+          }
+        }
+      }
+    },
+    "Timers": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timers"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cronómetros"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chronos"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タイマー"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cronômetros"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "计时"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "計時"
           }
         }
       }
@@ -22075,6 +24221,64 @@
         }
       }
     },
+    "Today is still in progress: it is shown faded in the charts and left out of the averages.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heute läuft noch: Der Tag ist in den Diagrammen blasser und zählt nicht zu den Durchschnitten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today is still in progress: it is shown faded in the charts and left out of the averages."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoy aún no ha terminado: se muestra atenuado en los gráficos y no cuenta en los promedios."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aujourd’hui n’est pas terminé : il est estompé dans les graphiques et exclu des moyennes."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日はまだ途中のため、グラフでは薄く表示され、平均には含まれません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘은 아직 진행 중이라 차트에 흐리게 표시되고 평균에서 제외돼요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoje ainda está em andamento: aparece esmaecido nos gráficos e fica fora das médias."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今天还没结束：图表中以淡色显示，且不计入平均值。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今天還沒結束：圖表中以淡色顯示，且不計入平均值。"
+          }
+        }
+      }
+    },
     "Total": {
       "localizations": {
         "de": {
@@ -22245,6 +24449,296 @@
           "stringUnit": {
             "state": "translated",
             "value": "總睡眠"
+          }
+        }
+      }
+    },
+    "Touch and Hold": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedrückt halten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch and Hold"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mantener pulsado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toucher longuement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "長押し"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "길게 누르기"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque e segure"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "长按"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "長按"
+          }
+        }
+      }
+    },
+    "Touch and Hold for More": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedrückt halten für mehr"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch and Hold for More"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mantén pulsado para más"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez longuement pour plus"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "長押しでその他の操作"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "길게 눌러 더 보기"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque e segure para mais"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "长按查看更多"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "長按查看更多"
+          }
+        }
+      }
+    },
+    "Touch and hold an empty spot on the Home Screen, tap Edit, then Add Widget, and choose Tinytide. Medium and large widgets have one-tap buttons for sleep, nursing and diapers.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halte eine freie Stelle auf dem Home-Bildschirm gedrückt, tippe auf Bearbeiten, dann auf Widget hinzufügen und wähle Tinytide. Mittlere und große Widgets haben Ein-Tipp-Tasten für Schlaf, Stillen und Windeln."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch and hold an empty spot on the Home Screen, tap Edit, then Add Widget, and choose Tinytide. Medium and large widgets have one-tap buttons for sleep, nursing and diapers."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mantén pulsado un espacio vacío de la pantalla de inicio, toca Editar, luego Añadir widget y elige Tinytide. Los widgets mediano y grande tienen botones de un toque para sueño, lactancia y pañales."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez longuement un espace vide de l’écran d’accueil, touchez Modifier, puis Ajouter un widget, et choisissez Tinytide. Les widgets moyen et grand ont des boutons en un geste pour le sommeil, l’allaitement et les couches."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ホーム画面の空いている場所を長押しし、「編集」→「ウィジェットを追加」から Tinytide を選びます。中・大サイズには睡眠・授乳・おむつのワンタップボタンがあります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "홈 화면의 빈 곳을 길게 누르고 편집 → 위젯 추가에서 Tinytide를 선택하세요. 중간·큰 위젯에는 수면, 수유, 기저귀 원탭 버튼이 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque e segure um espaço vazio da Tela de Início, toque em Editar, depois em Adicionar Widget e escolha Tinytide. Os widgets médio e grande têm botões de um toque para sono, amamentação e fraldas."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在主屏幕空白处长按，轻点“编辑”→“添加小组件”，选择“摇摇”。中、大尺寸小组件带有一键记录睡眠、亲喂和尿布的按钮。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在主畫面空白處長按，點一下「編輯」→「加入小工具」，選擇「搖搖」。中、大尺寸小工具有一鍵記錄睡眠、親餵和尿布的按鈕。"
+          }
+        }
+      }
+    },
+    "Touch and hold the Lock Screen, tap Customize, and add a Tinytide widget to see the time since the last feed at a glance.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halte den Sperrbildschirm gedrückt, tippe auf Anpassen und füge ein Tinytide-Widget hinzu, um die Zeit seit der letzten Mahlzeit auf einen Blick zu sehen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch and hold the Lock Screen, tap Customize, and add a Tinytide widget to see the time since the last feed at a glance."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mantén pulsada la pantalla bloqueada, toca Personalizar y añade un widget de Tinytide para ver de un vistazo cuánto hace de la última toma."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez longuement l’écran verrouillé, touchez Personnaliser et ajoutez un widget Tinytide pour voir d’un coup d’œil le temps écoulé depuis le dernier repas."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック画面を長押しして「カスタマイズ」をタップし、Tinytide ウィジェットを追加すると、前回の授乳からの時間がひと目でわかります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잠금 화면을 길게 누르고 사용자화를 탭한 다음 Tinytide 위젯을 추가하면 마지막 수유 후 지난 시간을 한눈에 볼 수 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque e segure a Tela Bloqueada, toque em Personalizar e adicione um widget do Tinytide para ver num relance quanto tempo faz desde a última mamada."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "长按锁屏，轻点“自定”，添加“摇摇”小组件，一眼就能看到距上次喂奶多久。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "長按鎖定畫面，點一下「自訂」，加入「搖搖」小工具，一眼就能看到距上次餵奶多久。"
+          }
+        }
+      }
+    },
+    "Track Together": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemeinsam festhalten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Track Together"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registren juntos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suivez ensemble"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "みんなで記録"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "함께 기록하기"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrem juntos"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一起记录"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一起記錄"
           }
         }
       }
@@ -23525,6 +26019,64 @@
         }
       }
     },
+    "Widgets, Siri & Shortcuts": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets, Siri & Kurzbefehle"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets, Siri & Shortcuts"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets, Siri y Atajos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets, Siri et Raccourcis"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ウィジェット・Siri・ショートカット"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위젯, Siri 및 단축어"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets, Siri e Atalhos"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "小组件、Siri 与快捷指令"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "小工具、Siri 與捷徑"
+          }
+        }
+      }
+    },
     "Wind Chimes": {
       "localizations": {
         "de": {
@@ -23929,6 +26481,122 @@
           "stringUnit": {
             "state": "translated",
             "value": "你已經支持搖搖 %lld 次了 💖"
+          }
+        }
+      }
+    },
+    "Your Name": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Name"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Name"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu nombre"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre prénom"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたの名前"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "내 이름"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu nome"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的名字"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的名字"
+          }
+        }
+      }
+    },
+    "Your Timer Keeps Going": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Timer läuft weiter"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Timer Keeps Going"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El cronómetro sigue en marcha"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le chrono continue"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タイマーは動き続けます"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머가 계속 돌아가요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O cronômetro continua"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "计时会一直进行"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "計時會一直進行"
           }
         }
       }

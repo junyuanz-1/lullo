@@ -100,8 +100,10 @@ private struct HistoryList: View {
     @Binding var editor: EditorRoute?
     @Binding var toast: UndoToast?
     var loadMore: () -> Void
+    private let isFiltered: Bool
 
     init(baby: Baby, category: EventCategory?, days: Int, editor: Binding<EditorRoute?>, toast: Binding<UndoToast?>, loadMore: @escaping () -> Void) {
+        isFiltered = category != nil
         let since = Calendar.current.date(byAdding: .day, value: -days, to: Calendar.current.startOfDay(for: AppClock.now))!
         var predicates = [
             NSPredicate(format: "baby == %@", baby),
@@ -147,11 +149,7 @@ private struct HistoryList: View {
                         }
                     }
                 } header: {
-                    HStack {
-                        Text(Fmt.dayTitle(section.day))
-                        Spacer()
-                        Text(daySummary(section.events)).textCase(nil)
-                    }
+                    DayHeader(day: section.day, records: section.events.map(\.record))
                 }
             }
             if !events.isEmpty {
@@ -164,20 +162,84 @@ private struct HistoryList: View {
         // screen instead of as a card at the top with blank space below it.
         .overlay {
             if events.isEmpty {
-                ContentUnavailableView("No Entries Yet", systemImage: "tray", description: Text("Entries you log will appear here."))
+                // Older entries may still exist beyond the days shown, so the way to
+                // them stays on screen.
+                ContentUnavailableView {
+                    if isFiltered {
+                        Label("No Matching Entries", systemImage: "line.3.horizontal.decrease.circle")
+                    } else {
+                        Label("No Entries Yet", systemImage: "tray")
+                    }
+                } description: {
+                    if isFiltered {
+                        Text("Nothing of this kind in the days shown.")
+                    } else {
+                        Text("Entries you log will appear here.")
+                    }
+                } actions: {
+                    Button("Show Earlier Entries", action: loadMore)
+                }
+            }
+        }
+    }
+}
+
+/// The day title with that day's totals. Each total keeps its icon and number
+/// together; when they don't fit beside the title they move to a line below it.
+private struct DayHeader: View {
+    var day: Date
+    var records: [EventRecord]
+
+    var body: some View {
+        let sleep = records.filter { $0.kind == .sleep }.reduce(0) { $0 + $1.duration(at: AppClock.now) }
+        let feeds = records.filter { $0.kind.isFeeding }.count
+        let diapers = records.filter { $0.kind == .diaper }.count
+        let totals = HStack(spacing: 10) {
+            if sleep > 0 { total(.sleep, Fmt.duration(sleep)) }
+            if feeds > 0 { total(.bottle, "\(feeds)") }
+            if diapers > 0 { total(.diaper, "\(diapers)") }
+        }
+        .textCase(nil)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(accessibilitySummary(sleep: sleep, feeds: feeds, diapers: diapers)))
+
+        ViewThatFits(in: .horizontal) {
+            HStack {
+                Text(Fmt.dayTitle(day))
+                Spacer()
+                totals
+            }
+            // Below the date, wrapping onto more lines at large text sizes.
+            VStack(alignment: .leading, spacing: 4) {
+                Text(Fmt.dayTitle(day))
+                FlowLayout(spacing: 10, lineSpacing: 4) {
+                    if sleep > 0 { total(.sleep, Fmt.duration(sleep)) }
+                    if feeds > 0 { total(.bottle, "\(feeds)") }
+                    if diapers > 0 { total(.diaper, "\(diapers)") }
+                }
+                .textCase(nil)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(accessibilitySummary(sleep: sleep, feeds: feeds, diapers: diapers)))
             }
         }
     }
 
-    private func daySummary(_ events: [Event]) -> String {
-        let records = events.map(\.record)
-        let feeds = records.filter { $0.kind.isFeeding }.count
-        let diapers = records.filter { $0.kind == .diaper }.count
-        let sleep = records.filter { $0.kind == .sleep }.reduce(0) { $0 + $1.duration(at: AppClock.now) }
+    private func total(_ kind: EventKind, _ value: String) -> some View {
+        HStack(spacing: 3) {
+            Image(systemName: kind.systemImage).foregroundStyle(kind.color)
+            Text(value).monospacedDigit()
+        }
+        .lineLimit(1)
+        .fixedSize()
+    }
+
+    private func accessibilitySummary(sleep: TimeInterval, feeds: Int, diapers: Int) -> String {
         var parts: [String] = []
-        if sleep > 0 { parts.append("💤 \(Fmt.duration(sleep))") }
-        if feeds > 0 { parts.append("🍼 \(feeds)") }
-        if diapers > 0 { parts.append("🧷 \(diapers)") }
-        return parts.joined(separator: "  ")
+        if sleep > 0 { parts.append(String(localized: "Sleep \(Fmt.duration(sleep))")) }
+        // Passed as text so the keys are "Feeds %@" / "Diapers %@" (an Int would
+        // look up "%lld" and miss the translations).
+        if feeds > 0 { parts.append(String(localized: "Feeds \(String(feeds))")) }
+        if diapers > 0 { parts.append(String(localized: "Diapers \(String(diapers))")) }
+        return parts.joined(separator: ", ")
     }
 }

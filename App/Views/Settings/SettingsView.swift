@@ -1,3 +1,4 @@
+import AppIntents
 import BabyCore
 import CloudKit
 import CoreData
@@ -34,12 +35,14 @@ struct SettingsView: View {
     @State private var pendingImport: BackupFile?
     @State private var importResult: String?
     @State private var errorMessage: String?
+    @State private var notificationsDenied = false
 
     var body: some View {
         NavigationStack {
             Form {
                 babiesSection
                 familySection
+                guideSection
                 preferencesSection
                 remindersSection
                 alarmSection
@@ -48,7 +51,7 @@ struct SettingsView: View {
                 supportSection
                 aboutSection
             }
-            .navigationTitle("More")
+            .navigationTitle("Settings")
             .sheet(item: $editingBaby) { baby in
                 NavigationStack { BabyFormView(baby: baby) }
             }
@@ -77,6 +80,14 @@ struct SettingsView: View {
                 Button("OK") { importResult = nil }
             } message: {
                 Text(importResult ?? "")
+            }
+            .alert("Notifications Are Off", isPresented: $notificationsDenied) {
+                Button("Open Settings") {
+                    if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("Allow notifications for Tinytide in the Settings app to get reminders.")
             }
             .alert("Something Went Wrong", isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })) {
                 Button("OK") { errorMessage = nil }
@@ -120,12 +131,13 @@ struct SettingsView: View {
                     }
                     .buttonStyle(.plain)
                     .accessibilityAddTraits(selected ? .isSelected : [])
-                    Button {
+                    // A word, not a second icon next to the checkmark, so the two
+                    // can't be mistaken for each other.
+                    Button("Edit") {
                         editingBaby = baby
-                    } label: {
-                        Image(systemName: "pencil.circle").font(.title3)
                     }
                     .buttonStyle(.borderless)
+                    .font(.subheadline)
                     .accessibilityLabel(Text("Edit Baby"))
                 }
             }
@@ -145,8 +157,13 @@ struct SettingsView: View {
 
     private var familySection: some View {
         Section {
-            TextField("Your name (shown on entries)", text: $caregiverName)
-                .textContentType(.givenName)
+            LabeledContent {
+                TextField("Your Name", text: $caregiverName, prompt: Text("Shown on entries"))
+                    .textContentType(.givenName)
+                    .multilineTextAlignment(.trailing)
+            } label: {
+                Text("Your Name")
+            }
             ForEach(babies) { baby in
                 Button {
                     share(baby)
@@ -187,6 +204,11 @@ struct SettingsView: View {
                     if !enabled { LiveActivityManager.shared.endAll() }
                     store.refreshSideEffects()
                 }
+            NavigationLink {
+                AppearanceView()
+            } label: {
+                Text("Appearance")
+            }
         }
         .onChange(of: unitSystem) { _, _ in store.refreshSideEffects() }
         .onChange(of: nightStartHour) { _, _ in store.refreshSideEffects() }
@@ -213,9 +235,9 @@ struct SettingsView: View {
         } footer: {
             Text("Medication reminders can be set when logging a dose.")
         }
-        .onChange(of: feedReminder) { _, on in remindersChanged(on) }
-        .onChange(of: diaperReminder) { _, on in remindersChanged(on) }
-        .onChange(of: napReminder) { _, on in remindersChanged(on) }
+        .onChange(of: feedReminder) { _, on in remindersChanged(on) { feedReminder = false } }
+        .onChange(of: diaperReminder) { _, on in remindersChanged(on) { diaperReminder = false } }
+        .onChange(of: napReminder) { _, on in remindersChanged(on) { napReminder = false } }
         .onChange(of: feedHours) { _, _ in store.refreshSideEffects() }
         .onChange(of: diaperHours) { _, _ in store.refreshSideEffects() }
     }
@@ -313,19 +335,25 @@ struct SettingsView: View {
                     Image(systemName: "heart.fill").foregroundStyle(.pink)
                 }
             }
-            NavigationLink {
-                AppearanceView()
-            } label: {
-                Label {
-                    Text("Appearance")
-                } icon: {
-                    Image(systemName: "paintpalette.fill").foregroundStyle(.orange)
-                }
-            }
         } header: {
             Text("Support Tinytide")
         } footer: {
             Text("Every tracking feature is free. A subscription or tip helps keep Tinytide independent and ad-free.")
+        }
+    }
+
+    /// Near the top, not under the tip jar: these are features worth finding early.
+    private var guideSection: some View {
+        Section {
+            NavigationLink {
+                FeatureGuideView()
+            } label: {
+                Label {
+                    Text("Widgets, Siri & Shortcuts")
+                } icon: {
+                    Image(systemName: "square.grid.2x2.fill").foregroundStyle(.blue)
+                }
+            }
         }
     }
 
@@ -360,9 +388,15 @@ struct SettingsView: View {
         return date.formatted(date: .omitted, time: .shortened)
     }
 
-    private func remindersChanged(_ enabled: Bool) {
+    /// Asks for notification permission when a reminder is switched on. If it
+    /// is refused, the toggle goes back off (no reminder would ever arrive) and
+    /// the user is told where to allow it.
+    private func remindersChanged(_ enabled: Bool, turnOff: @escaping () -> Void) {
         Task {
-            if enabled { _ = await NotificationManager.requestAuthorization() }
+            if enabled, !(await NotificationManager.requestAuthorization()) {
+                turnOff()
+                notificationsDenied = true
+            }
             store.refreshSideEffects()
         }
     }
@@ -404,7 +438,7 @@ struct SettingsView: View {
     }
 }
 
-/// Version, disclaimers and support links, kept off the main More screen.
+/// Version, disclaimers and support links, kept off the main Settings screen.
 struct AboutView: View {
     var body: some View {
         Form {
@@ -426,5 +460,68 @@ struct AboutView: View {
         }
         .navigationTitle("About")
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+/// Where to find the features that live outside the app: Lock Screen and
+/// Dynamic Island timers, widgets, Siri and Shortcuts.
+struct FeatureGuideView: View {
+    var body: some View {
+        Form {
+            Section {
+                guideRow(
+                    String(localized: "Lock Screen & Dynamic Island"),
+                    systemImage: "lock.iphone",
+                    text: String(localized: "Running timers show on the Lock Screen and in the Dynamic Island. Stop them, pause, or switch nursing sides without unlocking.")
+                )
+                guideRow(
+                    String(localized: "Home Screen Widgets"),
+                    systemImage: "apps.iphone",
+                    text: String(localized: "Touch and hold an empty spot on the Home Screen, tap Edit, then Add Widget, and choose Tinytide. Medium and large widgets have one-tap buttons for sleep, nursing and diapers.")
+                )
+                guideRow(
+                    String(localized: "Lock Screen Widgets"),
+                    systemImage: "rectangle.on.rectangle",
+                    text: String(localized: "Touch and hold the Lock Screen, tap Customize, and add a Tinytide widget to see the time since the last feed at a glance.")
+                )
+            }
+            Section {
+                guideRow(
+                    String(localized: "Siri"),
+                    systemImage: "mic.fill",
+                    text: String(localized: "Say “Start sleep in Tinytide”, “Baby woke up in Tinytide” or “Log a diaper in Tinytide”.")
+                )
+                ShortcutsLink()
+                    .shortcutsLinkStyle(.automaticOutline)
+                    .frame(maxWidth: .infinity)
+                    .listRowBackground(Color.clear)
+            } footer: {
+                Text("All of Tinytide’s actions are also in the Shortcuts app, for automations and the Action button.")
+            }
+            Section {
+                guideRow(
+                    String(localized: "Touch and Hold"),
+                    systemImage: "hand.tap.fill",
+                    text: String(localized: "On Today, touch and hold a timer to pick a nursing side, add details before starting, or log one from earlier.")
+                )
+            }
+        }
+        .navigationTitle("Widgets, Siri & Shortcuts")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func guideRow(_ title: String, systemImage: String, text: String) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: systemImage)
+                .font(.title3)
+                .foregroundStyle(.tint)
+                .frame(width: 28)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title).font(.headline)
+                Text(text).font(.subheadline).foregroundStyle(.secondary)
+            }
+        }
+        .padding(.vertical, 4)
+        .accessibilityElement(children: .combine)
     }
 }

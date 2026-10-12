@@ -12,6 +12,7 @@ struct TinytideApp: App {
 
     init() {
         if DemoMode.isEnabled { DemoMode.start() }
+        TinytideTips.configure()
     }
 
     var body: some Scene {
