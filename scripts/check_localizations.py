@@ -1,5 +1,6 @@
-"""Checks that every user-facing string in the Swift sources is translated in
-every Localizable.strings file, with matching %@ placeholders.
+"""Checks that every user-facing string in the Swift sources is in
+Shared/Resources/Localizable.xcstrings and translated into every language the
+app ships (CFBundleLocalizations in project.yml), with matching placeholders.
 
 Usage: python3 scripts/check_localizations.py   (from the repository root)
 """
@@ -65,29 +66,65 @@ for f in files:
                 if pat.startswith(r'\.\w+:') and 'caseDisplayRepresentations' not in text: continue
                 keys.setdefault(to_key(raw), f"{f.relative_to(root)}:{line_no}")
 
-entry = re.compile(r'^"((?:[^"\\]|\\.)*)" = "((?:[^"\\]|\\.)*)";$')
-def unescape(s): return s.replace('\\"', '"').replace('\\n', '\n').replace('\\\\', '\\')
-def count(s): return len(re.findall(r'%(?:\d+\$)?@', s))
+keys = {}
+for f in files:
+    text = f.read_text()
+    for line_no, line in enumerate(text.splitlines(), 1):
+        if 'verbatim:' in line:
+            continue
+        for pat in patterns:
+            for m in re.finditer(pat, line):
+                raw = m.group(1)
+                if not raw.strip(): continue
+                if pat.startswith(r'\.\w+:') and 'caseDisplayRepresentations' not in text: continue
+                keys.setdefault(to_key(raw), f"{f.relative_to(root)}:{line_no}")
+
+import json
+
+SPEC = re.compile(r'%(?:\d+\$)?(?:@|lld|ld|d|f|lf)|%#@\w+@')
+def normalize(s):
+    """Treat %@, %lld, positional and substitution placeholders alike."""
+    return SPEC.sub('%@', s)
+def count(s): return len(SPEC.findall(s))
+
+languages = re.search(r'CFBundleLocalizations: \[(.*?)\]', (root / 'project.yml').read_text()).group(1)
+languages = [l.strip() for l in languages.split(',')]
+catalog_path = root / "Shared/Resources/Localizable.xcstrings"
+catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+entries = catalog["strings"]
+by_normalized = {normalize(k): k for k in entries}
+
+def values(loc):
+    """All user-visible values in one localization (plain, plural variants, substitutions)."""
+    out = []
+    if "stringUnit" in loc: out.append(loc["stringUnit"].get("value", ""))
+    for variants in loc.get("variations", {}).values():
+        for v in variants.values(): out.extend(values(v))
+    for sub in loc.get("substitutions", {}).values():
+        for variants in sub.get("variations", {}).values():
+            for v in variants.values(): out.extend(values(v))
+    return out
 
 problems = []
-tables = sorted((root / "Shared/Resources").glob("*.lproj/Localizable.strings"))
-for table in tables:
-    lang = table.parent.name.removesuffix(".lproj")
-    found = {}
-    for i, line in enumerate(table.read_text(encoding="utf-8").splitlines(), 1):
-        if not line or line.startswith("/*"): continue
-        m = entry.match(line)
-        if not m:
-            problems.append(f"{table}:{i}: malformed line"); continue
-        found[unescape(m.group(1))] = unescape(m.group(2))
-    for key, where in sorted(keys.items()):
-        if key not in found:
-            problems.append(f"{lang}: missing translation for {key!r} (used at {where})")
-        elif count(key) != count(found[key]):
-            problems.append(f"{lang}: placeholder count differs for {key!r}")
+for key, where in sorted(keys.items()):
+    catalog_key = by_normalized.get(normalize(key))
+    if catalog_key is None:
+        problems.append(f"missing from Localizable.xcstrings: {key!r} (used at {where})")
+        continue
+    locs = entries[catalog_key].get("localizations", {})
+    for lang in languages:
+        loc = locs.get(lang)
+        if lang == "en" and loc is None:
+            continue  # the key itself is the English text
+        if loc is None or not any(v.strip() for v in values(loc)):
+            problems.append(f"{lang}: missing translation for {catalog_key!r}")
+            continue
+        main = loc["stringUnit"]["value"] if "stringUnit" in loc else None
+        if main is not None and count(main) != count(catalog_key):
+            problems.append(f"{lang}: placeholder count differs for {catalog_key!r}")
 
 if problems:
     print("\n".join(problems))
-    print(f"\n{len(problems)} localization problem(s). Add the missing strings to every Shared/Resources/*.lproj/Localizable.strings.")
+    print(f"\n{len(problems)} localization problem(s). Open Shared/Resources/Localizable.xcstrings in Xcode to fill them in.")
     sys.exit(1)
-print(f"{len(keys)} strings translated in {len(tables)} languages: {', '.join(t.parent.name.removesuffix('.lproj') for t in tables)}")
+print(f"{len(keys)} strings translated in {len(languages)} languages: {', '.join(languages)}")

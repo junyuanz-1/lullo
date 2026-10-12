@@ -68,7 +68,7 @@ struct SettingsView: View {
                 Button("Cancel", role: .cancel) { pendingImport = nil }
             } message: {
                 if let file = pendingImport {
-                    Text("The file contains \(String(file.babies.count)) babies and \(String(file.events.count)) entries. Entries you already have are kept; newer copies replace older ones.")
+                    Text("The file contains \(file.babies.count) babies and \(file.events.count) entries. Entries you already have are kept; newer copies replace older ones.")
                 }
             }
             .alert("Import finished", isPresented: Binding(get: { importResult != nil }, set: { if !$0 { importResult = nil } })) {
@@ -340,7 +340,7 @@ struct SettingsView: View {
 
     private func runImport(_ file: BackupFile) {
         let summary = BackupService.importBackup(file, into: store)
-        importResult = String(localized: "Added \(String(summary.babiesAdded)) babies and \(String(summary.eventsAdded)) entries, updated \(String(summary.eventsUpdated + summary.babiesUpdated)), skipped \(String(summary.eventsSkipped)).")
+        importResult = String(localized: "Added \(summary.babiesAdded) babies and \(summary.eventsAdded) entries, updated \(summary.eventsUpdated + summary.babiesUpdated), skipped \(summary.eventsSkipped).")
     }
 
     private func share(_ baby: Baby) {

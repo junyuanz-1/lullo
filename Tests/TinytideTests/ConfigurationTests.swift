@@ -41,6 +41,17 @@ final class ConfigurationTests: XCTestCase {
         }
     }
 
+    /// The String Catalog's plural rules pick singular or plural wording by count.
+    func testPluralRules() {
+        let en = Locale(identifier: "en")
+        XCTAssertEqual(String(localized: "You've supported Tinytide \(1) times 💖", locale: en), "You've supported Tinytide once 💖")
+        XCTAssertEqual(String(localized: "You've supported Tinytide \(3) times 💖", locale: en), "You've supported Tinytide 3 times 💖")
+        XCTAssertEqual(
+            String(localized: "Added \(1) babies and \(2) entries, updated \(0), skipped \(5).", locale: en),
+            "Added 1 baby and 2 entries, updated 0, skipped 5."
+        )
+    }
+
     private func placeholderCount(_ string: String) -> Int {
         string.matches(of: #/%(\d+\$)?@/#).count
     }

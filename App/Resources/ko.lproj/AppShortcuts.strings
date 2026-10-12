@@ -1,9 +1,0 @@
-/* Siri phrases. Keys must match the English phrases in App/Intents/IntentActions.swift. */
-"Start sleep in ${applicationName}" = "${applicationName}에서 수면 시작";
-"Baby is sleeping in ${applicationName}" = "${applicationName}에서 아기가 잠들었어요";
-"Baby woke up in ${applicationName}" = "${applicationName}에서 아기가 깼어요";
-"Stop sleep in ${applicationName}" = "${applicationName}에서 수면 종료";
-"Start nursing in ${applicationName}" = "${applicationName}에서 수유 시작";
-"Start breastfeeding in ${applicationName}" = "${applicationName}에서 모유 수유 시작";
-"Log a diaper in ${applicationName}" = "${applicationName}에서 기저귀 기록";
-"Log a ${type} diaper in ${applicationName}" = "${applicationName}에서 ${type} 기저귀 기록";

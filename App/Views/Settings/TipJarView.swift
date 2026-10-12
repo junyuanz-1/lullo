@@ -165,7 +165,7 @@ struct TipThanksView: View {
                 .foregroundStyle(.secondary)
                 .padding(.horizontal)
             if totalTips > 1 {
-                Label(String(localized: "You've supported Tinytide \(String(totalTips)) times 💖"), systemImage: "sparkles")
+                Label(String(localized: "You've supported Tinytide \(totalTips) times 💖"), systemImage: "sparkles")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.pink)
             }

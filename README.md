@@ -195,15 +195,22 @@ cd Packages/BabyCore && swift test     # 核心逻辑，macOS / Linux 都能跑
 
 ### 本地化
 
-界面文字以英文作为 key，各语言的翻译在 `Shared/Resources/<语言>.lproj/Localizable.strings`；App 名称在 `App/Resources/<语言>.lproj/InfoPlist.strings`，Siri 短语在 `AppShortcuts.strings`；订阅和打赏商品的本地化名称在 `Config/Tinytide.storekit`（App Store Connect 里也要填写同样的名称）。
+所有界面文字都在 Xcode 的 **String Catalog** 里，一个文件包含全部 9 种语言：
 
-新增或修改界面文字后运行：
+| 文件 | 内容 |
+|---|---|
+| `Shared/Resources/Localizable.xcstrings` | App 和小组件的界面文字（App 与小组件共用） |
+| `App/Resources/InfoPlist.xcstrings` | 桌面上显示的 App 名称 |
+| `App/Resources/AppShortcuts.xcstrings` | Siri / 快捷指令短语 |
+| `Config/Tinytide.storekit` | 订阅和打赏商品的本地化名称（App Store Connect 里也要填写同样的名称） |
+
+在 Xcode 里打开 `.xcstrings` 可以看到每种语言的翻译进度；每次编译时，Xcode 会自动把代码里新增的文字加进去。带数量的文字（比如“1 baby / 2 babies”）用的是 String Catalog 的单复数规则。
+
+新增或修改界面文字后，可以运行下面的命令检查有没有漏翻的语言（CI 也会运行）：
 
 ```bash
 python3 scripts/check_localizations.py
 ```
-
-它会列出所有缺少翻译或 `%@` 占位符数量不一致的条目。CI 也会运行这个检查。
 
 > 翻译由 AI 完成，医疗相关的提示（发烧、过敏、便便颜色）建议上架前请母语人士再检查一遍。
 
