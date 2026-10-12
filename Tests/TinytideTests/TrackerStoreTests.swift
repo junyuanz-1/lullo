@@ -35,6 +35,24 @@ final class TrackerStoreTests: XCTestCase {
         XCTAssertTrue(store.runningTimers(for: baby).isEmpty)
     }
 
+    func testFussyDetailsAreStoredAndNeverRunAsATimer() throws {
+        let baby = makeBaby()
+        let babyID = try XCTUnwrap(baby.id)
+        var record = EventRecord(babyID: babyID, kind: .fussy, startDate: Date(),
+                                 fussIntensity: .moderate, fussCauses: [.tired, .gas], soothingMethods: [.rocking])
+        let event = try XCTUnwrap(store.save(record))
+        XCTAssertEqual(event.fussCauses, "gas,tired", "Stored in declaration order")
+        XCTAssertEqual(event.record.fussCauses, [.gas, .tired])
+        XCTAssertEqual(event.record.soothingMethods, [.rocking])
+        XCTAssertEqual(event.record.fussIntensity, .moderate)
+        XCTAssertTrue(store.runningTimers(for: baby).isEmpty, "A fussy moment without an end is not a running timer")
+
+        record = event.record
+        record.fussCauses = []
+        store.save(record)
+        XCTAssertNil(event.fussCauses, "Clearing every choice clears the field")
+    }
+
     func testNursingUsesSuggestedSideAndSwitches() throws {
         let baby = makeBaby()
         let session = try XCTUnwrap(store.startNursing(for: baby, side: nil))

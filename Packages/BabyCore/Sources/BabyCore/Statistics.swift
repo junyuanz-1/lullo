@@ -85,6 +85,10 @@ public struct DailySummary: Equatable, Sendable, Identifiable {
 
     public var activityDuration: [ActivityType: TimeInterval] = [:]
 
+    public var fussyCount = 0
+    /// Only spells logged with an end time count towards this.
+    public var fussyDuration: TimeInterval = 0
+
     public init(day: Date) {
         self.day = day
     }
@@ -176,6 +180,10 @@ public enum Statistics {
                 guard let i = index[dayOfStart] else { continue }
                 let type = event.activityType ?? .other
                 summaries[i].activityDuration[type, default: 0] += event.duration(at: now)
+            case .fussy:
+                guard let i = index[dayOfStart] else { continue }
+                summaries[i].fussyCount += 1
+                summaries[i].fussyDuration += event.duration(at: now)
             case .growth, .medication, .temperature, .symptom, .vaccine, .note:
                 continue
             }
@@ -183,7 +191,8 @@ public enum Statistics {
         return summaries
     }
 
-    /// Per-day rows for the 24 h schedule chart (sleep and feeding blocks, diaper marks).
+    /// Per-day rows for the 24 h schedule chart (sleep, feeding and fussy blocks;
+    /// diaper and fussy marks).
     public static func schedules(
         events: [EventRecord],
         from: Date,
@@ -203,8 +212,12 @@ public enum Statistics {
             // A bottle timed for at least a minute is drawn as a block; a bottle
             // logged without a duration stays a tick.
             let timedBottle = event.kind == .bottle && event.duration(at: now) >= 60
+            // Likewise a fussy spell with an end time is a block, a moment a tick.
+            let timedFussy = event.kind == .fussy && event.duration(at: now) >= 60
             switch event.kind {
-            case .sleep, .nursing, .pumping, .bottle where timedBottle:
+            case .sleep, .nursing, .pumping,
+                 .bottle where timedBottle,
+                 .fussy where timedFussy:
                 // Nursing is drawn from its start for its summed duration; good enough for a schedule view.
                 let end = event.kind == .nursing
                     ? event.startDate.addingTimeInterval(max(event.nursingTotal(at: now), 60))
@@ -216,7 +229,7 @@ public enum Statistics {
                     let e = min(rows[i].dayLength, end.timeIntervalSince(dayStart))
                     if e > s { rows[i].blocks.append(.init(start: s, end: e, kind: event.kind)) }
                 }
-            case .bottle, .solids, .diaper, .medication:
+            case .bottle, .solids, .diaper, .medication, .fussy:
                 let day = calendar.startOfDay(for: event.startDate)
                 guard let i = index[day] else { continue }
                 rows[i].marks.append(.init(offset: event.startDate.timeIntervalSince(day), kind: event.kind))

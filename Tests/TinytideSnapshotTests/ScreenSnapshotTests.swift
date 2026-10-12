@@ -51,7 +51,7 @@ final class ScreenSnapshotTests: XCTestCase {
     }
 
     func testTrends() {
-        verify(TrendsView(baby: baby), height: 2300)
+        verify(TrendsView(baby: baby), height: 2900)
     }
 
     func testGrowth() {
@@ -95,6 +95,10 @@ final class ScreenSnapshotTests: XCTestCase {
 
     func testNewActivity() {
         verify(editor(.activity))
+    }
+
+    func testNewFussy() {
+        verify(editor(.fussy), height: 1100)
     }
 
     // MARK: Helpers

@@ -25,8 +25,8 @@ struct EditorSheet: View {
         NavigationStack {
             EventEditorView(baby: baby, kind: route.kind, existing: route.existing, mode: route.mode, choices: route.choices)
         }
-        // Short forms (diaper, note) open half-height so the Save button is close
-        // at hand; drag up for more room.
+        // Short forms (diaper, note, fussy) open half-height so the Save button
+        // is close at hand; drag up for more room.
         .presentationDetents(route.kind.prefersCompactSheet ? [.medium, .large] : [.large])
     }
 }
@@ -486,6 +486,7 @@ struct QuickActionsGrid: View {
                 entryTile(.diaper)
                 entryTile(.solids)
                 entryTile(.activity)
+                entryTile(.fussy)
                 entryTile(.growth)
                 healthTile
                 entryTile(.note)
@@ -970,8 +971,8 @@ struct EventRow: View {
 
     private func timeText(_ r: EventRecord) -> String {
         // A range only when there was one (bottles logged without a duration
-        // end when they start).
-        if r.kind.hasDuration, let end = r.endDate, r.kind != .nursing, end.timeIntervalSince(r.startDate) >= 60 {
+        // end when they start; a fussy spell may have no end at all).
+        if r.hasTimeRange, let end = r.endDate, r.kind != .nursing, end.timeIntervalSince(r.startDate) >= 60 {
             return "\(Fmt.time(r.startDate)) – \(Fmt.time(end))"
         }
         return Fmt.time(r.startDate)

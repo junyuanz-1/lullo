@@ -80,6 +80,15 @@ enum IntentActions {
         return saved != nil
     }
 
+    /// Logs a fussy spell starting now. Returns the baby's name, or nil when
+    /// there is no baby.
+    static func logFussy(babyID: UUID?) -> String? {
+        guard let baby = baby(babyID), let id = baby.id,
+              store.save(EventRecord(babyID: id, kind: .fussy, startDate: Date())) != nil else { return nil }
+        store.refreshSideEffects()
+        return baby.displayName
+    }
+
     static func stopTimer(eventID: UUID) {
         guard let event = runningEvent(eventID) else { return }
         store.stopTimer(event)
@@ -155,6 +164,15 @@ struct TrackerShortcuts: AppShortcutsProvider {
             ],
             shortTitle: "Log Diaper",
             systemImageName: "leaf.fill"
+        )
+        AppShortcut(
+            intent: LogFussyIntent(),
+            phrases: [
+                "Baby is fussy in \(.applicationName)",
+                "Baby is crying in \(.applicationName)",
+            ],
+            shortTitle: "Log Fussy",
+            systemImageName: "cloud.rain.fill"
         )
     }
 }

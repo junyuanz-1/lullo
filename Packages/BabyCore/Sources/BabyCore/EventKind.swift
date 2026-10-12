@@ -14,6 +14,7 @@ public enum EventKind: String, Codable, CaseIterable, Sendable, Identifiable, Ha
     case symptom
     case vaccine
     case activity
+    case fussy
     case note
 
     public var id: String { rawValue }
@@ -27,6 +28,7 @@ public enum EventKind: String, Codable, CaseIterable, Sendable, Identifiable, Ha
         case .growth: return .growth
         case .medication, .temperature, .symptom, .vaccine: return .health
         case .activity: return .activity
+        case .fussy: return .fussy
         case .note: return .note
         }
     }
@@ -42,6 +44,10 @@ public enum EventKind: String, Codable, CaseIterable, Sendable, Identifiable, Ha
     /// Kinds whose entries span a time range (start + end).
     public var hasDuration: Bool { supportsTimer }
 
+    /// Point-in-time kinds that may also be given an end time. Without one the
+    /// entry is a moment, not a running timer.
+    public var allowsOptionalEnd: Bool { self == .fussy }
+
     public var isFeeding: Bool { category == .feeding }
 }
 
@@ -53,6 +59,7 @@ public enum EventCategory: String, Codable, CaseIterable, Sendable, Identifiable
     case growth
     case health
     case activity
+    case fussy
     case note
 
     public var id: String { rawValue }
@@ -141,6 +148,43 @@ public enum ActivityType: String, Codable, CaseIterable, Sendable {
     case brushTeeth
     case massage
     case potty
+    case other
+}
+
+/// How hard a fussy spell was.
+public enum FussIntensity: String, Codable, CaseIterable, Sendable {
+    case mild
+    case moderate
+    case intense
+}
+
+/// What seemed to set off a fussy spell. Several can apply.
+public enum FussCause: String, Codable, CaseIterable, Sendable {
+    case hungry
+    case tired
+    case gas
+    case diaper
+    case colic
+    case teething
+    case unwell
+    case overstimulated
+    case wantsHolding
+    case unknown
+}
+
+/// What was tried to settle a fussy spell. Several can apply.
+public enum SoothingMethod: String, Codable, CaseIterable, Sendable {
+    case holding
+    case rocking
+    case feeding
+    case pacifier
+    case whiteNoise
+    case swaddling
+    case burping
+    case diaperChange
+    case bath
+    case walk
+    case singing
     case other
 }
 

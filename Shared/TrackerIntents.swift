@@ -200,6 +200,31 @@ struct LogDiaperIntent: LiveActivityIntent {
     }
 }
 
+struct LogFussyIntent: LiveActivityIntent {
+    static var title: LocalizedStringResource = "Log Fussy"
+    static var description = IntentDescription("Logs that the baby is fussy now. Add the details in the app later.")
+
+    @Parameter(title: "Baby ID")
+    var babyID: String?
+
+    init() {}
+    init(babyID: UUID?) { self.babyID = babyID?.uuidString }
+
+    func perform() async throws -> some IntentResult & ProvidesDialog {
+        #if WIDGET_EXTENSION
+        return .result(dialog: "")
+        #else
+        if let readOnly = await IntentActions.readOnlyMessage(babyID: babyID.flatMap(UUID.init(uuidString:))) {
+            return .result(dialog: "\(readOnly)")
+        }
+        let name = await IntentActions.logFussy(babyID: babyID.flatMap(UUID.init(uuidString:)))
+        let message = name.map { String(localized: "Logged a fussy spell for \($0).") }
+            ?? String(localized: "Add a baby in the app first.")
+        return .result(dialog: "\(message)")
+        #endif
+    }
+}
+
 struct StopTimerIntent: LiveActivityIntent {
     static var title: LocalizedStringResource = "Stop Timer"
     static var isDiscoverable = false

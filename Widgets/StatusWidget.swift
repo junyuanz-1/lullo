@@ -180,9 +180,12 @@ private func nursingTimerStart(_ timer: BabySnapshot.RunningTimer) -> Date? {
 private struct QuickButtons: View {
     let baby: BabySnapshot
     var compact = false
+    /// Adds a Fussy button and puts all five in one row; only the large widget
+    /// is wide enough (and one row keeps it from growing taller).
+    var showsFussy = false
 
     var body: some View {
-        let columns = [GridItem(.flexible(), spacing: 6), GridItem(.flexible(), spacing: 6)]
+        let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: showsFussy ? 5 : 2)
         LazyVGrid(columns: columns, spacing: 6) {
             if let sleep = baby.runningSleep {
                 button(intent: StopTimerIntent(eventID: sleep.id), title: String(localized: "Wake"), image: "sun.max.fill", color: .indigo)
@@ -197,6 +200,9 @@ private struct QuickButtons: View {
             }
             button(intent: LogDiaperIntent(babyID: baby.id, type: .wet), title: DiaperType.wet.title, image: DiaperType.wet.systemImage, color: .teal)
             button(intent: LogDiaperIntent(babyID: baby.id, type: .dirty), title: DiaperType.dirty.title, image: DiaperType.dirty.systemImage, color: .brown)
+            if showsFussy {
+                button(intent: LogFussyIntent(babyID: baby.id), title: EventKind.fussy.title, image: EventKind.fussy.systemImage, color: EventKind.fussy.color)
+            }
         }
     }
 
@@ -278,7 +284,7 @@ private struct LargeStatusView: View {
                 total(String(localized: "Dirty"), "\(baby.today.dirtyDiapers)")
             }
             Spacer(minLength: 0)
-            QuickButtons(baby: baby)
+            QuickButtons(baby: baby, showsFussy: true)
         }
     }
 

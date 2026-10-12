@@ -60,6 +60,10 @@ enum ManagedModel {
             attribute("symptoms", .stringAttributeType),
             attribute("vaccineName", .stringAttributeType),
             attribute("activityType", .stringAttributeType),
+            attribute("fussIntensity", .stringAttributeType),
+            // Multiple choices as comma-separated raw values (see EventRecord.joinedRawValues).
+            attribute("fussCauses", .stringAttributeType),
+            attribute("soothingMethods", .stringAttributeType),
             attribute("photoData", .binaryDataAttributeType, externalStorage: true),
         ]
 

@@ -306,7 +306,10 @@ struct EventEditorView: View {
                     ChipPicker(title: String(localized: "Ended On"), options: BreastSide.allCases, selection: $draft.lastSide, tint: .pink, label: \.title)
                 }
             } else {
-                DatePicker(kind.hasDuration ? String(localized: "Start") : String(localized: "Time"), selection: $draft.startDate)
+                DatePicker(draft.hasTimeRange ? String(localized: "Start") : String(localized: "Time"), selection: $draft.startDate)
+            }
+            if kind.allowsOptionalEnd {
+                optionalEndRows
             }
             if kind != .nursing && kind.hasDuration {
                 if draft.endDate == nil && !isNew {
@@ -327,6 +330,33 @@ struct EventEditorView: View {
                     LabeledContent("Duration", value: Fmt.duration(draft.duration()))
                 }
             }
+        }
+    }
+
+    /// For a fussy spell the end is optional: without it the entry is a moment.
+    @ViewBuilder
+    private var optionalEndRows: some View {
+        Toggle("Add End Time", isOn: Binding(
+            get: { draft.endDate != nil },
+            set: { on in
+                guard on else { draft.endDate = nil; return }
+                let now = AppClock.now
+                if now.timeIntervalSince(draft.startDate) < 60 {
+                    // Started "now" and already over: most likely it just ended,
+                    // so offer a range ending now rather than one in the future.
+                    draft.startDate = now.addingTimeInterval(-15 * 60)
+                    draft.endDate = now
+                } else {
+                    draft.endDate = min(now, draft.startDate.addingTimeInterval(15 * 60))
+                }
+            }
+        ))
+        if draft.endDate != nil {
+            DatePicker("End", selection: Binding(
+                get: { draft.endDate ?? draft.startDate },
+                set: { draft.endDate = $0 }
+            ), in: draft.startDate...)
+            LabeledContent("Duration", value: Fmt.duration(draft.duration()))
         }
     }
 
@@ -438,6 +468,12 @@ struct EventEditorView: View {
         case .activity:
             if mode == .manual || !isNew {
                 Section("Activity") { activityTypePicker }
+            }
+        case .fussy:
+            Section("Details") {
+                ChipPicker(title: String(localized: "How Fussy"), options: FussIntensity.allCases, selection: $draft.fussIntensity, tint: EventKind.fussy.color, label: \.title)
+                MultiChipPicker(title: String(localized: "Possible Cause"), options: FussCause.allCases, selection: $draft.fussCauses, tint: EventKind.fussy.color, label: \.title)
+                MultiChipPicker(title: String(localized: "Soothing"), options: SoothingMethod.allCases, selection: $draft.soothingMethods, tint: EventKind.fussy.color, label: \.title)
             }
         case .note:
             EmptyView()
@@ -562,7 +598,7 @@ struct EventEditorView: View {
         // A new entry is "ongoing" only because it has no end yet; it still needs minutes.
         case .nursing: return draft.leftDuration + draft.rightDuration > 0 || (!isNew && draft.isOngoing)
         default:
-            if kind.hasDuration, let end = draft.endDate { return end >= draft.startDate }
+            if draft.hasTimeRange, let end = draft.endDate { return end >= draft.startDate }
             return true
         }
     }
