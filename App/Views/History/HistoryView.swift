@@ -145,8 +145,12 @@ private struct HistoryList: View {
                             if canEdit {
                                 Button(role: .destructive) {
                                     let record = event.record
+                                    let alarm = TimerAlarms.shared.duration(for: record.id)
                                     store.delete(event)
-                                    toast = UndoToast(message: String(localized: "Entry deleted")) { store.save(record) }
+                                    toast = UndoToast(message: String(localized: "Entry deleted")) {
+                                        store.save(record)
+                                        if let alarm, record.isOngoing { TimerAlarms.shared.setDuration(alarm, for: record.id) }
+                                    }
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }

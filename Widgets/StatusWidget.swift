@@ -40,7 +40,9 @@ struct StatusProvider: AppIntentTimelineProvider {
     private static func today(_ baby: BabySnapshot, madeAt: Date, shownAt date: Date) -> BabySnapshot {
         guard !Calendar.current.isDate(madeAt, inSameDayAs: date), date > madeAt else { return baby }
         var baby = baby
-        baby.today.sleep = 0
+        // A sleep still running counts from midnight.
+        let midnight = Calendar.current.startOfDay(for: date)
+        baby.today.sleep = baby.runningSleep.map { date.timeIntervalSince(max(midnight, $0.startDate)) } ?? 0
         baby.today.feeds = 0
         baby.today.bottleML = 0
         baby.today.wetDiapers = 0

@@ -640,10 +640,14 @@ struct EventEditorView: View {
             // ended on, and changed minutes or start move the end with them.
             if record.leftDuration > 0 && record.rightDuration == 0 { record.lastSide = .left }
             if record.rightDuration > 0 && record.leftDuration == 0 { record.lastSide = .right }
-            let timingChanged = baseline.map {
-                $0.startDate != record.startDate || $0.leftDuration != record.leftDuration || $0.rightDuration != record.rightDuration
-            } ?? true
-            if timingChanged { record.endDate = record.startDate.addingTimeInterval(total) }
+            if let base = baseline, base.leftDuration == record.leftDuration, base.rightDuration == record.rightDuration {
+                // Only the start moved: the whole feed moves with it, pauses included.
+                if record.startDate != base.startDate, let end = base.endDate {
+                    record.endDate = end.addingTimeInterval(record.startDate.timeIntervalSince(base.startDate))
+                }
+            } else {
+                record.endDate = record.startDate.addingTimeInterval(total)
+            }
         } else if isNew && kind.hasDuration && kind != .nursing && record.endDate == nil {
             record.endDate = record.startDate
         }

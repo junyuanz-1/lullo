@@ -81,7 +81,10 @@ public enum NapPredictor {
         var result: [TimeInterval] = []
         for (previous, next) in zip(sorted, sorted.dropFirst()) {
             guard let end = previous.endDate, end >= since else { continue }
-            guard !classifier.isNight(next, now: now, calendar: calendar) else { continue }
+            // By start hour, not overlap: a sleep resumed after a night waking
+            // (04:40–08:00) is mostly outside the night window, but the gap before
+            // it is a night waking, not a daytime wake window.
+            guard !classifier.isNight(next.startDate, calendar: calendar) else { continue }
             let gap = next.startDate.timeIntervalSince(end)
             if gap >= 10 * 60 && gap <= 8 * 3600 { result.append(gap) }
         }
@@ -114,7 +117,7 @@ public enum NapPredictor {
         // Later wake windows in the day tend to be longer.
         let dayStart = calendar.startOfDay(for: awakeSince)
         let napsToday = sorted.filter {
-            $0.startDate >= dayStart && $0.startDate <= awakeSince && !classifier.isNight($0, now: now, calendar: calendar)
+            $0.startDate >= dayStart && $0.startDate <= awakeSince && !classifier.isNight($0.startDate, calendar: calendar)
         }.count
         let t = min(0.5, 0.2 * Double(napsToday))
         let earliest = awakeSince.addingTimeInterval(window.min + window.width * t)
