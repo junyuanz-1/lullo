@@ -34,4 +34,24 @@ platform :ios do
       run_precheck_before_submit: false
     )
   end
+
+  desc "Create or update the tips and Supporter subscription in App Store Connect"
+  desc "from Config/Tinytide.storekit and fastlane/in_app_purchases.yml."
+  desc "Try `dry_run:true` first: it shows what would change without changing anything"
+  lane :upload_iap do |options|
+    require_relative "lib/app_store_iap"
+    sh("python3", "../scripts/check_store_metadata.py")
+    root = File.expand_path("..", __dir__)
+    begin
+      ok = AppStoreIAP.run(
+        root: root,
+        api_key_path: File.expand_path(ENV.fetch("ASC_API_KEY_PATH", "fastlane/asc_api_key.json"), root),
+        bundle_id: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
+        dry_run: [true, "true", "yes", "1"].include?(options[:dry_run])
+      )
+    rescue AppStoreIAP::Error => e
+      UI.user_error!(e.message)
+    end
+    UI.user_error!("Some in-app purchases weren't updated; see the messages above") unless ok
+  end
 end

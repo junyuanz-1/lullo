@@ -33,7 +33,7 @@
           "locale": "ko"
         },
         {
-          "description": "Un pequeño agradecimiento por las tomas de las 3 de la madrugada.",
+          "description": "Gracias por las tomas de las 3 de la mañana.",
           "displayName": "Un café",
           "locale": "es_ES"
         },
@@ -43,12 +43,12 @@
           "locale": "pt_BR"
         },
         {
-          "description": "Un petit merci pour les réveils de 3 h du matin.",
+          "description": "Un petit merci pour les tétées de 3 h.",
           "displayName": "Un café",
           "locale": "fr"
         },
         {
-          "description": "Ein kleines Dankeschön für die Mahlzeiten um 3 Uhr nachts.",
+          "description": "Ein Dankeschön für die Nächte um 3 Uhr.",
           "displayName": "Eine Tasse Kaffee",
           "locale": "de"
         }
@@ -143,17 +143,17 @@
           "locale": "ko"
         },
         {
-          "description": "Financia nuevas funciones para todas las familias.",
+          "description": "Financia nuevas funciones para las familias.",
           "displayName": "Una buena comida",
           "locale": "es_ES"
         },
         {
-          "description": "Financia novos recursos para todas as famílias.",
+          "description": "Financia novos recursos para as famílias.",
           "displayName": "Um bom almoço",
           "locale": "pt_BR"
         },
         {
-          "description": "Finance de nouvelles fonctions pour toutes les familles.",
+          "description": "Finance de nouvelles fonctions.",
           "displayName": "Un bon déjeuner",
           "locale": "fr"
         },
@@ -236,7 +236,7 @@
           "introductoryOffer": null,
           "localizations": [
             {
-              "description": "Support Tinytide and unlock app icons and themes.",
+              "description": "Support Tinytide; unlock icons and themes.",
               "displayName": "Supporter (Monthly)",
               "locale": "en_US"
             },
@@ -261,22 +261,22 @@
               "locale": "ko"
             },
             {
-              "description": "Apoya a Tinytide y desbloquea iconos y temas para la app.",
+              "description": "Apoya a Tinytide; desbloquea iconos y temas.",
               "displayName": "Tinytide Supporter (mensual)",
               "locale": "es_ES"
             },
             {
-              "description": "Apoie o Tinytide e desbloqueie ícones do app e temas.",
+              "description": "Apoie o Tinytide e ganhe ícones e temas.",
               "displayName": "Apoiador Tinytide (Mensal)",
               "locale": "pt_BR"
             },
             {
-              "description": "Soutenez Tinytide et débloquez icônes et thèmes.",
+              "description": "Soutenez Tinytide : icônes et thèmes.",
               "displayName": "Soutien Tinytide (mensuel)",
               "locale": "fr"
             },
             {
-              "description": "Unterstütze Tinytide und schalte App-Symbole und Designfarben frei.",
+              "description": "Unterstütze Tinytide: Symbole und Designs.",
               "displayName": "Unterstützer (monatlich)",
               "locale": "de"
             }
@@ -322,7 +322,7 @@
               "locale": "ko"
             },
             {
-              "description": "Apoya a Tinytide durante un año y ahorra un 16%.",
+              "description": "Apoya a Tinytide un año y ahorra un 16%.",
               "displayName": "Tinytide Supporter (anual)",
               "locale": "es_ES"
             },
@@ -332,12 +332,12 @@
               "locale": "pt_BR"
             },
             {
-              "description": "Soutenez Tinytide pendant un an et économisez 16 %.",
+              "description": "Soutenez Tinytide un an : 16 % d’économie.",
               "displayName": "Soutien Tinytide (annuel)",
               "locale": "fr"
             },
             {
-              "description": "Unterstütze Tinytide ein Jahr lang und spare 16 %.",
+              "description": "Ein Jahr Tinytide unterstützen, 16 % sparen.",
               "displayName": "Unterstützer (jährlich)",
               "locale": "de"
             }

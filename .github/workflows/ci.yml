@@ -25,6 +25,12 @@ jobs:
         run: python3 scripts/check_localizations.py
       - name: Check App Store metadata
         run: python3 scripts/check_store_metadata.py
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+      # Also checks that Config/Tinytide.storekit fits App Store Connect's limits.
+      - name: Test the in-app purchase upload
+        run: ruby fastlane/test/app_store_iap_test.rb
 
   ios:
     name: Build and test iOS app
