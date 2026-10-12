@@ -1,7 +1,7 @@
 Thank you for reviewing Tinytide, a baby tracker for parents and caregivers.
 
 NO ACCOUNT OR LOGIN
-There is no sign-up, server or demo account. Data is stored on the device and in the user's own private iCloud database (CloudKit). On first launch, tap "Add Baby", enter any name and birthday, and every feature is available.
+There is no sign-up, server or demo account. Data is stored on the device and in the user's own private iCloud database (CloudKit). On first launch, tap "Add Your Baby", enter any name and birthday, and every feature is available.
 
 HOW TO TRY THE MAIN FEATURES
 - Today tab: tap Sleep, Nursing or Pumping (tiles marked with a play badge) to start a timer, and tap the same tile again to stop it. Nursing starts on the suggested side; touch and hold a timer tile to pick a side or "Start with Details". A Live Activity appears on the Lock Screen and in the Dynamic Island, where the timer can also be stopped. An Undo button appears after each one-tap action.
@@ -11,16 +11,16 @@ HOW TO TRY THE MAIN FEATURES
 - Siri: "Baby is sleeping in Tinytide", "Baby woke up in Tinytide".
 
 FAMILY SHARING (needs two iCloud accounts)
-More > Family & Caregivers > Share <baby's name> sends an iCloud share invitation (CKShare / UICloudSharingController). The invited person opens the link on an iPhone with Tinytide installed and sees the same baby, synced in real time. The owner can make participants view-only or able to edit, and stop sharing at any time. Without iCloud the app works fully on one device.
+Settings tab > Family & Caregivers > Share <baby's name> sends an iCloud share invitation (CKShare / UICloudSharingController). The invited person opens the link on an iPhone with Tinytide installed and sees the same baby, synced in real time. The owner can make participants view-only or able to edit, and stop sharing at any time. Without iCloud the app works fully on one device.
 
 IN-APP PURCHASES
-- Tinytide Supporter (tinytide.supporter.monthly, tinytide.supporter.yearly): an optional auto-renewing subscription. It only unlocks cosmetic extras: alternate app icons, theme colors and a supporter badge (More > Appearance). No tracking, sync or sharing feature is behind it. The subscription screen (More > Tinytide Supporter) uses SubscriptionStoreView, with price, renewal terms, Restore Purchases, Terms of Use and Privacy Policy.
-- Tips (tinytide.tip.small, .medium, .large): optional consumable tips in More > Leave a Tip. They unlock nothing.
+- Tinytide Supporter (tinytide.supporter.monthly, tinytide.supporter.yearly): an optional auto-renewing subscription. It only unlocks cosmetic extras: alternate app icons, theme colors and a supporter badge (Settings > Appearance). No tracking, sync or sharing feature is behind it. The subscription screen (Settings > Tinytide Supporter) uses SubscriptionStoreView, with price, renewal terms, Restore Purchases, Terms of Use and Privacy Policy.
+- Tips (tinytide.tip.small, .medium, .large): optional consumable tips in Settings > Leave a Tip. They unlock nothing.
 
 HEALTH INFORMATION
 Tinytide is a logbook, not a medical device, and makes no diagnosis. Nap-time suggestions use typical wake windows by age; growth percentiles use the published WHO Child Growth Standards; fever and stool-color notes are general guidance that tell the parent to contact their pediatrician. The description and Support page state that it is not medical advice.
 
 PRIVACY
-No analytics, ads, tracking or third-party SDKs. App Privacy: Data Not Collected. The app keeps up to 10 daily backups in its own Application Support folder on the device (More > Automatic Backups); they are never uploaded anywhere by the app.
+No analytics, ads, tracking or third-party SDKs. App Privacy: Data Not Collected. The app keeps up to 10 daily backups in its own Application Support folder on the device (Settings > Automatic Backups); they are never uploaded anywhere by the app.
 
 Contact: support@tinytide.app

@@ -23,14 +23,14 @@ no advertising and no tracking. The developer cannot see anything you log.
 **Sharing with family:** if you choose to share a baby with someone, Apple's
 iCloud sharing makes that baby's entries available to the people you invite.
 You can see who has access and stop sharing at any time in
-**More → Family & Caregivers**.
+Tinytide's **Settings → Family & Caregivers**.
 
 **Exports and backups:** backup and CSV files you export are created only when
 you ask, and go only where you send them. Tinytide also keeps up to 10
 automatic daily backups in its own storage on your iPhone, so mistakes can be
 undone. They never leave your device, except as part of your iPhone's own
 iCloud or computer backup, and you can delete them in
-**More → Automatic Backups**.
+Tinytide's **Settings → Automatic Backups**.
 
 **Notifications:** reminders are scheduled locally on your device.
 
@@ -41,7 +41,8 @@ your payment details.
 **Children's privacy:** Tinytide is used by parents and caregivers to record
 information about their children. It does not collect any of that information.
 
-**Deleting your data:** delete a baby in **More → Babies**, or delete the app.
+**Deleting your data:** delete a baby in Tinytide's **Settings → Babies**, or delete
+the app.
 To remove the iCloud copy, go to **Settings → [your name] → iCloud → Manage
 Account Storage → Tinytide** on your iPhone.
 
