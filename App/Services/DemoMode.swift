@@ -10,6 +10,12 @@ enum DemoMode {
     enum Screen: String {
         case today, log, trends, growth, more
         case nursing, diaper, bottle
+        case tipjar, supporter
+    }
+
+    /// The purchase screens, opened from Settings for the App Review screenshots.
+    enum PurchaseScreen: Hashable {
+        case tipJar, supporter
     }
 
     static var screen: Screen? {
@@ -24,7 +30,7 @@ enum DemoMode {
         case .log: return .log
         case .trends: return .trends
         case .growth: return .growth
-        case .more: return .more
+        case .more, .tipjar, .supporter: return .more
         default: return .today
         }
     }
@@ -35,6 +41,15 @@ enum DemoMode {
         case .nursing: return .nursing
         case .diaper: return .diaper
         case .bottle: return .bottle
+        default: return nil
+        }
+    }
+
+    /// The purchase screen to open in Settings at launch.
+    static var initialPurchaseScreen: PurchaseScreen? {
+        switch screen {
+        case .tipjar: return .tipJar
+        case .supporter: return .supporter
         default: return nil
         }
     }

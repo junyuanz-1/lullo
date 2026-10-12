@@ -1,9 +1,17 @@
 name: App Store screenshots
 
-# Generates the App Store screenshots for every language with fastlane and
-# uploads them as an artifact (Actions → App Store screenshots → Run workflow).
+# Generates screenshots with fastlane and uploads them as an artifact
+# (Actions → App Store screenshots → Run workflow):
+# - app-store: the App Store screenshots for every language
+# - in-app-purchases: the App Review screenshots of the purchase screens
 on:
   workflow_dispatch:
+    inputs:
+      screens:
+        description: Which screenshots
+        type: choice
+        options: [app-store, in-app-purchases]
+        default: app-store
 
 jobs:
   screenshots:
@@ -21,14 +29,15 @@ jobs:
           bundler-cache: true
 
       - name: Capture
-        run: bundle exec fastlane screenshots
+        run: bundle exec fastlane ${{ inputs.screens == 'in-app-purchases' && 'iap_screenshots' || 'screenshots' }}
 
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: app-store-screenshots
+          name: ${{ inputs.screens }}-screenshots
           path: |
             fastlane/screenshots
+            fastlane/in_app_purchases/*.png
             ~/Library/Logs/snapshot
           if-no-files-found: warn

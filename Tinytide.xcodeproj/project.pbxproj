@@ -23,6 +23,7 @@
 		3298857608B56641F68F750D /* TrackerIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285F77592F707347BB761F8B /* TrackerIntents.swift */; };
 		329B16B427E136E066B07A60 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D68CFB08E53E8E138F04F4FA /* SwiftUI.framework */; };
 		3333A47D78905F51160BEAA6 /* TrackerStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EA96D6107BC2D0309753CB /* TrackerStoreTests.swift */; };
+		3B894A32AA0E01E2E76F6B02 /* InAppPurchaseScreenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31FD23DB124D5952FB46FCA3 /* InAppPurchaseScreenshots.swift */; };
 		41F6E4FB8AB898C592387393 /* TinytideApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F874D33928F676E32AC14F1 /* TinytideApp.swift */; };
 		4679A92C72E8F10243091E7F /* BabyCore in Frameworks */ = {isa = PBXBuildFile; productRef = 726F29833E36AC48FE2AF319 /* BabyCore */; };
 		483CBAC591C802236821C27C /* CloudSharingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA9B5AA0139BE2DEB4AA8F2 /* CloudSharingPresenter.swift */; };
@@ -50,6 +51,7 @@
 		81E4572E0D3603F8071D32FB /* TrackerActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7A7025E3EA34E67EAA06A /* TrackerActivityAttributes.swift */; };
 		88551A0AC26015BF5F570F7C /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B856E785D8A05804E1ADA3E /* BackupService.swift */; };
 		89503F2352F2FB8967882B19 /* TinytideWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A59F4D57DE6A466AB1A4A6 /* TinytideWidgets.swift */; };
+		8A86C64A13DF3ABAE5BB80C4 /* Tinytide.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 1A35AAC06C9040F3BD773926 /* Tinytide.storekit */; };
 		8F791E7596C1DDB65BF47DDE /* TrackerLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D088D1F0727EAAED708B612 /* TrackerLiveActivity.swift */; };
 		8F8D318F74C4C1CD829075C1 /* BabyCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9E473B3835F065F5982D9AC7 /* BabyCore */; };
 		94213446050472BF707D0DF7 /* DisplayNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94CCB7EF551B71E3230B17F /* DisplayNames.swift */; };
@@ -132,6 +134,7 @@
 		0BC3E3510619F81D38B98516 /* TrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsView.swift; sourceTree = "<group>"; };
 		0F874D33928F676E32AC14F1 /* TinytideApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinytideApp.swift; sourceTree = "<group>"; };
 		165D30EE30831D3B583E95DC /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		1A35AAC06C9040F3BD773926 /* Tinytide.storekit */ = {isa = PBXFileReference; path = Tinytide.storekit; sourceTree = "<group>"; };
 		1B48AD081D29D6CA5A3EA7D2 /* TinytideWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TinytideWidgets.entitlements; sourceTree = "<group>"; };
 		202D060D4993782AB092325C /* TipJarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipJarTests.swift; sourceTree = "<group>"; };
 		234B01B18850892404B997BE /* LiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityManager.swift; sourceTree = "<group>"; };
@@ -142,6 +145,7 @@
 		29699299E17BB4DA4D8418FA /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		2E4914902B71998F894CCF5E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F619F171D56E24FB9B48D39 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		31FD23DB124D5952FB46FCA3 /* InAppPurchaseScreenshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseScreenshots.swift; sourceTree = "<group>"; };
 		384A37B21B28B5A9EFA81A7B /* StatusWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusWidget.swift; sourceTree = "<group>"; };
 		3909E1444F36C7CBEDF217E6 /* Chime.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chime.wav; sourceTree = "<group>"; };
 		397758B613FF7425DD8BA283 /* TinytideSnapshotTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TinytideSnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -435,6 +439,7 @@
 			isa = PBXGroup;
 			children = (
 				090D8E08F6A2B5336CDCD149 /* AppStoreScreenshots.swift */,
+				31FD23DB124D5952FB46FCA3 /* InAppPurchaseScreenshots.swift */,
 				7EF56BC4A14207C357E0F038 /* SnapshotHelper.swift */,
 			);
 			path = TinytideUITests;
@@ -473,6 +478,7 @@
 			isa = PBXGroup;
 			children = (
 				EE6812A80099D12766DBB710 /* Shared.xcconfig */,
+				1A35AAC06C9040F3BD773926 /* Tinytide.storekit */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -582,6 +588,7 @@
 			buildConfigurationList = 38BF3E15155B67AFCF254F4C /* Build configuration list for PBXNativeTarget "TinytideUITests" */;
 			buildPhases = (
 				78787C78901BFB7232CACFCB /* Sources */,
+				3090EF4884D3D6B3B344FFEB /* Resources */,
 			);
 			buildRules = (
 			);
@@ -679,6 +686,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3090EF4884D3D6B3B344FFEB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A86C64A13DF3ABAE5BB80C4 /* Tinytide.storekit in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5E8592FC83E3AF914BDF11B9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -720,6 +735,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1556703F4B5EC1063D66AA4D /* AppStoreScreenshots.swift in Sources */,
+				3B894A32AA0E01E2E76F6B02 /* InAppPurchaseScreenshots.swift in Sources */,
 				CF37B16220F7DC4B37633097 /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

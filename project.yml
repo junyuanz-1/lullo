@@ -146,6 +146,9 @@ targets:
     platform: iOS
     sources:
       - path: Tests/TinytideUITests
+      # Products and prices for the purchase screen screenshots (SKTestSession).
+      - path: Config/Tinytide.storekit
+        buildPhase: resources
     dependencies:
       - target: Tinytide
     settings:

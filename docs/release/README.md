@@ -36,7 +36,7 @@
 - [x] **App 隐私**：选“我们不会从此 App 中收集数据”（没有分析、广告、第三方 SDK，数据只在设备和用户自己的 iCloud）
 - [x] **价格**：免费
 - [x] **审核联系人**：姓名和电话在 App Store Connect 里填（不存在仓库里）；邮箱用 support@tinytide.app
-- [ ] **内购项目**：`bundle exec fastlane upload_iap` 自动创建和更新（先加 `dry_run:true` 看会改什么），见 `fastlane/README.md`。上传前先把两张审核截图放进 `fastlane/in_app_purchases/`（`tip_jar.png`、`supporter.png`）：
+- [ ] **内购项目**：`bundle exec fastlane upload_iap` 自动创建和更新（先加 `dry_run:true` 看会改什么），见 `fastlane/README.md`。上传前先运行 `bundle exec fastlane iap_screenshots` 生成两张审核截图（`fastlane/in_app_purchases/tip_jar.png`、`supporter.png`）：
 
   | 产品 ID | 类型 | 价格 |
   |---|---|---|

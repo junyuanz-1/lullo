@@ -1,9 +1,29 @@
+# fastlane/README.md is written by hand; don't let fastlane replace it with a lane list.
+skip_docs
+
 default_platform(:ios)
 
 platform :ios do
   desc "Capture App Store screenshots for every language (see Snapfile)"
   lane :screenshots do
-    capture_screenshots
+    capture_screenshots(only_testing: ["TinytideUITests/AppStoreScreenshots"])
+  end
+
+  desc "Capture the App Review screenshots of the tip jar and the subscription page"
+  desc "into fastlane/in_app_purchases/, where upload_iap picks them up"
+  lane :iap_screenshots do
+    output = File.expand_path("../build/iap_screenshots", __dir__)
+    capture_screenshots(
+      only_testing: ["TinytideUITests/InAppPurchaseScreenshots"],
+      languages: ["en-US"],
+      output_directory: output
+    )
+    %w[tip_jar supporter].each do |name|
+      shot = Dir[File.join(output, "en-US", "*-#{name}.png")].first or
+        UI.user_error!("No #{name} screenshot was captured; see the test output above")
+      FileUtils.cp(shot, File.join(__dir__, "in_app_purchases", "#{name}.png"))
+      UI.success("Saved fastlane/in_app_purchases/#{name}.png")
+    end
   end
 
   desc "Upload the App Store listing in fastlane/metadata (all languages, review notes, URLs)"

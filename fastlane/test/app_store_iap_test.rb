@@ -201,7 +201,7 @@ class AppStoreIAPTest < Minitest::Test
     File.delete(File.join(@screenshots, "supporter.png"))
     ok, out = sync
     assert ok, out
-    assert_match(%r{To do: Add fastlane/in_app_purchases/supporter.png}, out)
+    assert_match(%r{To do: Run `bundle exec fastlane iap_screenshots` to capture fastlane/in_app_purchases/supporter.png}, out)
     assert_equal 6, @asc.uploads.size
   end
 

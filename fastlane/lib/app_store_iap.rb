@@ -616,7 +616,7 @@ module AppStoreIAP
       unless file && File.exist?(file)
         name = file ? "fastlane/in_app_purchases/#{File.basename(file)}" : "a review screenshot in fastlane/in_app_purchases.yml"
         say("  review screenshot: missing #{name}")
-        @todos << "Add #{name} (a screenshot of the purchase screen) and run again"
+        @todos << "Run `bundle exec fastlane iap_screenshots` to capture #{name}, then run this again"
         return
       end
       type, existing_path, parent = if kind == :iap

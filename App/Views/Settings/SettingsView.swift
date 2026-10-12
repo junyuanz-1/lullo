@@ -36,6 +36,7 @@ struct SettingsView: View {
     @State private var importResult: String?
     @State private var errorMessage: String?
     @State private var notificationsDenied = false
+    @State private var demoPurchaseScreen = DemoMode.initialPurchaseScreen
 
     var body: some View {
         NavigationStack {
@@ -52,6 +53,12 @@ struct SettingsView: View {
                 aboutSection
             }
             .navigationTitle("Settings")
+            .navigationDestination(item: $demoPurchaseScreen) { screen in
+                switch screen {
+                case .tipJar: TipJarView()
+                case .supporter: SupporterView()
+                }
+            }
             .sheet(item: $editingBaby) { baby in
                 NavigationStack { BabyFormView(baby: baby) }
             }
