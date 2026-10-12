@@ -2953,6 +2953,64 @@
         }
       }
     },
+    "Also shows on your Lock Screen and in the Dynamic Island.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auch auf dem Sperrbildschirm und in der Dynamic Island."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Also shows on your Lock Screen and in the Dynamic Island."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "También se muestra en la pantalla bloqueada y en la Dynamic Island."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S’affiche aussi sur l’écran verrouillé et dans la Dynamic Island."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック画面とダイナミックアイランドにも表示されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잠금 화면과 Dynamic Island에도 표시돼요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Também aparece na Tela Bloqueada e na Dynamic Island."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "也会显示在锁定屏幕和灵动岛上。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "也會顯示在鎖定畫面和動態島上。"
+          }
+        }
+      }
+    },
     "Amount": {
       "localizations": {
         "de": {
@@ -18732,6 +18790,64 @@
         }
       }
     },
+    "Plays a gentle sound. Change it in Settings → Timer Alarm.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klingelt mit einem sanften Ton. Ändern unter Einstellungen → Timer-Wecker."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plays a gentle sound. Change it in Settings → Timer Alarm."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suena con un tono suave. Cámbialo en Ajustes → Alarma del temporizador."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonne avec un son doux. Modifiez-le dans Réglages → Alarme du minuteur."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "やさしい音で鳴ります。設定 → タイマーアラーム で変更できます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "부드러운 소리로 울려요. 설정 → 타이머 알람에서 바꿀 수 있어요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca com um som suave. Mude em Ajustes → Alarme do timer."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "响铃声音很轻柔，可以在 设置 → 计时闹钟 中更改。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "響鈴聲音很輕柔，可以在 設定 → 計時鬧鐘 中更改。"
+          }
+        }
+      }
+    },
     "Poop": {
       "localizations": {
         "de": {
@@ -20353,64 +20469,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ 響鈴"
-          }
-        }
-      }
-    },
-    "Rings with a gentle sound. Change the sound and these choices in Settings → Timer Alarm.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Klingelt mit einem sanften Ton. Ton und Auswahl änderst du unter Einstellungen → Timer-Wecker."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rings with a gentle sound. Change the sound and these choices in Settings → Timer Alarm."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suena con un tono suave. Cambia el sonido y estas opciones en Ajustes → Alarma del temporizador."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sonne avec un son doux. Modifiez le son et ces choix dans Réglages → Alarme du minuteur."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "やさしい音で鳴ります。音と選択肢は 設定 → タイマーアラーム で変更できます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "부드러운 소리로 울려요. 설정 → 타이머 알람에서 소리와 선택지를 바꿀 수 있어요."
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toca com um som suave. Mude o som e estas opções em Ajustes → Alarme do timer."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "响铃声音很轻柔。可以在 设置 → 计时闹钟 中更改铃声和这些选项。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "響鈴聲音很輕柔。可以在 設定 → 計時鬧鐘 中更改鈴聲和這些選項。"
           }
         }
       }
@@ -26073,64 +26131,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "無法驗證這筆購買。"
-          }
-        }
-      }
-    },
-    "The timer keeps running on your Lock Screen and Dynamic Island.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Der Timer läuft auf dem Sperrbildschirm und in der Dynamic Island weiter."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The timer keeps running on your Lock Screen and Dynamic Island."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El cronómetro sigue corriendo en la pantalla bloqueada y en la Dynamic Island."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le chronomètre continue de tourner sur l’écran verrouillé et dans la Dynamic Island."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タイマーはロック画面とダイナミックアイランドで動き続けます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머가 잠금 화면과 Dynamic Island에서 계속 실행돼요."
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "O cronômetro continua na Tela Bloqueada e na Dynamic Island."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "计时会在锁屏和灵动岛上持续显示。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "計時會持續顯示在鎖定畫面和動態島上。"
           }
         }
       }

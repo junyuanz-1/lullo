@@ -83,6 +83,13 @@ struct EventEditorView: View {
             Group { formContent }
                 .disabled(!canEdit)
         }
+        // Start sits at the bottom, always in reach, with Notes above it so
+        // they are filled in before starting rather than skipped.
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if mode == .timer && isNew {
+                startBar.disabled(!canEdit)
+            }
+        }
         .navigationTitle(kind.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -197,21 +204,26 @@ struct EventEditorView: View {
             Section {
                 alarmPicker(selection: $newTimerAlarm)
             } footer: {
-                Text("Rings with a gentle sound. Change the sound and these choices in Settings → Timer Alarm.")
+                // Only worth saying once there is something to ring.
+                if newTimerAlarm != nil {
+                    Text("Plays a gentle sound. Change it in Settings → Timer Alarm.")
+                }
             }
         }
-        // The start buttons get their own section with no card behind them, so
-        // the cards above keep their rounded bottoms instead of looking cut off.
-        Section {
+    }
+
+    /// The start buttons, pinned under the form on a bar.
+    private var startBar: some View {
+        VStack(spacing: 6) {
             if kind == .nursing {
                 let suggested = EventRecord.suggestedNextSide(after: store.lastEvent(of: [.nursing], for: baby)?.record)
-                HStack(spacing: 16) {
+                HStack(spacing: 12) {
                     ForEach([BreastSide.left, .right], id: \.self) { side in
                         Button {
                             startNursing(side)
                         } label: {
-                            VStack(spacing: 6) {
-                                Image(systemName: "play.fill").font(.title2)
+                            VStack(spacing: 4) {
+                                Image(systemName: "play.fill").font(.title3)
                                 Text("Start \(side.title)").font(.headline)
                                 // Always laid out so both buttons are the same height.
                                 Text("Suggested").font(.caption2.bold())
@@ -219,7 +231,7 @@ struct EventEditorView: View {
                                     .accessibilityHidden(side != suggested)
                             }
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 18)
+                            .padding(.vertical, 12)
                             .background(side == suggested ? AnyShapeStyle(.tint) : AnyShapeStyle(.tint.opacity(0.15)), in: RoundedRectangle(cornerRadius: 14))
                             .foregroundStyle(side == suggested ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
                         }
@@ -237,14 +249,21 @@ struct EventEditorView: View {
                         .padding(.vertical, 8)
                 }
                 .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.capsule)
             }
-        } footer: {
             if AppSettings.liveActivitiesEnabled {
-                Text("The timer keeps running on your Lock Screen and Dynamic Island.")
+                Text("Also shows on your Lock Screen and in the Dynamic Island.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
             }
         }
-        .listRowInsets(EdgeInsets())
-        .listRowBackground(Color.clear)
+        .padding(.horizontal)
+        .padding(.top, 12)
+        .padding(.bottom, 8)
+        .frame(maxWidth: .infinity)
+        .background(.bar)
+        .overlay(alignment: .top) { Divider() }
     }
 
     /// Chips for the related kinds a new entry can be (Health).
