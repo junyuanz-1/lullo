@@ -923,6 +923,12 @@ struct RecentCard: View {
     /// Nil when the entries can't be deleted (a read-only caregiver).
     var onDelete: ((Event) -> Void)?
 
+    /// The row swiped open, if any; only one at a time, as in a List.
+    @State private var revealed: NSManagedObjectID?
+    /// The Card's own padding, which rows reach into so they can slide out past
+    /// the card's edge.
+    private let inset: CGFloat = 16
+
     var body: some View {
         if !events.isEmpty {
             Card(title: String(localized: "Recent"), systemImage: "clock.fill", tint: .gray) {
@@ -943,24 +949,37 @@ struct RecentCard: View {
                                 }
                             }
                         }
-                        if event != events.last { Divider() }
+                        if event != events.last {
+                            // Lined up with the titles, past the icon (34 + 12).
+                            Divider().padding(.leading, inset + 46)
+                        }
                     }
                 }
+                .padding(.horizontal, -inset)
             }
         }
     }
 
     @ViewBuilder
     private func row(_ event: Event) -> some View {
+        let content = EventRow(event: event)
+            .padding(.vertical, 8)
+            .padding(.horizontal, inset)
         if let onDelete {
-            SwipeToDeleteRow(onTap: { onSelect(event) }, onDelete: { onDelete(event) }) {
-                EventRow(event: event)
-                    .padding(.vertical, 6)
+            SwipeToDeleteRow(
+                isRevealed: Binding(
+                    get: { revealed == event.objectID },
+                    set: { open in
+                        if open { revealed = event.objectID } else if revealed == event.objectID { revealed = nil }
+                    }
+                ),
+                onTap: { onSelect(event) },
+                onDelete: { onDelete(event) }
+            ) {
+                content
             }
         } else {
-            EventRow(event: event)
-                .padding(.vertical, 6)
-                .onTapGesture { onSelect(event) }
+            content.onTapGesture { onSelect(event) }
         }
     }
 }

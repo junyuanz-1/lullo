@@ -650,59 +650,131 @@ extension View {
 // MARK: - Swipe to delete
 
 /// Swipe left to reveal Delete, for rows that are not in a List (which has
-/// swipeActions built in). Tap the row to open it, or to close the swipe.
+/// swipeActions built in), drawn the way Mail does it: the red action fills
+/// the gap the row leaves, and a long swipe deletes outright. Tap the row to
+/// open it, or to close the swipe.
+///
+/// The row should span the full width of its card, so it slides out past the
+/// card's edge rather than being cut off inside its padding.
 struct SwipeToDeleteRow<Content: View>: View {
+    /// Shared by the rows of a card, so opening one closes the others.
+    @Binding var isRevealed: Bool
     var onTap: () -> Void
     var onDelete: () -> Void
     @ViewBuilder var content: Content
 
     @State private var offset: CGFloat = 0
-    @State private var revealed = false
-    private let buttonWidth: CGFloat = 72
+    @State private var width: CGFloat = 0
+    /// Past this point letting go deletes; a haptic marks crossing it.
+    @State private var armed = false
+    /// Decided on the first movement: a mostly vertical drag is left to scrolling.
+    @State private var horizontal: Bool?
+    /// Where the row was when the drag began (closed, or open on Delete).
+    @State private var dragStart: CGFloat = 0
+    private let buttonWidth: CGFloat = 80
+
+    private var fullSwipe: CGFloat { max(buttonWidth * 2, width * 0.55) }
 
     var body: some View {
         content
             .contentShape(Rectangle())
             .onTapGesture {
-                if revealed { close() } else { onTap() }
+                if isRevealed { isRevealed = false } else { onTap() }
             }
             .offset(x: offset)
-            .background(alignment: .trailing) {
-                Button(role: .destructive) {
-                    close()
-                    onDelete()
-                } label: {
-                    Image(systemName: "trash")
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                        .frame(width: buttonWidth)
-                        .frame(maxHeight: .infinity)
-                        .background(Color.red, in: RoundedRectangle(cornerRadius: 10))
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(Text("Delete"))
-                .opacity(offset < -8 ? 1 : 0)
+            .overlay(alignment: .trailing) {
+                if offset < 0 { action }
             }
             .clipped()
-            .gesture(
-                DragGesture(minimumDistance: 20)
-                    .onChanged { value in
-                        let base: CGFloat = revealed ? -buttonWidth : 0
-                        offset = min(0, max(-buttonWidth - 16, base + value.translation.width))
-                    }
-                    .onEnded { _ in
-                        withAnimation(.snappy(duration: 0.2)) {
-                            revealed = offset < -buttonWidth / 2
-                            offset = revealed ? -buttonWidth : 0
-                        }
-                    }
-            )
+            .background {
+                GeometryReader { proxy in
+                    Color.clear
+                        .onAppear { width = proxy.size.width }
+                        .onChange(of: proxy.size.width) { _, new in width = new }
+                }
+            }
+            .gesture(drag)
+            .onChange(of: isRevealed) { _, revealed in
+                if !revealed { settle(at: 0) }
+            }
+            .accessibilityAction(named: Text("Delete"), onDelete)
     }
 
-    private func close() {
-        withAnimation(.snappy(duration: 0.2)) {
-            revealed = false
-            offset = 0
+    /// Fills exactly the space the row has moved out of.
+    private var action: some View {
+        Button(role: .destructive, action: slideOutAndDelete) {
+            VStack(spacing: 3) {
+                Image(systemName: "trash.fill").font(.body.weight(.semibold))
+                Text("Delete").font(.caption2.weight(.semibold)).lineLimit(1)
+            }
+            .fixedSize()
+            .foregroundStyle(.white)
+            // Hidden until there is room for it, then follows the row's edge
+            // once a full swipe is armed, like Mail.
+            .opacity(-offset > 44 ? 1 : 0)
+            .frame(width: buttonWidth)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: armed ? .leading : .trailing)
+            .background(Color.red)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .frame(width: -offset)
+        .clipped()
+        .accessibilityHidden(true)
+    }
+
+    private var drag: some Gesture {
+        DragGesture(minimumDistance: 12)
+            .onChanged { value in
+                let dx = value.translation.width, dy = value.translation.height
+                if horizontal == nil {
+                    horizontal = abs(dx) > abs(dy)
+                    dragStart = offset
+                }
+                guard horizontal == true else { return }
+                if !isRevealed && dx < 0 { isRevealed = true }
+                offset = min(0, dragStart + dx)
+                let nowArmed = -offset > fullSwipe
+                if nowArmed != armed {
+                    withAnimation(.snappy(duration: 0.2)) { armed = nowArmed }
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                }
+            }
+            .onEnded { value in
+                defer { horizontal = nil }
+                guard horizontal == true else { return }
+                if armed {
+                    slideOutAndDelete()
+                } else if -offset > buttonWidth / 2 || value.predictedEndTranslation.width < -buttonWidth * 2 {
+                    settle(at: -buttonWidth)
+                } else {
+                    isRevealed = false
+                    settle(at: 0)
+                }
+            }
+    }
+
+    private func settle(at target: CGFloat) {
+        withAnimation(.snappy(duration: 0.25)) {
+            offset = target
+            armed = false
+        }
+    }
+
+    /// The row leaves to the left before it is removed, as in a List.
+    private func slideOutAndDelete() {
+        withAnimation(.easeOut(duration: 0.2)) {
+            offset = -max(width, buttonWidth)
+            armed = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            onDelete()
+            // Normally the row is gone by now; if it stays (the delete didn't
+            // happen), it comes back closed.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                isRevealed = false
+                settle(at: 0)
+            }
         }
     }
 }
