@@ -160,8 +160,11 @@ public enum Statistics {
         for (i, day) in days.enumerated() { index[day] = i }
 
         for event in events {
+            // A bottle timed for at least a minute is drawn as a block; a bottle
+            // logged without a duration stays a tick.
+            let timedBottle = event.kind == .bottle && event.duration(at: now) >= 60
             switch event.kind {
-            case .sleep, .nursing, .pumping:
+            case .sleep, .nursing, .pumping, .bottle where timedBottle:
                 // Nursing is drawn from its start for its summed duration; good enough for a schedule view.
                 let end = event.kind == .nursing
                     ? event.startDate.addingTimeInterval(max(event.nursingTotal(at: now), 60))

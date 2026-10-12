@@ -118,6 +118,7 @@ extension EventRecord {
         case .bottle:
             if let amountML { parts.append(Fmt.volume(amountML)) }
             if let bottleContent { parts.append(bottleContent.title) }
+            if isOngoing || duration(at: now) >= 60 { parts.append(Fmt.duration(duration(at: now))) }
         case .solids:
             if foodName != nil, let amountML { parts.append(Fmt.volume(amountML)) }
             if let foodReaction { parts.append("\(foodReaction.emoji) \(foodReaction.title)") }

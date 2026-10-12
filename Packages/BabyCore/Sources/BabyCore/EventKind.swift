@@ -34,7 +34,7 @@ public enum EventKind: String, Codable, CaseIterable, Sendable, Identifiable, Ha
     /// Kinds that can be started as a live timer.
     public var supportsTimer: Bool {
         switch self {
-        case .sleep, .nursing, .pumping, .activity: return true
+        case .sleep, .nursing, .bottle, .pumping, .activity: return true
         default: return false
         }
     }

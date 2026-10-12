@@ -3,12 +3,13 @@ import Foundation
 /// Countdown alarms on running timers ("let me know after 10 minutes").
 public enum TimerAlarm {
     /// Kinds that can have a countdown alarm.
-    public static let supportedKinds: [EventKind] = [.nursing, .pumping, .activity, .sleep]
+    public static let supportedKinds: [EventKind] = [.nursing, .bottle, .pumping, .activity, .sleep]
 
     /// Quick choices offered for each kind, in minutes.
     public static func presetMinutes(for kind: EventKind) -> [Int] {
         switch kind {
         case .nursing: return [5, 10, 15, 20, 30]
+        case .bottle: return [5, 10, 15, 20, 30]
         case .pumping: return [10, 15, 20, 30]
         case .activity: return [3, 5, 10, 15, 30]
         case .sleep: return [20, 30, 45, 60, 90, 120]

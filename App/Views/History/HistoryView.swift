@@ -7,12 +7,14 @@ struct HistoryView: View {
     @State private var category: EventCategory?
     @State private var days = 14
     @State private var editor: EditorRoute?
+    @State private var toast: UndoToast?
 
     var body: some View {
         NavigationStack {
-            HistoryList(baby: baby, category: category, days: days, editor: $editor) {
+            HistoryList(baby: baby, category: category, days: days, editor: $editor, toast: $toast) {
                 days += 14
             }
+            .undoToast($toast)
             .navigationTitle("Log")
             // Inline title keeps the filter chips right under the toolbar instead of below a large-title gap.
             .navigationBarTitleDisplayMode(.inline)
@@ -96,9 +98,10 @@ private struct HistoryList: View {
     @EnvironmentObject private var store: TrackerStore
     @FetchRequest private var events: FetchedResults<Event>
     @Binding var editor: EditorRoute?
+    @Binding var toast: UndoToast?
     var loadMore: () -> Void
 
-    init(baby: Baby, category: EventCategory?, days: Int, editor: Binding<EditorRoute?>, loadMore: @escaping () -> Void) {
+    init(baby: Baby, category: EventCategory?, days: Int, editor: Binding<EditorRoute?>, toast: Binding<UndoToast?>, loadMore: @escaping () -> Void) {
         let since = Calendar.current.date(byAdding: .day, value: -days, to: Calendar.current.startOfDay(for: Date()))!
         var predicates = [
             NSPredicate(format: "baby == %@", baby),
@@ -113,6 +116,7 @@ private struct HistoryList: View {
             animation: .default
         )
         _editor = editor
+        _toast = toast
         self.loadMore = loadMore
     }
 
@@ -134,7 +138,9 @@ private struct HistoryList: View {
                         .buttonStyle(.plain)
                         .swipeActions {
                             Button(role: .destructive) {
+                                let record = event.record
                                 store.delete(event)
+                                toast = UndoToast(message: String(localized: "Entry deleted")) { store.save(record) }
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }

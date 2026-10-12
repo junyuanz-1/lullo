@@ -27,13 +27,6 @@ struct EditorSheet: View {
     }
 }
 
-/// A short "done" message with a single Undo button, shown after one-tap actions.
-struct UndoToast: Identifiable {
-    let id = UUID()
-    var message: String
-    var undo: () -> Void
-}
-
 struct HomeView: View {
     @EnvironmentObject private var store: TrackerStore
     @ObservedObject var baby: Baby
@@ -91,29 +84,16 @@ struct HomeView: View {
                         }
                     }
 
-                    RecentCard(events: Array(recent.prefix(6))) { event in
-                        editor = EditorRoute(kind: event.eventKind, existing: event)
-                    }
+                    RecentCard(
+                        events: Array(recent.prefix(6)),
+                        onSelect: { event in editor = EditorRoute(kind: event.eventKind, existing: event) },
+                        onDelete: delete
+                    )
                 }
                 .padding()
             }
             .background(Color(.systemGroupedBackground))
-            .safeAreaInset(edge: .bottom) {
-                if let toast {
-                    UndoToastView(toast: toast) {
-                        toast.undo()
-                        self.toast = nil
-                    }
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
-            }
-            .animation(.snappy(duration: 0.25), value: toast?.id)
-            // Each toast stays for a few seconds; a newer one restarts the clock.
-            .task(id: toast?.id) {
-                guard toast != nil else { return }
-                try? await Task.sleep(for: .seconds(6))
-                toast = nil
-            }
+            .undoToast($toast)
             .toolbar {
                 ToolbarItem(placement: .principal) { BabySwitcher(baby: baby) }
             }
@@ -132,6 +112,7 @@ struct HomeView: View {
         let message: String
         switch kind {
         case .sleep: message = String(localized: "Sleep started")
+        case .bottle: message = String(localized: "Bottle started")
         case .pumping: message = String(localized: "Pumping started")
         case .activity: message = String(localized: "\((activityType ?? .play).title) started")
         default: message = String(localized: "Timer started")
@@ -156,21 +137,30 @@ struct HomeView: View {
         let before = event.record
         store.stopTimer(event)
         haptic()
-        if before.kind == .pumping {
-            // Amounts are usually known only once pumping ends; ask for them now
-            // instead of making the user find the entry again.
-            editor = EditorRoute(kind: .pumping, existing: event)
-            return
-        }
         let message: String
         switch before.kind {
         case .sleep: message = String(localized: "Sleep ended")
         case .nursing: message = String(localized: "Nursing finished")
+        case .bottle: message = String(localized: "Bottle finished")
+        case .pumping: message = String(localized: "Pumping finished")
         case .activity: message = String(localized: "Activity finished")
         default: message = String(localized: "Timer stopped")
         }
         // Saving the earlier record puts the timer back exactly as it was.
-        show(message) { store.save(before) }
+        var toast = UndoToast(message: message) { store.save(before) }
+        if before.kind == .pumping || before.kind == .bottle {
+            // Amounts are often known only at the end; offer the entry without
+            // forcing it open.
+            toast.action = (title: String(localized: "Add Amount"), perform: { editor = EditorRoute(kind: before.kind, existing: event) })
+        }
+        self.toast = toast
+    }
+
+    private func delete(_ event: Event) {
+        let record = event.record
+        store.delete(event)
+        haptic()
+        show(String(localized: "Entry deleted")) { store.save(record) }
     }
 
     private func logDiaper(_ type: DiaperType) {
@@ -185,29 +175,6 @@ struct HomeView: View {
 
     private func haptic() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-    }
-}
-
-struct UndoToastView: View {
-    var toast: UndoToast
-    var onUndo: () -> Void
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-            Text(toast.message)
-                .font(.subheadline.weight(.medium))
-                .lineLimit(2)
-            Spacer(minLength: 8)
-            Button("Undo", action: onUndo)
-                .font(.subheadline.bold())
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .shadow(color: .black.opacity(0.12), radius: 12, y: 4)
-        .padding(.horizontal)
-        .padding(.bottom, 8)
     }
 }
 
@@ -369,7 +336,7 @@ struct QuickActionsGrid: View {
         LazyVGrid(columns: columns, spacing: 12) {
             sleepTile
             nursingTile
-            editorTile(.bottle)
+            bottleTile
             diaperTile
             pumpingTile
             editorTile(.solids)
@@ -418,6 +385,24 @@ struct QuickActionsGrid: View {
                     Divider()
                     logPastButton(.nursing)
                 }
+            }
+        }
+    }
+
+    /// Bottles need an amount, so the sheet opens (prefilled with the last
+    /// bottle) with Start Timer or Log Past one tap away.
+    private var bottleTile: some View {
+        Group {
+            if isRunning(.bottle) {
+                Button {
+                    stopRunning(.bottle)
+                } label: {
+                    QuickActionTile(title: String(localized: "Stop"), systemImage: "stop.fill", color: EventKind.bottle.color)
+                }
+                .buttonStyle(.plain)
+            } else {
+                editorTile(.bottle)
+                    .contextMenu { logPastButton(.bottle) }
             }
         }
     }
@@ -725,17 +710,29 @@ struct TodayCard: View {
 struct RecentCard: View {
     var events: [Event]
     var onSelect: (Event) -> Void
+    var onDelete: (Event) -> Void
 
     var body: some View {
         if !events.isEmpty {
             Card(title: String(localized: "Recent"), systemImage: "clock.fill", tint: .gray) {
                 VStack(spacing: 0) {
                     ForEach(events) { event in
-                        Button { onSelect(event) } label: {
+                        SwipeToDeleteRow(onTap: { onSelect(event) }, onDelete: { onDelete(event) }) {
                             EventRow(event: event)
                                 .padding(.vertical, 6)
                         }
-                        .buttonStyle(.plain)
+                        .contextMenu {
+                            Button {
+                                onSelect(event)
+                            } label: {
+                                Label("Edit", systemImage: "pencil")
+                            }
+                            Button(role: .destructive) {
+                                onDelete(event)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
                         if event != events.last { Divider() }
                     }
                 }
@@ -780,7 +777,9 @@ struct EventRow: View {
     }
 
     private func timeText(_ r: EventRecord) -> String {
-        if r.kind.hasDuration, let end = r.endDate, r.kind != .nursing {
+        // A range only when there was one (bottles logged without a duration
+        // end when they start).
+        if r.kind.hasDuration, let end = r.endDate, r.kind != .nursing, end.timeIntervalSince(r.startDate) >= 60 {
             return "\(Fmt.time(r.startDate)) – \(Fmt.time(end))"
         }
         return Fmt.time(r.startDate)
