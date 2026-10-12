@@ -14,9 +14,6 @@ permissions:
   actions: write
   pull-requests: write
 
-concurrency:
-  group: record-snapshots-${{ github.head_ref || github.ref_name }}
-
 env:
   BRANCH: ${{ github.head_ref || github.ref_name }}
 
@@ -24,6 +21,10 @@ jobs:
   record:
     name: Record reference images
     if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'record-snapshots'
+    # At job level, so runs for other labels or new pushes (which skip this job)
+    # don't take the group and cancel a recording in progress.
+    concurrency:
+      group: record-snapshots-${{ github.head_ref || github.ref_name }}
     runs-on: macos-15
     timeout-minutes: 60
     steps:
