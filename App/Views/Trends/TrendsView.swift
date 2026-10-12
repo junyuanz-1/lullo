@@ -14,9 +14,9 @@ struct TrendsView: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Picker("Range", selection: $range) {
-                            Text("7 days").tag(7)
-                            Text("14 days").tag(14)
-                            Text("30 days").tag(30)
+                            Text("7 Days").tag(7)
+                            Text("14 Days").tag(14)
+                            Text("30 Days").tag(30)
                         }
                         .pickerStyle(.menu)
                     }
@@ -63,7 +63,7 @@ private struct TrendsContent: View {
                 if let average {
                     AveragesCard(average: average, recommended: NapPredictor.recommendedDailySleepHours(ageInMonths: ageMonths))
                 }
-                Card(title: String(localized: "Daily schedule"), systemImage: "calendar.day.timeline.left", tint: .indigo) {
+                Card(title: String(localized: "Daily Schedule"), systemImage: "calendar.day.timeline.left", tint: .indigo) {
                     ScheduleChart(rows: Array(schedules.suffix(min(range, 14)).reversed()))
                 }
                 SleepChart(days: days, recommended: NapPredictor.recommendedDailySleepHours(ageInMonths: ageMonths))
@@ -84,14 +84,14 @@ private struct AveragesCard: View {
     var recommended: ClosedRange<Double>
 
     var body: some View {
-        Card(title: String(localized: "Daily averages"), systemImage: "chart.bar.fill", tint: .blue) {
+        Card(title: String(localized: "Daily Averages"), systemImage: "chart.bar.fill", tint: .blue) {
             Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 12) {
                 GridRow {
-                    item(String(localized: "Total sleep"), Fmt.duration(average.totalSleep), .indigo)
+                    item(String(localized: "Total Sleep"), Fmt.duration(average.totalSleep), .indigo)
                     item(String(localized: "Naps"), "\(average.napCount) · \(Fmt.duration(average.napSleep))", .indigo)
                 }
                 GridRow {
-                    item(String(localized: "Night sleep"), Fmt.duration(average.nightSleep), .indigo)
+                    item(String(localized: "Night Sleep"), Fmt.duration(average.nightSleep), .indigo)
                     item(String(localized: "Feeds"), "\(average.feedCount)", .pink)
                 }
                 GridRow {
@@ -120,44 +120,52 @@ struct ScheduleChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 0) {
-                Color.clear.frame(width: 44, height: 1)
-                ForEach([0, 6, 12, 18], id: \.self) { hour in
-                    Text(hourLabel(hour))
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            }
-            ForEach(rows) { row in
-                HStack(spacing: 0) {
-                    Text(row.day.formatted(.dateTime.month(.defaultDigits).day()))
-                        .font(.caption2.monospacedDigit())
-                        .foregroundStyle(.secondary)
-                        .frame(width: 44, alignment: .leading)
-                    GeometryReader { geo in
-                        let width = geo.size.width
-                        ZStack(alignment: .leading) {
-                            RoundedRectangle(cornerRadius: 3).fill(Color(.tertiarySystemFill))
-                            ForEach(Array(row.blocks.enumerated()), id: \.offset) { _, block in
-                                RoundedRectangle(cornerRadius: 2)
-                                    .fill(block.kind.color.opacity(block.kind == .sleep ? 0.85 : 1))
-                                    .frame(width: max(2, width * (block.end - block.start) / row.dayLength),
-                                           height: block.kind == .sleep ? 16 : 8)
-                                    .offset(x: width * block.start / row.dayLength)
-                            }
-                            ForEach(Array(row.marks.enumerated()), id: \.offset) { _, mark in
-                                Capsule()
-                                    .fill(mark.kind.color)
-                                    .frame(width: 3, height: mark.kind == .diaper ? 8 : 12)
-                                    .offset(x: width * mark.offset / row.dayLength - 1.5)
-                            }
+            // A grid sizes the date column to its widest label, so dates never wrap
+            // at larger text sizes.
+            Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
+                GridRow {
+                    Color.clear.gridCellUnsizedAxes([.horizontal, .vertical])
+                    HStack(spacing: 0) {
+                        ForEach([0, 6, 12, 18], id: \.self) { hour in
+                            Text(hourLabel(hour))
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
-                    .frame(height: 16)
+                }
+                ForEach(rows) { row in
+                    GridRow {
+                        Text(row.day.formatted(.dateTime.month(.defaultDigits).day()))
+                            .font(.caption2.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                            .fixedSize()
+                        GeometryReader { geo in
+                            let width = geo.size.width
+                            ZStack(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: 3).fill(Color(.tertiarySystemFill))
+                                ForEach(Array(row.blocks.enumerated()), id: \.offset) { _, block in
+                                    RoundedRectangle(cornerRadius: 2)
+                                        .fill(block.kind.color.opacity(block.kind == .sleep ? 0.85 : 1))
+                                        .frame(width: max(2, width * (block.end - block.start) / row.dayLength),
+                                               height: block.kind == .sleep ? 16 : 8)
+                                        .offset(x: width * block.start / row.dayLength)
+                                }
+                                ForEach(Array(row.marks.enumerated()), id: \.offset) { _, mark in
+                                    Capsule()
+                                        .fill(mark.kind.color)
+                                        .frame(width: 3, height: mark.kind == .diaper ? 8 : 12)
+                                        .offset(x: width * mark.offset / row.dayLength - 1.5)
+                                }
+                            }
+                        }
+                        .frame(height: 16)
+                    }
                 }
             }
-            HStack(spacing: 12) {
+            FlowLayout(spacing: 12, lineSpacing: 6) {
                 legend(.sleep)
                 legend(.nursing)
                 legend(.bottle)
@@ -227,7 +235,7 @@ private struct FeedingChart: View {
             .frame(height: 180)
 
             if days.contains(where: { $0.bottleVolumeML > 0 }) {
-                Text("Bottle volume").font(.subheadline.weight(.semibold))
+                Text("Bottle Volume").font(.subheadline.weight(.semibold))
                 Chart(days) { day in
                     LineMark(x: .value("Day", day.day, unit: .day), y: .value("Volume", displayVolume(day.bottleVolumeML)))
                         .foregroundStyle(.orange)
@@ -237,7 +245,7 @@ private struct FeedingChart: View {
                 .frame(height: 140)
             }
             if days.contains(where: { $0.nursingDuration > 0 }) {
-                Text("Nursing minutes").font(.subheadline.weight(.semibold))
+                Text("Nursing Minutes").font(.subheadline.weight(.semibold))
                 Chart(days) { day in
                     BarMark(x: .value("Day", day.day, unit: .day), y: .value("Minutes", day.nursingDuration / 60))
                         .foregroundStyle(.pink.gradient)

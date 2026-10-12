@@ -218,6 +218,56 @@ final class BackupTests: XCTestCase {
     }
 }
 
+final class DiaperTests: XCTestCase {
+    func testPeeAmountRoundTripsAndExports() throws {
+        let baby = BabyRecord(name: "Leo", birthDate: Date())
+        let wet = EventRecord(babyID: baby.id, kind: .diaper, startDate: Date(timeIntervalSince1970: 0), diaperType: .mixed, peeAmount: .large)
+        let decoded = try BackupCodec.decode(BackupCodec.encode(BackupFile(babies: [baby], events: [wet])))
+        XCTAssertEqual(decoded.events.first?.peeAmount, .large)
+
+        let csv = CSVExporter.csv(events: [wet], babies: [baby], timeZone: TimeZone(identifier: "UTC")!)
+        let lines = csv.components(separatedBy: "\r\n")
+        let column = try XCTUnwrap(CSVExporter.header.firstIndex(of: "pee_amount"))
+        XCTAssertEqual(lines[1].components(separatedBy: ",")[column], "large")
+    }
+
+    func testPeeAmountIsOmittedForDirtyOnly() throws {
+        let baby = BabyRecord(name: "Leo", birthDate: Date())
+        let dirty = EventRecord(babyID: baby.id, kind: .diaper, startDate: Date(timeIntervalSince1970: 0), diaperType: .dirty, peeAmount: .small)
+        let csv = CSVExporter.csv(events: [dirty], babies: [baby], timeZone: TimeZone(identifier: "UTC")!)
+        let column = try XCTUnwrap(CSVExporter.header.firstIndex(of: "pee_amount"))
+        XCTAssertEqual(csv.components(separatedBy: "\r\n")[1].components(separatedBy: ",")[column], "")
+    }
+}
+
+final class RebaseTests: XCTestCase {
+    private let start = Date(timeIntervalSince1970: 1_700_000_000)
+
+    func testUntouchedFieldsFollowTheStore() {
+        // Editor opened on a running sleep; the timer is stopped from the Lock Screen.
+        let base = EventRecord(babyID: UUID(), kind: .sleep, startDate: start)
+        var latest = base
+        latest.endDate = start.addingTimeInterval(3600)
+        let merged = base.rebased(onto: latest, from: base)
+        XCTAssertEqual(merged.endDate, latest.endDate)
+        XCTAssertFalse(merged.isOngoing)
+    }
+
+    func testLocalEditsWin() {
+        let base = EventRecord(babyID: UUID(), kind: .sleep, startDate: start)
+        var draft = base
+        draft.note = "fussy"
+        draft.sleepLocation = .crib
+        var latest = base
+        latest.endDate = start.addingTimeInterval(1800)
+        latest.sleepLocation = .stroller
+        let merged = draft.rebased(onto: latest, from: base)
+        XCTAssertEqual(merged.note, "fussy")
+        XCTAssertEqual(merged.sleepLocation, .crib)
+        XCTAssertEqual(merged.endDate, latest.endDate)
+    }
+}
+
 final class WidgetSnapshotTests: XCTestCase {
     func testSnapshotSummarisesLatestState() throws {
         let now = Date()

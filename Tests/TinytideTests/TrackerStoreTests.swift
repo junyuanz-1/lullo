@@ -106,6 +106,27 @@ final class TrackerStoreTests: XCTestCase {
         XCTAssertEqual(store.lastEvent(of: [.diaper], for: leo)?.record.diaperType, .dirty)
     }
 
+    func testPeeAmountIsStored() throws {
+        let baby = makeBaby()
+        let record = EventRecord(babyID: try XCTUnwrap(baby.id), kind: .diaper, startDate: Date(), diaperType: .wet, peeAmount: .medium)
+        let event = try XCTUnwrap(store.save(record))
+        XCTAssertEqual(event.record.peeAmount, .medium)
+    }
+
+    func testStoppingFromElsewhereRebasesAnOpenDraft() throws {
+        // What the entry editor does when a running sleep is stopped from the Lock Screen.
+        let baby = makeBaby()
+        let sleep = try XCTUnwrap(store.startTimer(.sleep, for: baby))
+        let base = sleep.record
+        var draft = base
+        draft.note = "edited in the sheet"
+
+        store.stopTimer(sleep)
+        let merged = draft.rebased(onto: sleep.record, from: base)
+        XCTAssertNotNil(merged.endDate)
+        XCTAssertEqual(merged.note, "edited in the sheet")
+    }
+
     func testSnapshotReflectsState() throws {
         let baby = makeBaby()
         store.logDiaper(.mixed, for: baby)

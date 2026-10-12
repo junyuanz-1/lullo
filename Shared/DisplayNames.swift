@@ -92,7 +92,7 @@ extension BottleContent {
     var title: String {
         switch self {
         case .formula: return String(localized: "Formula")
-        case .breastMilk: return String(localized: "Breast milk")
+        case .breastMilk: return String(localized: "Breast Milk")
         case .mixed: return String(localized: "Mixed")
         case .milk: return String(localized: "Milk")
         case .other: return String(localized: "Other")
@@ -116,6 +116,16 @@ extension DiaperType {
         case .dirty: return "circle.hexagongrid.fill"
         case .mixed: return "drop.circle.fill"
         case .dry: return "sun.max.fill"
+        }
+    }
+}
+
+extension PeeAmount {
+    var title: String {
+        switch self {
+        case .small: return String(localized: "Small")
+        case .medium: return String(localized: "Medium")
+        case .large: return String(localized: "Large")
         }
     }
 }
@@ -168,9 +178,9 @@ extension SleepLocation {
         case .crib: return String(localized: "Crib")
         case .bassinet: return String(localized: "Bassinet")
         case .bed: return String(localized: "Bed")
-        case .arms: return String(localized: "In arms")
+        case .arms: return String(localized: "In Arms")
         case .stroller: return String(localized: "Stroller")
-        case .car: return String(localized: "Car seat")
+        case .car: return String(localized: "Car Seat")
         case .carrier: return String(localized: "Carrier")
         case .other: return String(localized: "Other")
         }
@@ -203,13 +213,13 @@ extension ActivityType {
     var title: String {
         switch self {
         case .bath: return String(localized: "Bath")
-        case .tummyTime: return String(localized: "Tummy time")
+        case .tummyTime: return String(localized: "Tummy Time")
         case .outdoor: return String(localized: "Outdoor")
         case .play: return String(localized: "Play")
-        case .story: return String(localized: "Story time")
-        case .screenTime: return String(localized: "Screen time")
-        case .skinToSkin: return String(localized: "Skin to skin")
-        case .brushTeeth: return String(localized: "Brush teeth")
+        case .story: return String(localized: "Story Time")
+        case .screenTime: return String(localized: "Screen Time")
+        case .skinToSkin: return String(localized: "Skin to Skin")
+        case .brushTeeth: return String(localized: "Brush Teeth")
         case .massage: return String(localized: "Massage")
         case .potty: return String(localized: "Potty")
         case .other: return String(localized: "Other")
@@ -219,7 +229,7 @@ extension ActivityType {
     var systemImage: String {
         switch self {
         case .bath: return "bathtub.fill"
-        case .tummyTime: return "figure.roll"
+        case .tummyTime: return "figure.child"
         case .outdoor: return "sun.max.fill"
         case .play: return "teddybear.fill"
         case .story: return "book.fill"
@@ -238,7 +248,7 @@ extension Sex {
         switch self {
         case .female: return String(localized: "Girl")
         case .male: return String(localized: "Boy")
-        case .unspecified: return String(localized: "Not set")
+        case .unspecified: return String(localized: "Not Set")
         }
     }
 }

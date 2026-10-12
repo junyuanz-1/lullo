@@ -119,7 +119,7 @@ struct AppearanceView: View {
                     } label: {
                         HStack {
                             Circle().fill(option.color).frame(width: 24, height: 24)
-                            Text(option.title).foregroundStyle(.primary)
+                            Text(option.title)
                             Spacer()
                             if theme == option {
                                 Image(systemName: "checkmark").foregroundStyle(.tint)
@@ -127,7 +127,12 @@ struct AppearanceView: View {
                                 Image(systemName: "lock.fill").foregroundStyle(.secondary)
                             }
                         }
+                        .contentShape(Rectangle())
                     }
+                    // A plain style keeps the name in the normal text colour; only
+                    // the swatch shows the theme.
+                    .buttonStyle(.plain)
+                    .accessibilityAddTraits(theme == option ? .isSelected : [])
                 }
             }
         }

@@ -71,12 +71,12 @@ struct SettingsView: View {
                     Text("The file contains \(file.babies.count) babies and \(file.events.count) entries. Entries you already have are kept; newer copies replace older ones.")
                 }
             }
-            .alert("Import finished", isPresented: Binding(get: { importResult != nil }, set: { if !$0 { importResult = nil } })) {
+            .alert("Import Finished", isPresented: Binding(get: { importResult != nil }, set: { if !$0 { importResult = nil } })) {
                 Button("OK") { importResult = nil }
             } message: {
                 Text(importResult ?? "")
             }
-            .alert("Something went wrong", isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })) {
+            .alert("Something Went Wrong", isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })) {
                 Button("OK") { errorMessage = nil }
             } message: {
                 Text(errorMessage ?? "")
@@ -100,7 +100,7 @@ struct SettingsView: View {
                         }
                         Spacer()
                         if store.persistence.isParticipant(baby) {
-                            Text("Shared with you").font(.caption).foregroundStyle(.blue)
+                            Text("Shared with You").font(.caption).foregroundStyle(.blue)
                         } else if baby.id == store.selectedBabyID || (store.selectedBabyID == nil && baby == babies.first) {
                             Image(systemName: "checkmark").foregroundStyle(.tint)
                         }
@@ -126,7 +126,7 @@ struct SettingsView: View {
                     HStack {
                         Label {
                             Text(store.persistence.isShared(baby)
-                                 ? String(localized: "Manage sharing for \(baby.displayName)")
+                                 ? String(localized: "Manage Sharing for \(baby.displayName)")
                                  : String(localized: "Share \(baby.displayName)"))
                         } icon: {
                             Image(systemName: store.persistence.isShared(baby) ? "person.2.fill" : "person.badge.plus")
@@ -146,16 +146,12 @@ struct SettingsView: View {
 
     private var preferencesSection: some View {
         Section("Preferences") {
-            Picker("Units", selection: $unitSystem) {
-                ForEach(UnitSystem.allCases, id: \.self) { Text($0.title).tag($0) }
-            }
-            Picker("Temperature", selection: $temperatureUnit) {
-                ForEach(TemperatureUnit.allCases, id: \.self) { Text($0.title).tag($0) }
-            }
-            Picker("Night starts", selection: $nightStartHour) {
+            ChipPicker(title: String(localized: "Units"), options: UnitSystem.allCases, value: $unitSystem, label: \.title)
+            ChipPicker(title: String(localized: "Temperature"), options: TemperatureUnit.allCases, value: $temperatureUnit, label: \.title)
+            Picker("Night Starts", selection: $nightStartHour) {
                 ForEach(17..<24, id: \.self) { Text(hourLabel($0)).tag($0) }
             }
-            Picker("Night ends", selection: $nightEndHour) {
+            Picker("Night Ends", selection: $nightEndHour) {
                 ForEach(3..<11, id: \.self) { Text(hourLabel($0)).tag($0) }
             }
             Toggle("Live Activities", isOn: $liveActivities)
@@ -171,19 +167,19 @@ struct SettingsView: View {
 
     private var remindersSection: some View {
         Section {
-            Toggle("Feeding reminder", isOn: $feedReminder)
+            Toggle("Feeding Reminder", isOn: $feedReminder)
             if feedReminder {
                 Stepper(value: $feedHours, in: 1...6, step: 0.5) {
-                    LabeledContent("After last feed", value: Fmt.duration(feedHours * 3600))
+                    LabeledContent("After Last Feed", value: Fmt.duration(feedHours * 3600))
                 }
             }
-            Toggle("Diaper reminder", isOn: $diaperReminder)
+            Toggle("Diaper Reminder", isOn: $diaperReminder)
             if diaperReminder {
                 Stepper(value: $diaperHours, in: 1...6, step: 0.5) {
-                    LabeledContent("After last change", value: Fmt.duration(diaperHours * 3600))
+                    LabeledContent("After Last Change", value: Fmt.duration(diaperHours * 3600))
                 }
             }
-            Toggle("Nap sweet spot reminder", isOn: $napReminder)
+            Toggle("Nap Sweet Spot Reminder", isOn: $napReminder)
         } header: {
             Text("Reminders")
         } footer: {
@@ -198,9 +194,9 @@ struct SettingsView: View {
 
     private var iCloudSection: some View {
         Section {
-            LabeledContent("iCloud account", value: accountText)
+            LabeledContent("iCloud Account", value: accountText)
             if let lastSync = sync.lastSync {
-                LabeledContent("Last synced", value: lastSync.formatted(date: .abbreviated, time: .shortened))
+                LabeledContent("Last Synced", value: lastSync.formatted(date: .abbreviated, time: .shortened))
             } else if sync.isSyncing {
                 LabeledContent("Status", value: String(localized: "Syncing…"))
             }

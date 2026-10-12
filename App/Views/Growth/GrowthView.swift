@@ -88,7 +88,7 @@ struct GrowthView: View {
                     } label: {
                         Image(systemName: "plus.circle.fill").font(.title3)
                     }
-                    .accessibilityLabel(Text("Add measurement"))
+                    .accessibilityLabel(Text("Add Measurement"))
                 }
             }
             .sheet(item: $editor) { route in

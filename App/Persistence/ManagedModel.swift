@@ -49,6 +49,7 @@ enum ManagedModel {
             attribute("diaperType", .stringAttributeType),
             attribute("poopColor", .stringAttributeType),
             attribute("poopConsistency", .stringAttributeType),
+            attribute("peeAmount", .stringAttributeType),
             attribute("hasRash", .booleanAttributeType, defaultValue: false),
             attribute("weightKg", .doubleAttributeType),
             attribute("heightCm", .doubleAttributeType),

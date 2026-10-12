@@ -69,6 +69,7 @@ struct KindIcon: View {
 }
 
 /// Number field that edits a metric value while showing the user's units.
+/// The unit can be switched inline; the choice is saved as the app-wide setting.
 struct MeasurementField: View {
     enum Quantity {
         case volume, weight, length, temperature
@@ -78,17 +79,8 @@ struct MeasurementField: View {
     @Binding var metricValue: Double?
     var quantity: Quantity
 
-    private var unitSystem: UnitSystem { AppSettings.unitSystem }
-    private var temperatureUnit: TemperatureUnit { AppSettings.temperatureUnit }
-
-    private var unitLabel: String {
-        switch quantity {
-        case .volume: return unitSystem == .metric ? String(localized: "ml") : String(localized: "oz")
-        case .weight: return unitSystem == .metric ? String(localized: "kg") : String(localized: "lb")
-        case .length: return unitSystem == .metric ? String(localized: "cm") : String(localized: "in")
-        case .temperature: return temperatureUnit.title
-        }
-    }
+    @AppStorage(SettingsKey.unitSystem, store: SharedContainer.defaults) private var unitSystem: UnitSystem = AppSettings.unitSystem
+    @AppStorage(SettingsKey.temperatureUnit, store: SharedContainer.defaults) private var temperatureUnit: TemperatureUnit = AppSettings.temperatureUnit
 
     private var displayBinding: Binding<Double?> {
         Binding(
@@ -118,38 +110,284 @@ struct MeasurementField: View {
     }
 
     var body: some View {
+        let placeholder = "0"
         HStack {
             Text(title)
             Spacer()
-            TextField(unitLabel, value: displayBinding, format: .number.precision(.fractionLength(0...2)))
+            TextField(placeholder, value: displayBinding, format: .number.precision(.fractionLength(0...2)))
                 .keyboardType(.decimalPad)
                 .multilineTextAlignment(.trailing)
-                .frame(maxWidth: 120)
-            Text(unitLabel).foregroundStyle(.secondary)
+                .frame(maxWidth: 110)
+            unitToggle
         }
+    }
+
+    @ViewBuilder
+    private var unitToggle: some View {
+        if quantity == .temperature {
+            UnitToggle(
+                options: TemperatureUnit.allCases,
+                selection: Binding(get: { temperatureUnit }, set: { temperatureUnit = $0; unitsChanged() }),
+                label: \.title
+            )
+        } else {
+            UnitToggle(
+                options: UnitSystem.allCases,
+                selection: Binding(get: { unitSystem }, set: { unitSystem = $0; unitsChanged() }),
+                label: { Self.unitLabel(quantity, $0) }
+            )
+        }
+    }
+
+    private func unitsChanged() {
+        UISelectionFeedbackGenerator().selectionChanged()
+        // Widgets and Live Activities format amounts with the same setting.
+        TrackerStore.shared.scheduleSideEffects()
+    }
+
+    static func unitLabel(_ quantity: Quantity, _ system: UnitSystem) -> String {
+        switch quantity {
+        case .volume: return system == .metric ? String(localized: "ml") : String(localized: "oz")
+        case .weight: return system == .metric ? String(localized: "kg") : String(localized: "lb")
+        case .length: return system == .metric ? String(localized: "cm") : String(localized: "in")
+        case .temperature: return system == .metric ? TemperatureUnit.celsius.title : TemperatureUnit.fahrenheit.title
+        }
+    }
+}
+
+/// Compact two-way unit switch ("ml | oz") shown next to a number field.
+struct UnitToggle<Value: Hashable>: View {
+    var options: [Value]
+    @Binding var selection: Value
+    var label: (Value) -> String
+
+    var body: some View {
+        HStack(spacing: 2) {
+            ForEach(options, id: \.self) { option in
+                let selected = option == selection
+                Button {
+                    withAnimation(.snappy(duration: 0.2)) { selection = option }
+                } label: {
+                    Text(label(option))
+                        .font(.footnote.weight(.semibold))
+                        .lineLimit(1)
+                        .fixedSize()
+                        .padding(.horizontal, 9)
+                        .padding(.vertical, 5)
+                        .background(selected ? Color.accentColor : .clear, in: Capsule())
+                        .foregroundStyle(selected ? Color.white : Color.secondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(selected ? .isSelected : [])
+            }
+        }
+        .padding(2)
+        .background(Color(.tertiarySystemFill), in: Capsule())
     }
 }
 
 /// Quick volume presets for bottles, in the user's unit.
 struct VolumePresets: View {
     @Binding var metricValue: Double?
+    @AppStorage(SettingsKey.unitSystem, store: SharedContainer.defaults) private var unitSystem: UnitSystem = AppSettings.unitSystem
 
     private var presets: [Double] {
-        AppSettings.unitSystem == .metric
+        unitSystem == .metric
             ? [60, 90, 120, 150, 180, 210]
             : [2, 3, 4, 5, 6, 7].map(UnitConversion.ml(fromOunces:))
     }
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack {
+            HStack(spacing: 8) {
                 ForEach(presets, id: \.self) { ml in
-                    Button(Fmt.volume(ml)) { metricValue = ml }
-                        .buttonStyle(.bordered)
-                        .tint(abs((metricValue ?? -1) - ml) < 0.5 ? .orange : .secondary)
+                    let selected = abs((metricValue ?? -1) - ml) < 0.5
+                    Button {
+                        metricValue = ml
+                    } label: {
+                        ChipLabel(title: Fmt.volume(ml, unit: unitSystem), selected: selected, tint: .orange)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
         }
+    }
+}
+
+/// Visual for one selectable pill.
+struct ChipLabel: View {
+    var title: String
+    var systemImage: String?
+    var selected: Bool
+    var tint: Color = .accentColor
+
+    var body: some View {
+        HStack(spacing: 5) {
+            if let systemImage { Image(systemName: systemImage).imageScale(.small) }
+            Text(title).lineLimit(1)
+        }
+        .font(.subheadline.weight(.medium))
+        .padding(.horizontal, 13)
+        .padding(.vertical, 7)
+        .background(selected ? tint : Color(.tertiarySystemFill), in: Capsule())
+        .foregroundStyle(selected ? Color.white : Color.primary)
+        .contentShape(Capsule())
+    }
+}
+
+/// A row of pills that wraps onto more lines as needed, used instead of
+/// drop-down menus so every choice is visible and one tap away.
+struct ChipPicker<Value: Hashable>: View {
+    var title: String?
+    var options: [Value]
+    @Binding var selection: Value?
+    /// Tapping the selected pill again clears an optional field.
+    var allowsDeselect = true
+    var tint: Color = .accentColor
+    var label: (Value) -> String
+    var systemImage: ((Value) -> String)?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if let title {
+                Text(title).font(.subheadline).foregroundStyle(.secondary)
+            }
+            FlowLayout(spacing: 8) {
+                ForEach(options, id: \.self) { option in
+                    let selected = selection == option
+                    Button {
+                        withAnimation(.snappy(duration: 0.2)) {
+                            selection = selected && allowsDeselect ? nil : option
+                        }
+                        UISelectionFeedbackGenerator().selectionChanged()
+                    } label: {
+                        ChipLabel(title: label(option), systemImage: systemImage?(option), selected: selected, tint: tint)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityAddTraits(selected ? .isSelected : [])
+                }
+            }
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+extension ChipPicker {
+    /// For fields that always have a value.
+    init(
+        title: String?,
+        options: [Value],
+        value selection: Binding<Value>,
+        tint: Color = .accentColor,
+        label: @escaping (Value) -> String,
+        systemImage: ((Value) -> String)? = nil
+    ) {
+        self.init(
+            title: title,
+            options: options,
+            selection: Binding<Value?>(get: { selection.wrappedValue }, set: { if let v = $0 { selection.wrappedValue = v } }),
+            allowsDeselect: false,
+            tint: tint,
+            label: label,
+            systemImage: systemImage
+        )
+    }
+}
+
+/// Two or three big pill segments with a sliding highlight, used in place of
+/// the system segmented control at the top of sheets.
+struct PillSegmentedControl<Value: Hashable>: View {
+    struct Segment {
+        var value: Value
+        var title: String
+        var systemImage: String
+    }
+
+    var segments: [Segment]
+    @Binding var selection: Value
+    var tint: Color = .accentColor
+    @Namespace private var highlight
+
+    var body: some View {
+        HStack(spacing: 4) {
+            ForEach(segments, id: \.value) { segment in
+                let selected = segment.value == selection
+                Button {
+                    withAnimation(.snappy(duration: 0.25)) { selection = segment.value }
+                } label: {
+                    Label(segment.title, systemImage: segment.systemImage)
+                        .font(.subheadline.weight(.semibold))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .foregroundStyle(selected ? Color.white : Color.secondary)
+                        .background {
+                            if selected {
+                                Capsule().fill(tint.gradient).matchedGeometryEffect(id: "highlight", in: highlight)
+                            }
+                        }
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(selected ? .isSelected : [])
+            }
+        }
+        .padding(4)
+        .background(Color(.tertiarySystemFill), in: Capsule())
+    }
+}
+
+/// Lays children out left to right, wrapping to a new line when a row is full.
+struct FlowLayout: Layout {
+    var spacing: CGFloat = 8
+    var lineSpacing: CGFloat?
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let rows = arrange(width: proposal.width ?? .infinity, subviews: subviews)
+        let width = rows.map(\.width).max() ?? 0
+        let height = rows.reduce(0) { $0 + $1.height } + CGFloat(max(0, rows.count - 1)) * (lineSpacing ?? spacing)
+        return CGSize(width: proposal.width ?? width, height: height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        var y = bounds.minY
+        for row in arrange(width: bounds.width, subviews: subviews) {
+            var x = bounds.minX
+            for index in row.indices {
+                let size = subviews[index].sizeThatFits(.unspecified)
+                subviews[index].place(
+                    at: CGPoint(x: x, y: y + (row.height - size.height) / 2),
+                    proposal: ProposedViewSize(width: min(size.width, bounds.width), height: size.height)
+                )
+                x += size.width + spacing
+            }
+            y += row.height + (lineSpacing ?? spacing)
+        }
+    }
+
+    private struct Row {
+        var indices: [Int] = []
+        var width: CGFloat = 0
+        var height: CGFloat = 0
+    }
+
+    private func arrange(width maxWidth: CGFloat, subviews: Subviews) -> [Row] {
+        var rows: [Row] = []
+        var current = Row()
+        for index in subviews.indices {
+            let size = subviews[index].sizeThatFits(.unspecified)
+            let needed = current.indices.isEmpty ? size.width : current.width + spacing + size.width
+            if needed > maxWidth, !current.indices.isEmpty {
+                rows.append(current)
+                current = Row()
+            }
+            current.width = current.indices.isEmpty ? min(size.width, maxWidth) : current.width + spacing + size.width
+            current.height = max(current.height, size.height)
+            current.indices.append(index)
+        }
+        if !current.indices.isEmpty { rows.append(current) }
+        return rows
     }
 }
 
@@ -169,7 +407,7 @@ struct PhotoField: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
             }
             PhotosPicker(selection: $item, matching: .images) {
-                Label(data == nil ? title : String(localized: "Change photo"), systemImage: "photo")
+                Label(data == nil ? title : String(localized: "Change Photo"), systemImage: "photo")
             }
             if data != nil {
                 Spacer()
@@ -180,7 +418,7 @@ struct PhotoField: View {
                     Image(systemName: "trash")
                 }
                 .buttonStyle(.borderless)
-                .accessibilityLabel(Text("Remove photo"))
+                .accessibilityLabel(Text("Remove Photo"))
             }
         }
         .onChange(of: item) { _, newItem in
