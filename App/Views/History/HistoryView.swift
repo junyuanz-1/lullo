@@ -25,7 +25,7 @@ struct HistoryView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) { BabySwitcher(baby: baby) }
                 ToolbarItem(placement: .topBarTrailing) {
-                    // Grouped the same way as the filter chips, so the 13 kinds
+                    // Grouped the same way as the filter chips, so the 14 kinds
                     // read as a few short lists instead of one long one.
                     Menu {
                         ForEach(EventCategory.allCases) { category in
@@ -203,14 +203,16 @@ private struct DayHeader: View {
         let sleep = records.filter { $0.kind == .sleep }.reduce(0) { $0 + $1.duration(at: AppClock.now) }
         let feeds = records.filter { $0.kind.isFeeding }.count
         let diapers = records.filter { $0.kind == .diaper }.count
+        let fussy = records.filter { $0.kind == .fussy }.count
         let totals = HStack(spacing: 10) {
             if sleep > 0 { total(.sleep, Fmt.duration(sleep)) }
             if feeds > 0 { total(.bottle, "\(feeds)") }
             if diapers > 0 { total(.diaper, "\(diapers)") }
+            if fussy > 0 { total(.fussy, "\(fussy)") }
         }
         .textCase(nil)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(accessibilitySummary(sleep: sleep, feeds: feeds, diapers: diapers)))
+        .accessibilityLabel(Text(accessibilitySummary(sleep: sleep, feeds: feeds, diapers: diapers, fussy: fussy)))
 
         ViewThatFits(in: .horizontal) {
             HStack {
@@ -225,10 +227,11 @@ private struct DayHeader: View {
                     if sleep > 0 { total(.sleep, Fmt.duration(sleep)) }
                     if feeds > 0 { total(.bottle, "\(feeds)") }
                     if diapers > 0 { total(.diaper, "\(diapers)") }
+                    if fussy > 0 { total(.fussy, "\(fussy)") }
                 }
                 .textCase(nil)
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel(Text(accessibilitySummary(sleep: sleep, feeds: feeds, diapers: diapers)))
+                .accessibilityLabel(Text(accessibilitySummary(sleep: sleep, feeds: feeds, diapers: diapers, fussy: fussy)))
             }
         }
     }
@@ -242,13 +245,14 @@ private struct DayHeader: View {
         .fixedSize()
     }
 
-    private func accessibilitySummary(sleep: TimeInterval, feeds: Int, diapers: Int) -> String {
+    private func accessibilitySummary(sleep: TimeInterval, feeds: Int, diapers: Int, fussy: Int) -> String {
         var parts: [String] = []
         if sleep > 0 { parts.append(String(localized: "Sleep \(Fmt.duration(sleep))")) }
         // Passed as text so the keys are "Feeds %@" / "Diapers %@" (an Int would
         // look up "%lld" and miss the translations).
         if feeds > 0 { parts.append(String(localized: "Feeds \(String(feeds))")) }
         if diapers > 0 { parts.append(String(localized: "Diapers \(String(diapers))")) }
+        if fussy > 0 { parts.append(String(localized: "Fussy \(String(fussy))")) }
         return parts.joined(separator: ", ")
     }
 }

@@ -10,7 +10,9 @@ public enum CSVExporter {
         "diaper", "pee_amount", "poop_color", "poop_consistency", "rash",
         "weight_kg", "length_cm", "head_cm",
         "medication", "dosage", "temperature_c", "symptoms", "vaccine",
-        "activity", "sleep_location", "note", "author",
+        "activity", "sleep_location",
+        "fuss_intensity", "fuss_causes", "soothing",
+        "note", "author",
     ]
 
     public static func csv(
@@ -27,7 +29,7 @@ public enum CSVExporter {
 
         var lines = [header.joined(separator: ",")]
         for e in events.sorted(by: { $0.startDate < $1.startDate }) {
-            let durationMinutes: String = e.kind.hasDuration ? number(e.duration(at: now) / 60) : ""
+            let durationMinutes: String = e.hasTimeRange ? number(e.duration(at: now) / 60) : ""
             let row: [String] = [
                 e.id.uuidString,
                 text(names[e.babyID]),
@@ -59,6 +61,9 @@ public enum CSVExporter {
                 text(e.vaccineName),
                 e.activityType?.rawValue ?? "",
                 e.sleepLocation?.rawValue ?? "",
+                e.fussIntensity?.rawValue ?? "",
+                e.fussCauses.map(\.rawValue).joined(separator: ";"),
+                e.soothingMethods.map(\.rawValue).joined(separator: ";"),
                 text(e.note),
                 text(e.authorName),
             ]

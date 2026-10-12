@@ -61,6 +61,14 @@ public enum DemoData {
             builder.sleep(at(15, 30), at(16, 15))
             builder.bottle(at(16, 40), ml: 150, content: .formula)
             builder.diaper(at(17, 20), .dirty, color: .yellow, consistency: .mushy)
+            if dayOffset % 2 == 1 {
+                // The evening "witching hour", timed.
+                builder.fussy(at(17, 35), minutes: 25, intensity: .moderate, causes: [.tired, .overstimulated], soothing: [.holding, .whiteNoise])
+            }
+            if dayOffset % 3 == 1 {
+                // A short spell logged as a moment.
+                builder.fussy(at(14, 25), intensity: .mild, causes: [.gas], soothing: [.burping])
+            }
             builder.activity(at(18, 10), minutes: 15, type: .bath)
             builder.nursing(at(18, 50), left: 12, right: 10, endingOn: .left)
             builder.diaper(at(19, 15), .wet, pee: .medium)
@@ -148,6 +156,14 @@ public enum DemoData {
             add(
                 EventRecord(babyID: babyID, kind: .activity, startDate: start,
                             endDate: start.addingTimeInterval(TimeInterval(minutes * 60)), activityType: type)
+            )
+        }
+
+        mutating func fussy(_ start: Date, minutes: Int? = nil, intensity: FussIntensity, causes: [FussCause], soothing: [SoothingMethod]) {
+            add(
+                EventRecord(babyID: babyID, kind: .fussy, startDate: start,
+                            endDate: minutes.map { start.addingTimeInterval(TimeInterval($0 * 60)) },
+                            fussIntensity: intensity, fussCauses: causes, soothingMethods: soothing)
             )
         }
 

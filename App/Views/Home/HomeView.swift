@@ -25,8 +25,8 @@ struct EditorSheet: View {
         NavigationStack {
             EventEditorView(baby: baby, kind: route.kind, existing: route.existing, mode: route.mode, choices: route.choices)
         }
-        // Short forms (diaper, note) open half-height so the Save button is close
-        // at hand; drag up for more room.
+        // Short forms (diaper, note, fussy) open half-height so the Save button
+        // is close at hand; drag up for more room.
         .presentationDetents(route.kind.prefersCompactSheet ? [.medium, .large] : [.large])
     }
 }
@@ -78,6 +78,7 @@ struct HomeView: View {
                     QuickActionsGrid(
                         records: records,
                         running: running,
+                        openFussy: recent.first(where: { $0.record.isOpenFussy(at: AppClock.now) }),
                         editor: $editor,
                         startTimer: startTimer,
                         startNursing: startNursing,
@@ -429,6 +430,8 @@ struct QuickActionsGrid: View {
     var records: [EventRecord]
     /// Running timers, oldest first.
     var running: [Event]
+    /// A fussy spell logged without an end in the last few hours.
+    var openFussy: Event?
     @Binding var editor: EditorRoute?
     var startTimer: (EventKind, ActivityType?) -> Void
     var startNursing: (BreastSide?) -> Void
@@ -486,6 +489,7 @@ struct QuickActionsGrid: View {
                 entryTile(.diaper)
                 entryTile(.solids)
                 entryTile(.activity)
+                entryTile(.fussy)
                 entryTile(.growth)
                 healthTile
                 entryTile(.note)
@@ -589,11 +593,12 @@ struct QuickActionsGrid: View {
 
     /// Opens the form for `kind` with Save at hand ("Log Past"; the Timer
     /// segment is one tap away). A running bottle opens that bottle instead, to
-    /// add the amount or stop it, and says so with a pencil badge. Activities can
-    /// overlap, so the tile always adds a new one and only names what is running.
+    /// add the amount or stop it, and says so with a pencil badge; so does a
+    /// fussy spell still going on, to end it. Activities can overlap, so the
+    /// tile always adds a new one and only names what is running.
     private func entryTile(_ kind: EventKind) -> some View {
         let active = runningTimers(of: kind)
-        let open = kind == .bottle ? active.first : nil
+        let open = kind == .bottle ? active.first : kind == .fussy ? openFussy : nil
         let openRecord = open?.record
         return Button {
             if let open {
@@ -608,11 +613,14 @@ struct QuickActionsGrid: View {
                 systemImage: kind.systemImage,
                 color: kind.color,
                 badge: openRecord == nil ? .add : .edit,
-                elapsed: openRecord.map { record in { (now: Date) in record.duration(at: now) } }
+                // A fussy spell has no end yet, so it counts from its start.
+                elapsed: openRecord.map { record in { (now: Date) in
+                    record.kind == .fussy ? max(0, now.timeIntervalSince(record.startDate)) : record.duration(at: now)
+                } }
             )
         }
         .buttonStyle(.plain)
-        .accessibilityHint(open == nil ? Text("Opens a form") : Text("Opens the running bottle"))
+        .accessibilityHint(open == nil ? Text("Opens a form") : kind == .fussy ? Text("Opens the fussy spell to end it") : Text("Opens the running bottle"))
     }
 
     /// The hint about touch-and-hold is no longer needed once it has been used.
@@ -970,8 +978,8 @@ struct EventRow: View {
 
     private func timeText(_ r: EventRecord) -> String {
         // A range only when there was one (bottles logged without a duration
-        // end when they start).
-        if r.kind.hasDuration, let end = r.endDate, r.kind != .nursing, end.timeIntervalSince(r.startDate) >= 60 {
+        // end when they start; a fussy spell may have no end at all).
+        if r.hasTimeRange, let end = r.endDate, r.kind != .nursing, end.timeIntervalSince(r.startDate) >= 60 {
             return "\(Fmt.time(r.startDate)) – \(Fmt.time(end))"
         }
         return Fmt.time(r.startDate)

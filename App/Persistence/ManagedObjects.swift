@@ -78,6 +78,9 @@ final class Event: NSManagedObject, Identifiable {
     @NSManaged var symptoms: String?
     @NSManaged var vaccineName: String?
     @NSManaged var activityType: String?
+    @NSManaged var fussIntensity: String?
+    @NSManaged var fussCauses: String?
+    @NSManaged var soothingMethods: String?
     @NSManaged var photoData: Data?
     @NSManaged var baby: Baby?
 
@@ -124,6 +127,9 @@ final class Event: NSManagedObject, Identifiable {
             symptoms: symptoms,
             vaccineName: vaccineName,
             activityType: activityType.flatMap(ActivityType.init(rawValue:)),
+            fussIntensity: fussIntensity.flatMap(FussIntensity.init(rawValue:)),
+            fussCauses: EventRecord.parseRawValues(fussCauses),
+            soothingMethods: EventRecord.parseRawValues(soothingMethods),
             photoData: photoData
         )
     }
@@ -165,6 +171,9 @@ final class Event: NSManagedObject, Identifiable {
         assign(self, \.symptoms, r.symptoms?.nilIfBlank)
         assign(self, \.vaccineName, r.vaccineName?.nilIfBlank)
         assign(self, \.activityType, r.activityType?.rawValue)
+        assign(self, \.fussIntensity, r.fussIntensity?.rawValue)
+        assign(self, \.fussCauses, EventRecord.joinedRawValues(r.fussCauses))
+        assign(self, \.soothingMethods, EventRecord.joinedRawValues(r.soothingMethods))
         assign(self, \.photoData, r.photoData)
     }
 }

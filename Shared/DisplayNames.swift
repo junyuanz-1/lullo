@@ -19,6 +19,7 @@ extension EventKind {
         case .symptom: return String(localized: "Symptom")
         case .vaccine: return String(localized: "Vaccine")
         case .activity: return String(localized: "Activity")
+        case .fussy: return String(localized: "Fussy")
         case .note: return String(localized: "Note")
         }
     }
@@ -37,6 +38,7 @@ extension EventKind {
         case .symptom: return "stethoscope"
         case .vaccine: return "syringe.fill"
         case .activity: return "figure.play"
+        case .fussy: return "cloud.rain.fill"
         case .note: return "note.text"
         }
     }
@@ -52,16 +54,18 @@ extension EventKind {
         case .growth: return .blue
         case .medication, .temperature, .symptom, .vaccine: return .red
         case .activity: return .mint
+        // Storm-cloud slate: apart from the diaper teal and sleep indigo in the schedule chart.
+        case .fussy: return Color(red: 0.42, green: 0.5, blue: 0.62)
         case .note: return .gray
         }
     }
 }
 
 extension EventKind {
-    /// Short forms that fit a half-height sheet.
+    /// Forms that open half-height, so Save is close at hand (drag up for more).
     var prefersCompactSheet: Bool {
         switch self {
-        case .diaper, .note: return true
+        case .diaper, .note, .fussy: return true
         default: return false
         }
     }
@@ -77,6 +81,7 @@ extension EventCategory {
         case .growth: return String(localized: "Growth")
         case .health: return String(localized: "Health")
         case .activity: return String(localized: "Activity")
+        case .fussy: return String(localized: "Fussy")
         case .note: return String(localized: "Note")
         }
     }
@@ -253,6 +258,52 @@ extension ActivityType {
     }
 }
 
+extension FussIntensity {
+    var title: String {
+        switch self {
+        case .mild: return String(localized: "Mild")
+        case .moderate: return String(localized: "Moderate")
+        case .intense: return String(localized: "Intense")
+        }
+    }
+}
+
+extension FussCause {
+    var title: String {
+        switch self {
+        case .hungry: return String(localized: "Hungry")
+        case .tired: return String(localized: "Tired")
+        case .gas: return String(localized: "Gas / Spit-up")
+        case .diaper: return String(localized: "Diaper")
+        case .colic: return String(localized: "Colic")
+        case .teething: return String(localized: "Teething")
+        case .unwell: return String(localized: "Unwell")
+        case .overstimulated: return String(localized: "Overstimulated")
+        case .wantsHolding: return String(localized: "Wants Holding")
+        case .unknown: return String(localized: "Not Sure")
+        }
+    }
+}
+
+extension SoothingMethod {
+    var title: String {
+        switch self {
+        case .holding: return String(localized: "Holding")
+        case .rocking: return String(localized: "Rocking")
+        case .feeding: return String(localized: "Nursing / Bottle")
+        case .pacifier: return String(localized: "Pacifier")
+        case .whiteNoise: return String(localized: "White Noise")
+        case .swaddling: return String(localized: "Swaddling")
+        case .burping: return String(localized: "Burping")
+        case .diaperChange: return String(localized: "Diaper Change")
+        case .bath: return String(localized: "Bath")
+        case .walk: return String(localized: "Walk / Stroller")
+        case .singing: return String(localized: "Singing / Talking")
+        case .other: return String(localized: "Other")
+        }
+    }
+}
+
 extension Sex {
     var title: String {
         switch self {
@@ -300,6 +351,7 @@ extension EventRecord {
         case .medication: return medicationName ?? kind.title
         case .vaccine: return vaccineName ?? kind.title
         case .solids: return foodName ?? kind.title
+        case .fussy: return fussIntensity.map { String(localized: "Fussy · \($0.title)") } ?? kind.title
         default: return kind.title
         }
     }

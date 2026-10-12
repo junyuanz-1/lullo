@@ -540,9 +540,150 @@ final class DemoDataTests: XCTestCase {
         XCTAssertEqual(summary.totalSleep / 3600, 14.5, accuracy: 1.5)
         XCTAssertGreaterThanOrEqual(summary.feedCount, 6)
         XCTAssertGreaterThanOrEqual(summary.wetDiapers, 5)
+        XCTAssertGreaterThanOrEqual(summary.fussyCount, 1)
 
         // Same input, same output.
         XCTAssertEqual(DemoData.make(now: now, calendar: calendar).events, data.events)
+    }
+}
+
+final class FussyTests: XCTestCase {
+    private var calendar: Calendar = {
+        var c = Calendar(identifier: .gregorian)
+        c.timeZone = TimeZone(identifier: "UTC")!
+        return c
+    }()
+    private let baby = UUID()
+
+    private func date(_ day: Int, _ hour: Int, _ minute: Int = 0) -> Date {
+        calendar.date(from: DateComponents(year: 2026, month: 3, day: day, hour: hour, minute: minute))!
+    }
+
+    func testAMomentHasNoDurationAndIsNotATimer() {
+        let moment = EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 17))
+        XCTAssertFalse(moment.isOngoing)
+        XCTAssertFalse(moment.hasTimeRange)
+        XCTAssertEqual(moment.duration(at: date(3, 18)), 0)
+        XCTAssertEqual(moment.effectiveEnd(at: date(3, 18)), moment.startDate)
+    }
+
+    func testAnEndTimeMakesASpell() {
+        let spell = EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 17), endDate: date(3, 17, 40))
+        XCTAssertTrue(spell.hasTimeRange)
+        XCTAssertFalse(spell.isOngoing)
+        XCTAssertEqual(spell.duration(at: date(3, 20)), 40 * 60)
+        XCTAssertEqual(spell.effectiveEnd(at: date(3, 20)), date(3, 17, 40))
+    }
+
+    func testDailyCountAndMinutes() {
+        let events = [
+            EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 10)),
+            EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 17), endDate: date(3, 17, 30)),
+            EventRecord(babyID: baby, kind: .fussy, startDate: date(4, 18), endDate: date(4, 18, 10)),
+        ]
+        let days = Statistics.dailySummaries(events: events, from: date(3, 0), to: date(4, 0), now: date(5, 0), calendar: calendar)
+        XCTAssertEqual(days.map(\.fussyCount), [2, 1])
+        XCTAssertEqual(days.map(\.fussyDuration), [1800, 600])
+    }
+
+    func testScheduleShowsSpellsAsBlocksAndMomentsAsMarks() {
+        let events = [
+            EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 10)),
+            EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 17), endDate: date(3, 17, 30)),
+        ]
+        let row = Statistics.schedules(events: events, from: date(3, 0), to: date(3, 0), now: date(4, 0), calendar: calendar)[0]
+        XCTAssertEqual(row.marks, [.init(offset: 10.0 * 3600, kind: .fussy)])
+        XCTAssertEqual(row.blocks, [.init(start: 17.0 * 3600, end: 17.5 * 3600, kind: .fussy)])
+    }
+
+    func testDetailsRoundTripThroughBackupAndCSV() throws {
+        let mia = BabyRecord(name: "Mia", birthDate: date(1, 0))
+        let spell = EventRecord(
+            babyID: mia.id, kind: .fussy, startDate: date(3, 17), endDate: date(3, 17, 25),
+            fussIntensity: .intense, fussCauses: [.gas, .tired], soothingMethods: [.holding, .whiteNoise]
+        )
+        let decoded = try XCTUnwrap(BackupCodec.decode(BackupCodec.encode(BackupFile(babies: [mia], events: [spell]))).events.first)
+        XCTAssertEqual(decoded.kind, .fussy)
+        XCTAssertEqual(decoded.endDate, spell.endDate)
+        XCTAssertEqual(decoded.fussIntensity, .intense)
+        XCTAssertEqual(decoded.fussCauses, [.gas, .tired])
+        XCTAssertEqual(decoded.soothingMethods, [.holding, .whiteNoise])
+
+        let lines = CSVExporter.csv(events: [spell], babies: [mia], timeZone: TimeZone(identifier: "UTC")!).components(separatedBy: "\r\n")
+        let row = lines[1].components(separatedBy: ",")
+        XCTAssertEqual(row.count, CSVExporter.header.count)
+        XCTAssertEqual(row[try XCTUnwrap(CSVExporter.header.firstIndex(of: "type"))], "fussy")
+        XCTAssertEqual(row[try XCTUnwrap(CSVExporter.header.firstIndex(of: "duration_min"))], "25.0")
+        XCTAssertEqual(row[try XCTUnwrap(CSVExporter.header.firstIndex(of: "fuss_intensity"))], "intense")
+        XCTAssertEqual(row[try XCTUnwrap(CSVExporter.header.firstIndex(of: "fuss_causes"))], "gas;tired")
+        XCTAssertEqual(row[try XCTUnwrap(CSVExporter.header.firstIndex(of: "soothing"))], "holding;whiteNoise")
+
+        let moment = EventRecord(babyID: mia.id, kind: .fussy, startDate: date(3, 9))
+        let momentRow = CSVExporter.csv(events: [moment], babies: [mia]).components(separatedBy: "\r\n")[1].components(separatedBy: ",")
+        XCTAssertEqual(momentRow[try XCTUnwrap(CSVExporter.header.firstIndex(of: "duration_min"))], "")
+    }
+
+    func testUnknownChoicesAreDroppedNotTheEntry() throws {
+        let json = """
+        {"formatVersion":1,"exportedAt":"2026-01-01T00:00:00Z","babies":[],
+         "events":[{"id":"\(UUID().uuidString)","babyID":"\(UUID().uuidString)","kind":"fussy",
+                    "startDate":"2026-01-01T08:00:00Z","fussIntensity":"volcanic",
+                    "fussCauses":["moonPhase","hungry"],"soothingMethods":"rocking"}]}
+        """
+        let event = try XCTUnwrap(BackupCodec.decode(Data(json.utf8)).events.first)
+        XCTAssertEqual(event.kind, .fussy)
+        XCTAssertNil(event.fussIntensity)
+        XCTAssertEqual(event.fussCauses, [.hungry])
+        XCTAssertEqual(event.soothingMethods, [])
+    }
+
+    func testChoicesAreStoredAsOrderedText() {
+        XCTAssertEqual(EventRecord.joinedRawValues([FussCause.tired, .hungry]), "hungry,tired")
+        XCTAssertNil(EventRecord.joinedRawValues([SoothingMethod]()))
+        let parsed: [SoothingMethod] = EventRecord.parseRawValues("rocking,dancing,pacifier")
+        XCTAssertEqual(parsed, [.rocking, .pacifier])
+        XCTAssertEqual(EventRecord.parseRawValues(nil) as [FussCause], [])
+    }
+
+    func testOnlyARecentUnendedSpellIsOpen() {
+        let now = date(3, 18)
+        let recent = EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 17, 30))
+        XCTAssertTrue(recent.isOpenFussy(at: now))
+        XCTAssertFalse(recent.isOngoing, "Still not a timer")
+
+        var ended = recent
+        ended.endDate = date(3, 17, 50)
+        XCTAssertFalse(ended.isOpenFussy(at: now))
+        XCTAssertFalse(EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 13, 59)).isOpenFussy(at: now), "Over 4 h ago: a moment")
+        XCTAssertFalse(EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 19)).isOpenFussy(at: now), "Not started yet")
+        XCTAssertFalse(EventRecord(babyID: baby, kind: .note, startDate: date(3, 17, 30)).isOpenFussy(at: now))
+    }
+
+    func testWidgetSnapshotCarriesTheOpenSpell() throws {
+        let mia = BabyRecord(name: "Mia", birthDate: date(1, 0))
+        let now = date(3, 18)
+        let events = [
+            EventRecord(babyID: mia.id, kind: .fussy, startDate: date(3, 12)),
+            EventRecord(babyID: mia.id, kind: .fussy, startDate: date(3, 17, 40)),
+        ]
+        let open = try XCTUnwrap(WidgetSnapshotBuilder.make(baby: mia, events: events, now: now, calendar: calendar).openFussy)
+        XCTAssertEqual(open.id, events[1].id)
+        XCTAssertTrue(open.isOpen(at: now))
+        XCTAssertFalse(open.isOpen(at: date(3, 21, 40)), "Closes once the window has passed")
+        XCTAssertNil(WidgetSnapshotBuilder.make(baby: mia, events: [events[0]], now: now, calendar: calendar).openFussy)
+    }
+
+    func testEditsToChoicesSurviveARebase() {
+        let base = EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 17))
+        var draft = base
+        draft.fussCauses = [.colic]
+        var latest = base
+        latest.note = "from the other phone"
+        latest.soothingMethods = [.rocking]
+        let merged = draft.rebased(onto: latest, from: base)
+        XCTAssertEqual(merged.fussCauses, [.colic])
+        XCTAssertEqual(merged.soothingMethods, [.rocking])
+        XCTAssertEqual(merged.note, "from the other phone")
     }
 }
 

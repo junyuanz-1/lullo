@@ -35,6 +35,39 @@ final class TrackerStoreTests: XCTestCase {
         XCTAssertTrue(store.runningTimers(for: baby).isEmpty)
     }
 
+    func testFussyDetailsAreStoredAndNeverRunAsATimer() throws {
+        let baby = makeBaby()
+        let babyID = try XCTUnwrap(baby.id)
+        var record = EventRecord(babyID: babyID, kind: .fussy, startDate: Date(),
+                                 fussIntensity: .moderate, fussCauses: [.gas, .tired], soothingMethods: [.rocking])
+        let event = try XCTUnwrap(store.save(record))
+        XCTAssertEqual(event.fussCauses, "tired,gas", "Stored in declaration order")
+        XCTAssertEqual(event.record.fussCauses, [.tired, .gas])
+        XCTAssertEqual(event.record.soothingMethods, [.rocking])
+        XCTAssertEqual(event.record.fussIntensity, .moderate)
+        XCTAssertTrue(store.runningTimers(for: baby).isEmpty, "A fussy moment without an end is not a running timer")
+
+        record = event.record
+        record.fussCauses = []
+        store.save(record)
+        XCTAssertNil(event.fussCauses, "Clearing every choice clears the field")
+    }
+
+    func testOnlyARecentUnendedFussySpellCanBeEnded() throws {
+        let baby = makeBaby()
+        let babyID = try XCTUnwrap(baby.id)
+        let now = Date()
+        store.save(EventRecord(babyID: babyID, kind: .fussy, startDate: now.addingTimeInterval(-5 * 3600)))
+        XCTAssertNil(store.openFussy(for: baby, now: now), "Over 4 hours old: a moment, not a spell to end")
+
+        let open = try XCTUnwrap(store.save(EventRecord(babyID: babyID, kind: .fussy, startDate: now.addingTimeInterval(-20 * 60))))
+        XCTAssertEqual(store.openFussy(for: baby, now: now), open)
+
+        store.stopTimer(open, at: now)
+        XCTAssertEqual(open.record.duration(), 20 * 60, accuracy: 1)
+        XCTAssertNil(store.openFussy(for: baby, now: now))
+    }
+
     func testNursingUsesSuggestedSideAndSwitches() throws {
         let baby = makeBaby()
         let session = try XCTUnwrap(store.startNursing(for: baby, side: nil))

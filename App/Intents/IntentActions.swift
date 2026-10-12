@@ -80,6 +80,50 @@ enum IntentActions {
         return saved != nil
     }
 
+    /// Logs a fussy spell starting now. Returns the baby's name, or nil when
+    /// there is no baby.
+    static func logFussy(babyID: UUID?) -> String? {
+        guard let baby = baby(babyID), let id = baby.id,
+              store.save(EventRecord(babyID: id, kind: .fussy, startDate: Date())) != nil else { return nil }
+        store.refreshSideEffects()
+        return baby.displayName
+    }
+
+    enum FussyEnd {
+        /// Ended the open spell, which lasted this long.
+        case ended(TimeInterval)
+        /// No spell logged without an end in the last few hours.
+        case noneOpen
+        case noBaby
+    }
+
+    static func endFussy(babyID: UUID?) -> FussyEnd {
+        guard let baby = baby(babyID) else { return .noBaby }
+        guard let open = store.openFussy(for: baby) else { return .noneOpen }
+        store.stopTimer(open)
+        store.refreshSideEffects()
+        return .ended(open.record.duration())
+    }
+
+    /// Logs a spell that started `startedAgo` seconds ago and ended now.
+    static func logEndedFussy(babyID: UUID?, startedAgo: TimeInterval) -> Bool {
+        guard let baby = baby(babyID), let id = baby.id else { return false }
+        let now = Date()
+        let saved = store.save(EventRecord(babyID: id, kind: .fussy, startDate: now.addingTimeInterval(-startedAgo), endDate: now))
+        store.refreshSideEffects()
+        return saved != nil
+    }
+
+    /// Ends the spell a widget showed, if it is still open.
+    static func endFussy(eventID: UUID) {
+        guard let event = store.event(id: eventID), event.record.isOpenFussy(at: Date()) else {
+            store.refreshSideEffects()
+            return
+        }
+        store.stopTimer(event)
+        store.refreshSideEffects()
+    }
+
     static func stopTimer(eventID: UUID) {
         guard let event = runningEvent(eventID) else { return }
         store.stopTimer(event)
@@ -155,6 +199,24 @@ struct TrackerShortcuts: AppShortcutsProvider {
             ],
             shortTitle: "Log Diaper",
             systemImageName: "leaf.fill"
+        )
+        AppShortcut(
+            intent: LogFussyIntent(),
+            phrases: [
+                "Baby is fussy in \(.applicationName)",
+                "Baby is crying in \(.applicationName)",
+            ],
+            shortTitle: "Log Fussy",
+            systemImageName: "cloud.rain.fill"
+        )
+        AppShortcut(
+            intent: FussyEndedIntent(),
+            phrases: [
+                "Baby stopped crying in \(.applicationName)",
+                "Baby stopped fussing in \(.applicationName)",
+            ],
+            shortTitle: "Baby Stopped Crying",
+            systemImageName: "cloud.sun.fill"
         )
     }
 }

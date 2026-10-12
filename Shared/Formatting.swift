@@ -148,6 +148,10 @@ extension EventRecord {
             break
         case .activity:
             if duration(at: now) > 0 { parts.append(Fmt.duration(duration(at: now))) }
+        case .fussy:
+            if duration(at: now) >= 60 { parts.append(Fmt.duration(duration(at: now))) }
+            if !fussCauses.isEmpty { parts.append(fussCauses.map(\.title).formatted(.list(type: .and, width: .narrow))) }
+            if !soothingMethods.isEmpty { parts.append(String(localized: "Soothed by \(soothingMethods.map(\.title).formatted(.list(type: .and, width: .narrow)))")) }
         case .note:
             break
         }

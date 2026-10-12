@@ -74,11 +74,12 @@ private struct TrendsContent: View {
             )
             .background(Color(.systemGroupedBackground))
         } else {
-            charts(days: days, average: average, schedules: schedules, ageMonths: ageMonths)
+            let fussy = records.filter { $0.kind == .fussy && $0.startDate >= from }
+            charts(days: days, average: average, schedules: schedules, fussy: fussy, ageMonths: ageMonths)
         }
     }
 
-    private func charts(days: [DailySummary], average: DailySummary?, schedules: [DaySchedule], ageMonths: Double) -> some View {
+    private func charts(days: [DailySummary], average: DailySummary?, schedules: [DaySchedule], fussy: [EventRecord], ageMonths: Double) -> some View {
         ScrollView {
             VStack(spacing: 16) {
                 if let average {
@@ -92,6 +93,9 @@ private struct TrendsContent: View {
                 DiaperChart(days: days)
                 if days.contains(where: { $0.pumpingCount > 0 }) {
                     PumpingChart(days: days)
+                }
+                if !fussy.isEmpty {
+                    FussyChart(days: days, spells: fussy)
                 }
             }
             .padding()
@@ -167,7 +171,7 @@ struct ScheduleChart: View {
                                 RoundedRectangle(cornerRadius: 2)
                                     .fill(block.kind.color.opacity(block.kind == .sleep ? 0.85 : 1))
                                     .frame(width: max(2, width * (block.end - block.start) / row.dayLength),
-                                           height: block.kind == .sleep ? 16 : 8)
+                                           height: block.kind == .sleep ? 16 : block.kind == .fussy ? 12 : 8)
                                     .offset(x: width * block.start / row.dayLength)
                             }
                             ForEach(Array(row.marks.enumerated()), id: \.offset) { _, mark in
@@ -187,6 +191,9 @@ struct ScheduleChart: View {
                 legend(.nursing)
                 legend(.bottle)
                 legend(.diaper)
+                if rows.contains(where: { row in row.blocks.contains { $0.kind == .fussy } || row.marks.contains { $0.kind == .fussy } }) {
+                    legend(.fussy)
+                }
             }
             .padding(.top, 4)
         }
@@ -350,6 +357,67 @@ private struct PumpingChart: View {
             .chartYAxisLabel(AppSettings.unitSystem == .metric ? String(localized: "ml") : String(localized: "oz"))
             .frame(height: 160)
         }
+    }
+}
+
+private struct FussyChart: View {
+    struct CauseCount {
+        var cause: FussCause
+        var count: Int
+        /// Position in `FussCause.allCases`, to break ties.
+        var order: Int
+    }
+
+    var days: [DailySummary]
+    /// The fussy entries in the range, for the most common causes.
+    var spells: [EventRecord]
+
+    var body: some View {
+        Card(title: String(localized: "Fussy"), systemImage: EventKind.fussy.systemImage, tint: EventKind.fussy.color) {
+            Chart(days) { day in
+                BarMark(x: .value("Day", day.day, unit: .day), y: .value("Count", day.fussyCount))
+                    .foregroundStyle(EventKind.fussy.color.gradient)
+                    .opacity(day.chartOpacity)
+            }
+            .frame(height: 140)
+
+            if days.contains(where: { $0.fussyDuration > 0 }) {
+                Text("Fussy Minutes").font(.subheadline.weight(.semibold))
+                Chart(days) { day in
+                    BarMark(x: .value("Day", day.day, unit: .day), y: .value("Minutes", day.fussyDuration / 60))
+                        .foregroundStyle(EventKind.fussy.color.gradient)
+                        .opacity(day.chartOpacity)
+                }
+                .frame(height: 140)
+                Text("Only entries with an end time count towards minutes.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            let causes = topCauses
+            if !causes.isEmpty {
+                Text("Common Causes").font(.subheadline.weight(.semibold))
+                FlowLayout(spacing: 8, lineSpacing: 6) {
+                    ForEach(causes, id: \.cause) { item in
+                        Text(verbatim: "\(item.cause.title) · \(item.count)")
+                            .font(.caption.weight(.medium))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(EventKind.fussy.color.opacity(0.15), in: Capsule())
+                    }
+                }
+            }
+        }
+    }
+
+    /// Up to four causes, most often chosen first ("Not Sure" left out).
+    private var topCauses: [CauseCount] {
+        let counts = FussCause.allCases.enumerated().compactMap { order, cause -> CauseCount? in
+            guard cause != .unknown else { return nil }
+            let count = spells.filter { $0.fussCauses.contains(cause) }.count
+            return count > 0 ? CauseCount(cause: cause, count: count, order: order) : nil
+        }
+        return Array(counts.sorted { ($1.count, $0.order) < ($0.count, $1.order) }.prefix(4))
     }
 }
 

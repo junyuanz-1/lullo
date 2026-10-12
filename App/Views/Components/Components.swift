@@ -332,6 +332,41 @@ extension ChipPicker {
     }
 }
 
+/// Like `ChipPicker`, but any number of pills can be on. The selection keeps
+/// the order of `options`.
+struct MultiChipPicker<Value: Hashable>: View {
+    var title: String?
+    var options: [Value]
+    @Binding var selection: [Value]
+    var tint: Color = .accentColor
+    var label: (Value) -> String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if let title {
+                Text(title).font(.subheadline).foregroundStyle(.secondary)
+            }
+            FlowLayout(spacing: 8) {
+                ForEach(options, id: \.self) { option in
+                    let selected = selection.contains(option)
+                    Button {
+                        withAnimation(.snappy(duration: 0.2)) {
+                            let chosen = Set(selection).symmetricDifference([option])
+                            selection = options.filter(chosen.contains)
+                        }
+                        UISelectionFeedbackGenerator().selectionChanged()
+                    } label: {
+                        ChipLabel(title: label(option), systemImage: selected ? "checkmark" : nil, selected: selected, tint: tint)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityAddTraits(selected ? .isSelected : [])
+                }
+            }
+        }
+        .padding(.vertical, 4)
+    }
+}
+
 /// Two or three big pill segments with a sliding highlight, used in place of
 /// the system segmented control at the top of sheets.
 struct PillSegmentedControl<Value: Hashable>: View {

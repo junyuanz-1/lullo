@@ -107,6 +107,11 @@ public struct EventRecord: Codable, Identifiable, Hashable, Sendable {
     // Activity
     public var activityType: ActivityType?
 
+    // Fussy
+    public var fussIntensity: FussIntensity?
+    public var fussCauses: [FussCause]
+    public var soothingMethods: [SoothingMethod]
+
     public var photoData: Data?
 
     public init(
@@ -145,6 +150,9 @@ public struct EventRecord: Codable, Identifiable, Hashable, Sendable {
         symptoms: String? = nil,
         vaccineName: String? = nil,
         activityType: ActivityType? = nil,
+        fussIntensity: FussIntensity? = nil,
+        fussCauses: [FussCause] = [],
+        soothingMethods: [SoothingMethod] = [],
         photoData: Data? = nil
     ) {
         self.id = id
@@ -182,6 +190,9 @@ public struct EventRecord: Codable, Identifiable, Hashable, Sendable {
         self.symptoms = symptoms
         self.vaccineName = vaccineName
         self.activityType = activityType
+        self.fussIntensity = fussIntensity
+        self.fussCauses = fussCauses
+        self.soothingMethods = soothingMethods
         self.photoData = photoData
     }
 
@@ -223,6 +234,12 @@ public struct EventRecord: Codable, Identifiable, Hashable, Sendable {
         symptoms = try c.decodeIfPresent(String.self, forKey: .symptoms)
         vaccineName = try c.decodeIfPresent(String.self, forKey: .vaccineName)
         activityType = try? c.decodeIfPresent(ActivityType.self, forKey: .activityType)
+        fussIntensity = try? c.decodeIfPresent(FussIntensity.self, forKey: .fussIntensity)
+        // Values this version does not know are dropped, not the whole entry.
+        fussCauses = (try? c.decodeIfPresent([String].self, forKey: .fussCauses))?
+            .compactMap(FussCause.init(rawValue:)) ?? []
+        soothingMethods = (try? c.decodeIfPresent([String].self, forKey: .soothingMethods))?
+            .compactMap(SoothingMethod.init(rawValue:)) ?? []
         photoData = try c.decodeIfPresent(Data.self, forKey: .photoData)
     }
 
@@ -269,17 +286,26 @@ public struct EventRecord: Codable, Identifiable, Hashable, Sendable {
         take(\.symptoms)
         take(\.vaccineName)
         take(\.activityType)
+        take(\.fussIntensity)
+        take(\.fussCauses)
+        take(\.soothingMethods)
         take(\.photoData)
         return result
     }
 
     public var isOngoing: Bool { kind.supportsTimer && endDate == nil }
 
+    /// Whether this entry covers a span of time: always for timer kinds, and
+    /// for kinds with an optional end (fussy) only when one was given.
+    public var hasTimeRange: Bool {
+        kind.hasDuration || (kind.allowsOptionalEnd && endDate != nil)
+    }
+
     /// Wall-clock duration (end − start), or up to `now` for a running timer.
     /// For nursing this is the sum of both sides instead.
     public func duration(at now: Date = Date()) -> TimeInterval {
         if kind == .nursing { return nursingTotal(at: now) }
-        guard kind.hasDuration else { return 0 }
+        guard hasTimeRange else { return 0 }
         return max(0, (endDate ?? now).timeIntervalSince(startDate))
     }
 
@@ -287,7 +313,32 @@ public struct EventRecord: Codable, Identifiable, Hashable, Sendable {
     /// events end when they start.
     public func effectiveEnd(at now: Date = Date()) -> Date {
         if kind.hasDuration { return endDate ?? max(now, startDate) }
+        if hasTimeRange, let endDate { return max(endDate, startDate) }
         return startDate
+    }
+
+    /// How long a fussy entry without an end still counts as going on, so it
+    /// can be ended ("Baby stopped crying"). Older ones are moments.
+    public static let openFussyWindow: TimeInterval = 4 * 3600
+
+    /// A fussy entry with no end that started within `openFussyWindow` of `now`.
+    public func isOpenFussy(at now: Date = Date()) -> Bool {
+        guard kind == .fussy, endDate == nil, startDate <= now else { return false }
+        return now.timeIntervalSince(startDate) < Self.openFussyWindow
+    }
+
+    /// Stores a multiple choice (fuss causes, soothing methods) in one text
+    /// field: raw values in declaration order, comma separated.
+    public static func joinedRawValues<T: CaseIterable & RawRepresentable & Equatable>(_ values: [T]) -> String?
+        where T.RawValue == String {
+        let ordered = T.allCases.filter(values.contains)
+        return ordered.isEmpty ? nil : ordered.map(\.rawValue).joined(separator: ",")
+    }
+
+    /// Reads a field written by `joinedRawValues`, skipping values this version does not know.
+    public static func parseRawValues<T: RawRepresentable>(_ text: String?) -> [T] where T.RawValue == String {
+        guard let text else { return [] }
+        return text.split(separator: ",").compactMap { T(rawValue: String($0)) }
     }
 
     /// Total of both pumped sides, falling back to `amountML`.

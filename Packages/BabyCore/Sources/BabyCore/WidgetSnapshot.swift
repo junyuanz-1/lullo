@@ -51,6 +51,18 @@ public struct BabySnapshot: Codable, Equatable, Sendable, Identifiable {
         public var rightDuration: TimeInterval
     }
 
+    /// A fussy spell logged without an end, recent enough to end from a widget.
+    public struct OpenFussy: Codable, Equatable, Sendable, Identifiable {
+        public var id: UUID
+        public var startDate: Date
+
+        /// Whether it still counts as going on at `date` (widget entries are
+        /// shown long after the snapshot was made).
+        public func isOpen(at date: Date) -> Bool {
+            date >= startDate && date.timeIntervalSince(startDate) < EventRecord.openFussyWindow
+        }
+    }
+
     public struct Today: Codable, Equatable, Sendable {
         public var sleep: TimeInterval
         public var feeds: Int
@@ -70,6 +82,7 @@ public struct BabySnapshot: Codable, Equatable, Sendable, Identifiable {
     public var nextNap: NapPrediction?
     public var suggestedSide: BreastSide
     public var today: Today
+    public var openFussy: OpenFussy?
 
     public var runningSleep: RunningTimer? { runningTimers.first { $0.kind == .sleep } }
     public var runningNursing: RunningTimer? { runningTimers.first { $0.kind == .nursing } }
@@ -116,6 +129,10 @@ public enum WidgetSnapshotBuilder {
             )
         }
 
+        let openFussy = mine.last { $0.isOpenFussy(at: now) }.map {
+            BabySnapshot.OpenFussy(id: $0.id, startDate: $0.startDate)
+        }
+
         let lastNursing = mine.last(where: { $0.kind == .nursing })
         let todaySummary = Statistics.dailySummaries(
             events: mine, from: now, to: now, now: now, classifier: classifier, calendar: calendar
@@ -139,7 +156,8 @@ public enum WidgetSnapshotBuilder {
                 bottleML: todaySummary.bottleVolumeML,
                 wetDiapers: todaySummary.wetDiapers,
                 dirtyDiapers: todaySummary.dirtyDiapers
-            )
+            ),
+            openFussy: openFussy
         )
     }
 
