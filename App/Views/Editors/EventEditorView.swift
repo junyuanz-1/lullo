@@ -33,6 +33,7 @@ struct EventEditorView: View {
     @State private var closing = false
     @State private var newTimerAlarm: Int?
     @ObservedObject private var alarms = TimerAlarms.shared
+    @Environment(\.dynamicTypeSize) private var typeSize
     /// Related kinds a new entry can switch between (the Health tile).
     let choices: [EventKind]
     /// A timer of this kind is already running for the baby, so a new entry can
@@ -251,7 +252,9 @@ struct EventEditorView: View {
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.capsule)
             }
-            if AppSettings.liveActivitiesEnabled {
+            // At accessibility sizes the caption would take a third of the
+            // screen; the button says enough.
+            if AppSettings.liveActivitiesEnabled && !typeSize.isAccessibilitySize {
                 Text("Also shows on your Lock Screen and in the Dynamic Island.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -262,7 +265,9 @@ struct EventEditorView: View {
         .padding(.top, 12)
         .padding(.bottom, 8)
         .frame(maxWidth: .infinity)
-        .background(.bar)
+        // Opaque, like the form behind it: a translucent bar let the fields
+        // scrolled under it show through the caption.
+        .background(Color(.systemGroupedBackground))
         .overlay(alignment: .top) { Divider() }
     }
 
