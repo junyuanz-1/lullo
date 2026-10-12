@@ -224,7 +224,7 @@ struct EventEditorView: View {
                 // A running session: the start can be corrected ("it actually began
                 // earlier"), the side times keep counting. The timer card has the
                 // controls and the alarm.
-                DatePicker("Start", selection: $draft.startDate, in: ...Date())
+                DatePicker("Start", selection: $draft.startDate, in: ...AppClock.now)
                 ForEach(BreastSide.allCases, id: \.self) { side in
                     ClockTimeline(every: 1) { now in
                         LabeledContent(side.title, value: Fmt.duration(draft.nursingElapsed(side, at: now)))
@@ -545,7 +545,7 @@ struct EventEditorView: View {
             // counted with it: 10 minutes earlier means 10 more minutes nursed.
             let delta = record.startDate.timeIntervalSince(base.startDate)
             if let since = record.activeSideStartedAt {
-                record.activeSideStartedAt = min(Date(), since.addingTimeInterval(delta))
+                record.activeSideStartedAt = min(AppClock.now, since.addingTimeInterval(delta))
             } else if let side = record.lastSide {
                 switch side {
                 case .left: record.leftDuration = max(0, record.leftDuration - delta)
