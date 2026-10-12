@@ -218,6 +218,19 @@ final class TrackerStore: ObservableObject {
         }
     }
 
+    /// The latest fussy spell logged without an end that still counts as going
+    /// on (see `EventRecord.isOpenFussy`). End it with `stopTimer`.
+    func openFussy(for baby: Baby, now: Date = Date()) -> Event? {
+        let request = Event.request()
+        request.predicate = NSPredicate(
+            format: "baby == %@ AND kind == %@ AND endDate == nil AND startDate > %@ AND startDate <= %@",
+            baby, EventKind.fussy.rawValue, now.addingTimeInterval(-EventRecord.openFussyWindow) as NSDate, now as NSDate
+        )
+        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
+    }
+
     @discardableResult
     func logDiaper(_ type: DiaperType, for baby: Baby, at date: Date = Date()) -> Event? {
         guard let babyID = baby.id else { return nil }

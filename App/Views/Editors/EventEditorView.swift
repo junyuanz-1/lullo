@@ -336,6 +336,17 @@ struct EventEditorView: View {
     /// For a fussy spell the end is optional: without it the entry is a moment.
     @ViewBuilder
     private var optionalEndRows: some View {
+        if !isNew, draft.endDate == nil, draft.isOpenFussy(at: AppClock.now) {
+            // Logged when it started and still going on: one tap ends it now.
+            ClockTimeline(every: 1) { now in
+                LabeledContent("Fussing For", value: Fmt.duration(max(0, now.timeIntervalSince(draft.startDate))))
+            }
+            Button("End Now") {
+                draft.endDate = max(AppClock.now, draft.startDate)
+                save()
+            }
+            .disabled(!isValid)
+        }
         Toggle("Add End Time", isOn: Binding(
             get: { draft.endDate != nil },
             set: { on in

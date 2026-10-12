@@ -53,6 +53,21 @@ final class TrackerStoreTests: XCTestCase {
         XCTAssertNil(event.fussCauses, "Clearing every choice clears the field")
     }
 
+    func testOnlyARecentUnendedFussySpellCanBeEnded() throws {
+        let baby = makeBaby()
+        let babyID = try XCTUnwrap(baby.id)
+        let now = Date()
+        store.save(EventRecord(babyID: babyID, kind: .fussy, startDate: now.addingTimeInterval(-5 * 3600)))
+        XCTAssertNil(store.openFussy(for: baby, now: now), "Over 4 hours old: a moment, not a spell to end")
+
+        let open = try XCTUnwrap(store.save(EventRecord(babyID: babyID, kind: .fussy, startDate: now.addingTimeInterval(-20 * 60))))
+        XCTAssertEqual(store.openFussy(for: baby, now: now), open)
+
+        store.stopTimer(open, at: now)
+        XCTAssertEqual(open.record.duration(), 20 * 60, accuracy: 1)
+        XCTAssertNil(store.openFussy(for: baby, now: now))
+    }
+
     func testNursingUsesSuggestedSideAndSwitches() throws {
         let baby = makeBaby()
         let session = try XCTUnwrap(store.startNursing(for: baby, side: nil))

@@ -225,6 +225,73 @@ struct LogFussyIntent: LiveActivityIntent {
     }
 }
 
+/// "Baby stopped crying": ends the fussy spell in progress, or, when none was
+/// logged, asks how long ago it started and logs the whole spell.
+struct FussyEndedIntent: LiveActivityIntent {
+    static var title: LocalizedStringResource = "Baby Stopped Crying"
+    static var description = IntentDescription("Ends the fussy spell in progress. If none was logged, asks how long ago it started and logs it.")
+
+    @Parameter(title: "Baby ID")
+    var babyID: String?
+
+    @Parameter(title: "How Long Ago", defaultUnit: .minutes)
+    var startedAgo: Measurement<UnitDuration>?
+
+    init() {}
+
+    func perform() async throws -> some IntentResult & ProvidesDialog {
+        #if WIDGET_EXTENSION
+        return .result(dialog: "")
+        #else
+        let id = babyID.flatMap(UUID.init(uuidString:))
+        if let readOnly = await IntentActions.readOnlyMessage(babyID: id) {
+            return .result(dialog: "\(readOnly)")
+        }
+        let message: String
+        switch await IntentActions.endFussy(babyID: id) {
+        case .ended(let duration):
+            message = String(localized: "Fussed for \(Fmt.duration(duration)).")
+        case .noBaby:
+            message = String(localized: "Add a baby in the app first.")
+        case .noneOpen:
+            // Nothing was logged when it started: ask when, and log the whole spell.
+            guard let startedAgo else {
+                let question: LocalizedStringResource = "How long ago did the fussing start?"
+                throw $startedAgo.needsValueError(IntentDialog(question))
+            }
+            let seconds = startedAgo.converted(to: .seconds).value
+            if seconds < 60 || seconds > 12 * 3600 {
+                message = String(localized: "Say a time between 1 minute and 12 hours ago.")
+            } else if await IntentActions.logEndedFussy(babyID: id, startedAgo: seconds) {
+                message = String(localized: "Logged \(Fmt.duration(seconds)) of fussing.")
+            } else {
+                message = String(localized: "Add a baby in the app first.")
+            }
+        }
+        return .result(dialog: "\(message)")
+        #endif
+    }
+}
+
+/// The widget's "Calm" button: ends the spell it showed.
+struct EndFussyIntent: LiveActivityIntent {
+    static var title: LocalizedStringResource = "End Fussy Spell"
+    static var isDiscoverable = false
+
+    @Parameter(title: "Event ID")
+    var eventID: String
+
+    init() {}
+    init(eventID: UUID) { self.eventID = eventID.uuidString }
+
+    func perform() async throws -> some IntentResult {
+        #if !WIDGET_EXTENSION
+        if let id = UUID(uuidString: eventID) { await IntentActions.endFussy(eventID: id) }
+        #endif
+        return .result()
+    }
+}
+
 struct StopTimerIntent: LiveActivityIntent {
     static var title: LocalizedStringResource = "Stop Timer"
     static var isDiscoverable = false

@@ -645,6 +645,34 @@ final class FussyTests: XCTestCase {
         XCTAssertEqual(EventRecord.parseRawValues(nil) as [FussCause], [])
     }
 
+    func testOnlyARecentUnendedSpellIsOpen() {
+        let now = date(3, 18)
+        let recent = EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 17, 30))
+        XCTAssertTrue(recent.isOpenFussy(at: now))
+        XCTAssertFalse(recent.isOngoing, "Still not a timer")
+
+        var ended = recent
+        ended.endDate = date(3, 17, 50)
+        XCTAssertFalse(ended.isOpenFussy(at: now))
+        XCTAssertFalse(EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 13, 59)).isOpenFussy(at: now), "Over 4 h ago: a moment")
+        XCTAssertFalse(EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 19)).isOpenFussy(at: now), "Not started yet")
+        XCTAssertFalse(EventRecord(babyID: baby, kind: .note, startDate: date(3, 17, 30)).isOpenFussy(at: now))
+    }
+
+    func testWidgetSnapshotCarriesTheOpenSpell() throws {
+        let mia = BabyRecord(name: "Mia", birthDate: date(1, 0))
+        let now = date(3, 18)
+        let events = [
+            EventRecord(babyID: mia.id, kind: .fussy, startDate: date(3, 12)),
+            EventRecord(babyID: mia.id, kind: .fussy, startDate: date(3, 17, 40)),
+        ]
+        let open = try XCTUnwrap(WidgetSnapshotBuilder.make(baby: mia, events: events, now: now, calendar: calendar).openFussy)
+        XCTAssertEqual(open.id, events[1].id)
+        XCTAssertTrue(open.isOpen(at: now))
+        XCTAssertFalse(open.isOpen(at: date(3, 21, 40)), "Closes once the window has passed")
+        XCTAssertNil(WidgetSnapshotBuilder.make(baby: mia, events: [events[0]], now: now, calendar: calendar).openFussy)
+    }
+
     func testEditsToChoicesSurviveARebase() {
         let base = EventRecord(babyID: baby, kind: .fussy, startDate: date(3, 17))
         var draft = base

@@ -78,6 +78,7 @@ struct HomeView: View {
                     QuickActionsGrid(
                         records: records,
                         running: running,
+                        openFussy: recent.first(where: { $0.record.isOpenFussy(at: AppClock.now) }),
                         editor: $editor,
                         startTimer: startTimer,
                         startNursing: startNursing,
@@ -429,6 +430,8 @@ struct QuickActionsGrid: View {
     var records: [EventRecord]
     /// Running timers, oldest first.
     var running: [Event]
+    /// A fussy spell logged without an end in the last few hours.
+    var openFussy: Event?
     @Binding var editor: EditorRoute?
     var startTimer: (EventKind, ActivityType?) -> Void
     var startNursing: (BreastSide?) -> Void
@@ -590,11 +593,12 @@ struct QuickActionsGrid: View {
 
     /// Opens the form for `kind` with Save at hand ("Log Past"; the Timer
     /// segment is one tap away). A running bottle opens that bottle instead, to
-    /// add the amount or stop it, and says so with a pencil badge. Activities can
-    /// overlap, so the tile always adds a new one and only names what is running.
+    /// add the amount or stop it, and says so with a pencil badge; so does a
+    /// fussy spell still going on, to end it. Activities can overlap, so the
+    /// tile always adds a new one and only names what is running.
     private func entryTile(_ kind: EventKind) -> some View {
         let active = runningTimers(of: kind)
-        let open = kind == .bottle ? active.first : nil
+        let open = kind == .bottle ? active.first : kind == .fussy ? openFussy : nil
         let openRecord = open?.record
         return Button {
             if let open {
@@ -609,11 +613,14 @@ struct QuickActionsGrid: View {
                 systemImage: kind.systemImage,
                 color: kind.color,
                 badge: openRecord == nil ? .add : .edit,
-                elapsed: openRecord.map { record in { (now: Date) in record.duration(at: now) } }
+                // A fussy spell has no end yet, so it counts from its start.
+                elapsed: openRecord.map { record in { (now: Date) in
+                    record.kind == .fussy ? max(0, now.timeIntervalSince(record.startDate)) : record.duration(at: now)
+                } }
             )
         }
         .buttonStyle(.plain)
-        .accessibilityHint(open == nil ? Text("Opens a form") : Text("Opens the running bottle"))
+        .accessibilityHint(open == nil ? Text("Opens a form") : kind == .fussy ? Text("Opens the fussy spell to end it") : Text("Opens the running bottle"))
     }
 
     /// The hint about touch-and-hold is no longer needed once it has been used.

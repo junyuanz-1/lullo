@@ -317,6 +317,16 @@ public struct EventRecord: Codable, Identifiable, Hashable, Sendable {
         return startDate
     }
 
+    /// How long a fussy entry without an end still counts as going on, so it
+    /// can be ended ("Baby stopped crying"). Older ones are moments.
+    public static let openFussyWindow: TimeInterval = 4 * 3600
+
+    /// A fussy entry with no end that started within `openFussyWindow` of `now`.
+    public func isOpenFussy(at now: Date = Date()) -> Bool {
+        guard kind == .fussy, endDate == nil, startDate <= now else { return false }
+        return now.timeIntervalSince(startDate) < Self.openFussyWindow
+    }
+
     /// Stores a multiple choice (fuss causes, soothing methods) in one text
     /// field: raw values in declaration order, comma separated.
     public static func joinedRawValues<T: CaseIterable & RawRepresentable & Equatable>(_ values: [T]) -> String?
