@@ -151,7 +151,7 @@ enum AppLinks {
     }
 
     static let supportEmail = URL(string: "mailto:support@tinytide.app?subject=Tinytide%20Support")!
-    static let supportPage = URL(string: "https://junyuanz1.github.io/lullo-site/support/")!
+    static let supportPage = URL(string: "https://tinytide.app/support/")!
 
     /// Apple's standard licensed application end user license agreement.
     static let termsOfUse = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
