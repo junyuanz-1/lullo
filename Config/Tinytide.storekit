@@ -1,0 +1,358 @@
+{
+  "identifier": "4C1E6E2A",
+  "nonRenewingSubscriptions": [],
+  "products": [
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "6740000001",
+      "localizations": [
+        {
+          "description": "A small thank-you for the 3 a.m. feeds.",
+          "displayName": "A cup of coffee",
+          "locale": "en_US"
+        },
+        {
+          "description": "为凌晨三点的夜奶加油。",
+          "displayName": "请喝一杯咖啡",
+          "locale": "zh_Hans"
+        },
+        {
+          "description": "為凌晨三點的夜奶加油。",
+          "displayName": "請喝一杯咖啡",
+          "locale": "zh_Hant"
+        },
+        {
+          "description": "深夜3時の授乳をがんばる毎日に、ささやかな感謝を。",
+          "displayName": "コーヒー1杯",
+          "locale": "ja"
+        },
+        {
+          "description": "새벽 3시 수유를 위한 작은 감사 인사예요.",
+          "displayName": "커피 한 잔",
+          "locale": "ko"
+        },
+        {
+          "description": "Un pequeño agradecimiento por las tomas de las 3 de la madrugada.",
+          "displayName": "Un café",
+          "locale": "es_ES"
+        },
+        {
+          "description": "Um obrigado pelas mamadas das 3 da manhã.",
+          "displayName": "Um cafezinho",
+          "locale": "pt_BR"
+        },
+        {
+          "description": "Un petit merci pour les réveils de 3 h du matin.",
+          "displayName": "Un café",
+          "locale": "fr"
+        },
+        {
+          "description": "Ein kleines Dankeschön für die Mahlzeiten um 3 Uhr nachts.",
+          "displayName": "Eine Tasse Kaffee",
+          "locale": "de"
+        }
+      ],
+      "productID": "tinytide.tip.small",
+      "referenceName": "Tip - Small",
+      "type": "Consumable"
+    },
+    {
+      "displayPrice": "2.99",
+      "familyShareable": false,
+      "internalID": "6740000002",
+      "localizations": [
+        {
+          "description": "Helps keep Tinytide ad-free.",
+          "displayName": "A slice of cake",
+          "locale": "en_US"
+        },
+        {
+          "description": "帮助摇摇保持无广告。",
+          "displayName": "请吃一块蛋糕",
+          "locale": "zh_Hans"
+        },
+        {
+          "description": "幫助搖搖維持無廣告。",
+          "displayName": "請吃一塊蛋糕",
+          "locale": "zh_Hant"
+        },
+        {
+          "description": "Tinytideの広告なし運営を支えます。",
+          "displayName": "ケーキひと切れ",
+          "locale": "ja"
+        },
+        {
+          "description": "Tinytide가 광고 없이 운영되도록 도와줘요.",
+          "displayName": "케이크 한 조각",
+          "locale": "ko"
+        },
+        {
+          "description": "Ayuda a que Tinytide siga sin anuncios.",
+          "displayName": "Un trozo de pastel",
+          "locale": "es_ES"
+        },
+        {
+          "description": "Ajuda a manter o Tinytide sem anúncios.",
+          "displayName": "Uma fatia de bolo",
+          "locale": "pt_BR"
+        },
+        {
+          "description": "Aide Tinytide à rester sans publicité.",
+          "displayName": "Une part de gâteau",
+          "locale": "fr"
+        },
+        {
+          "description": "Hilft, Tinytide werbefrei zu halten.",
+          "displayName": "Ein Stück Kuchen",
+          "locale": "de"
+        }
+      ],
+      "productID": "tinytide.tip.medium",
+      "referenceName": "Tip - Medium",
+      "type": "Consumable"
+    },
+    {
+      "displayPrice": "6.99",
+      "familyShareable": false,
+      "internalID": "6740000003",
+      "localizations": [
+        {
+          "description": "Funds new features for every family.",
+          "displayName": "A nice lunch",
+          "locale": "en_US"
+        },
+        {
+          "description": "支持为每个家庭开发新功能。",
+          "displayName": "请吃一顿午餐",
+          "locale": "zh_Hans"
+        },
+        {
+          "description": "支持為每個家庭開發新功能。",
+          "displayName": "請吃一頓午餐",
+          "locale": "zh_Hant"
+        },
+        {
+          "description": "すべての家族のための新機能開発に役立てます。",
+          "displayName": "ちょっと豪華なランチ",
+          "locale": "ja"
+        },
+        {
+          "description": "모든 가족을 위한 새 기능 개발에 쓰여요.",
+          "displayName": "근사한 점심 한 끼",
+          "locale": "ko"
+        },
+        {
+          "description": "Financia nuevas funciones para todas las familias.",
+          "displayName": "Una buena comida",
+          "locale": "es_ES"
+        },
+        {
+          "description": "Financia novos recursos para todas as famílias.",
+          "displayName": "Um bom almoço",
+          "locale": "pt_BR"
+        },
+        {
+          "description": "Finance de nouvelles fonctions pour toutes les familles.",
+          "displayName": "Un bon déjeuner",
+          "locale": "fr"
+        },
+        {
+          "description": "Finanziert neue Funktionen für alle Familien.",
+          "displayName": "Ein gutes Mittagessen",
+          "locale": "de"
+        }
+      ],
+      "productID": "tinytide.tip.large",
+      "referenceName": "Tip - Large",
+      "type": "Consumable"
+    }
+  ],
+  "settings": {
+    "_failTransactionsEnabled": false,
+    "_locale": "en_US",
+    "_storefront": "USA",
+    "_storeKitErrors": []
+  },
+  "subscriptionGroups": [
+    {
+      "id": "21500001",
+      "localizations": [
+        {
+          "description": "",
+          "displayName": "Tinytide Supporter",
+          "locale": "en_US"
+        },
+        {
+          "description": "",
+          "displayName": "摇摇支持者",
+          "locale": "zh_Hans"
+        },
+        {
+          "description": "",
+          "displayName": "搖搖支持者",
+          "locale": "zh_Hant"
+        },
+        {
+          "description": "",
+          "displayName": "Tinytideサポーター",
+          "locale": "ja"
+        },
+        {
+          "description": "",
+          "displayName": "Tinytide 서포터",
+          "locale": "ko"
+        },
+        {
+          "description": "",
+          "displayName": "Tinytide Supporter",
+          "locale": "es_ES"
+        },
+        {
+          "description": "",
+          "displayName": "Apoiador Tinytide",
+          "locale": "pt_BR"
+        },
+        {
+          "description": "",
+          "displayName": "Soutien Tinytide",
+          "locale": "fr"
+        },
+        {
+          "description": "",
+          "displayName": "Tinytide-Unterstützer",
+          "locale": "de"
+        }
+      ],
+      "name": "Tinytide Supporter",
+      "subscriptions": [
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "0.99",
+          "familyShareable": true,
+          "groupNumber": 1,
+          "internalID": "6740000011",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "Support Tinytide and unlock app icons and themes.",
+              "displayName": "Supporter (Monthly)",
+              "locale": "en_US"
+            },
+            {
+              "description": "支持摇摇，解锁替换图标和主题配色。",
+              "displayName": "支持者（月付）",
+              "locale": "zh_Hans"
+            },
+            {
+              "description": "支持搖搖，解鎖替代 App 圖像和主題色彩。",
+              "displayName": "支持者（月繳）",
+              "locale": "zh_Hant"
+            },
+            {
+              "description": "Tinytideを応援して、Appアイコンとテーマを解除できます。",
+              "displayName": "サポーター（月額）",
+              "locale": "ja"
+            },
+            {
+              "description": "Tinytide를 후원하고 앱 아이콘과 테마를 잠금 해제하세요.",
+              "displayName": "서포터(월간)",
+              "locale": "ko"
+            },
+            {
+              "description": "Apoya a Tinytide y desbloquea iconos y temas para la app.",
+              "displayName": "Tinytide Supporter (mensual)",
+              "locale": "es_ES"
+            },
+            {
+              "description": "Apoie o Tinytide e desbloqueie ícones do app e temas.",
+              "displayName": "Apoiador Tinytide (Mensal)",
+              "locale": "pt_BR"
+            },
+            {
+              "description": "Soutenez Tinytide et débloquez icônes et thèmes.",
+              "displayName": "Soutien Tinytide (mensuel)",
+              "locale": "fr"
+            },
+            {
+              "description": "Unterstütze Tinytide und schalte App-Symbole und Designfarben frei.",
+              "displayName": "Unterstützer (monatlich)",
+              "locale": "de"
+            }
+          ],
+          "productID": "tinytide.supporter.monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "Supporter Monthly",
+          "subscriptionGroupID": "21500001",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "9.99",
+          "familyShareable": true,
+          "groupNumber": 1,
+          "internalID": "6740000012",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "Support Tinytide for a year and save 16%.",
+              "displayName": "Supporter (Yearly)",
+              "locale": "en_US"
+            },
+            {
+              "description": "支持摇摇一整年，立省 16%。",
+              "displayName": "支持者（年付）",
+              "locale": "zh_Hans"
+            },
+            {
+              "description": "支持搖搖一整年，省下 16%。",
+              "displayName": "支持者（年繳）",
+              "locale": "zh_Hant"
+            },
+            {
+              "description": "Tinytideを1年間応援。16%おトクです。",
+              "displayName": "サポーター（年額）",
+              "locale": "ja"
+            },
+            {
+              "description": "1년 동안 Tinytide를 후원하고 16% 절약하세요.",
+              "displayName": "서포터(연간)",
+              "locale": "ko"
+            },
+            {
+              "description": "Apoya a Tinytide durante un año y ahorra un 16%.",
+              "displayName": "Tinytide Supporter (anual)",
+              "locale": "es_ES"
+            },
+            {
+              "description": "Apoie o Tinytide por um ano e economize 16%.",
+              "displayName": "Apoiador Tinytide (Anual)",
+              "locale": "pt_BR"
+            },
+            {
+              "description": "Soutenez Tinytide pendant un an et économisez 16 %.",
+              "displayName": "Soutien Tinytide (annuel)",
+              "locale": "fr"
+            },
+            {
+              "description": "Unterstütze Tinytide ein Jahr lang und spare 16 %.",
+              "displayName": "Unterstützer (jährlich)",
+              "locale": "de"
+            }
+          ],
+          "productID": "tinytide.supporter.yearly",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "Supporter Yearly",
+          "subscriptionGroupID": "21500001",
+          "type": "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version": {
+    "major": 3,
+    "minor": 0
+  }
+}

@@ -1,0 +1,8 @@
+"Start sleep in ${applicationName}" = "Start sleep in ${applicationName}";
+"Baby is sleeping in ${applicationName}" = "Baby is sleeping in ${applicationName}";
+"Baby woke up in ${applicationName}" = "Baby woke up in ${applicationName}";
+"Stop sleep in ${applicationName}" = "Stop sleep in ${applicationName}";
+"Start nursing in ${applicationName}" = "Start nursing in ${applicationName}";
+"Start breastfeeding in ${applicationName}" = "Start breastfeeding in ${applicationName}";
+"Log a diaper in ${applicationName}" = "Log a diaper in ${applicationName}";
+"Log a ${type} diaper in ${applicationName}" = "Log a ${type} diaper in ${applicationName}";

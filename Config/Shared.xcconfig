@@ -1,0 +1,23 @@
+// ─────────────────────────────────────────────────────────────
+// Change these before building on your own Apple Developer account.
+// See README.md → "Setup".
+// ─────────────────────────────────────────────────────────────
+
+// Your 10-character Team ID (Xcode → Settings → Accounts, or developer.apple.com → Membership).
+DEVELOPMENT_TEAM = RN7VL4B86Q
+
+// Must be unique on the App Store, e.g. com.yourname.Tinytide
+APP_BUNDLE_ID = app.tinytide.ios
+
+// Shared container between the app and its widgets. Must start with "group.".
+APP_GROUP_ID = group.$(APP_BUNDLE_ID)
+
+// iCloud container used for sync and sharing. Must start with "iCloud.".
+CLOUDKIT_CONTAINER_ID = iCloud.$(APP_BUNDLE_ID)
+
+// Where PRIVACY.md is published (required by App Review for subscriptions).
+// "//" starts a comment in xcconfig files, so the slashes are split with $().
+PRIVACY_POLICY_URL = https:/$()/tinytide.app/privacy/
+
+MARKETING_VERSION = 1.0.0
+CURRENT_PROJECT_VERSION = 1
