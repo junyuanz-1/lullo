@@ -125,7 +125,9 @@ public enum DemoData {
         }
 
         mutating func bottle(_ date: Date, ml: Double, content: BottleContent) {
-            add(EventRecord(babyID: babyID, kind: .bottle, startDate: date, amountML: ml, bottleContent: content))
+            // Bottles can be timed, and an untimed one would count as still running.
+            add(EventRecord(babyID: babyID, kind: .bottle, startDate: date, endDate: date.addingTimeInterval(12 * 60),
+                            amountML: ml, bottleContent: content))
         }
 
         mutating func pumping(_ start: Date, minutes: Int, left: Double, right: Double) {
