@@ -465,7 +465,7 @@
         }
       }
     },
-    "14 days": {
+    "14 Days": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -476,7 +476,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "14 days"
+            "value": "14 Days"
           }
         },
         "es": {
@@ -523,7 +523,7 @@
         }
       }
     },
-    "30 days": {
+    "30 Days": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -534,7 +534,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "30 days"
+            "value": "30 Days"
           }
         },
         "es": {
@@ -697,7 +697,7 @@
         }
       }
     },
-    "7 days": {
+    "7 Days": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -708,7 +708,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "7 days"
+            "value": "7 Days"
           }
         },
         "es": {
@@ -1277,6 +1277,180 @@
         }
       }
     },
+    "Add Entry": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eintrag hinzufügen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Entry"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregar registro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter une entrée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記録を追加"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기록 추가"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicionar registro"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加记录"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新增紀錄"
+          }
+        }
+      }
+    },
+    "Add Measurement": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messung hinzufügen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Measurement"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregar medida"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter une mesure"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "測定値を追加"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "측정값 추가"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicionar medida"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加测量"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新增測量"
+          }
+        }
+      }
+    },
+    "Add Photo": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foto hinzufügen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Photo"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregar foto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter une photo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "写真を追加"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 추가"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicionar foto"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加照片"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新增照片"
+          }
+        }
+      }
+    },
     "Add Your Baby": {
       "localizations": {
         "de": {
@@ -1447,180 +1621,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "新增備註"
-          }
-        }
-      }
-    },
-    "Add entry": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eintrag hinzufügen"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add entry"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Agregar registro"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajouter une entrée"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "記録を追加"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "기록 추가"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adicionar registro"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "添加记录"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "新增紀錄"
-          }
-        }
-      }
-    },
-    "Add measurement": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Messung hinzufügen"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add measurement"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Agregar medida"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajouter une mesure"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "測定値を追加"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "측정값 추가"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adicionar medida"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "添加测量"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "新增測量"
-          }
-        }
-      }
-    },
-    "Add photo": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Foto hinzufügen"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add photo"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Agregar foto"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajouter une photo"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "写真を追加"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "사진 추가"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adicionar foto"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "添加照片"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "新增照片"
           }
         }
       }
@@ -1851,7 +1851,7 @@
         }
       }
     },
-    "After last change": {
+    "After Last Change": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -1862,7 +1862,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "After last change"
+            "value": "After Last Change"
           }
         },
         "es": {
@@ -1909,7 +1909,7 @@
         }
       }
     },
-    "After last feed": {
+    "After Last Feed": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -1920,7 +1920,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "After last feed"
+            "value": "After Last Feed"
           }
         },
         "es": {
@@ -3591,7 +3591,7 @@
         }
       }
     },
-    "Bottle volume": {
+    "Bottle Volume": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -3602,7 +3602,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bottle volume"
+            "value": "Bottle Volume"
           }
         },
         "es": {
@@ -3707,7 +3707,7 @@
         }
       }
     },
-    "Breast milk": {
+    "Breast Milk": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -3718,7 +3718,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Breast milk"
+            "value": "Breast Milk"
           }
         },
         "es": {
@@ -3823,7 +3823,7 @@
         }
       }
     },
-    "Brush teeth": {
+    "Brush Teeth": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -3834,7 +3834,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Brush teeth"
+            "value": "Brush Teeth"
           }
         },
         "es": {
@@ -3939,7 +3939,7 @@
         }
       }
     },
-    "Car seat": {
+    "Car Seat": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -3950,7 +3950,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Car seat"
+            "value": "Car Seat"
           }
         },
         "es": {
@@ -4055,7 +4055,7 @@
         }
       }
     },
-    "Change photo": {
+    "Change Photo": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -4066,7 +4066,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Change photo"
+            "value": "Change Photo"
           }
         },
         "es": {
@@ -4171,7 +4171,7 @@
         }
       }
     },
-    "Choose photo": {
+    "Choose Photo": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -4182,7 +4182,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose photo"
+            "value": "Choose Photo"
           }
         },
         "es": {
@@ -4635,7 +4635,7 @@
         }
       }
     },
-    "Daily averages": {
+    "Daily Averages": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -4646,7 +4646,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Daily averages"
+            "value": "Daily Averages"
           }
         },
         "es": {
@@ -4693,7 +4693,7 @@
         }
       }
     },
-    "Daily schedule": {
+    "Daily Schedule": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -4704,7 +4704,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Daily schedule"
+            "value": "Daily Schedule"
           }
         },
         "es": {
@@ -5157,6 +5157,122 @@
         }
       }
     },
+    "Diaper Rash": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windelausschlag"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diaper Rash"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dermatitis del pañal"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Érythème fessier"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おむつかぶれ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기저귀 발진"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assadura"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尿布疹"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尿布疹"
+          }
+        }
+      }
+    },
+    "Diaper Reminder": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windel-Erinnerung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diaper Reminder"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordatorio de pañal"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel de couche"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おむつ替えの通知"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기저귀 알림"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembrete de fralda"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "换尿布提醒"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "換尿布提醒"
+          }
+        }
+      }
+    },
     "Diaper check for %@": {
       "localizations": {
         "de": {
@@ -5211,122 +5327,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "該幫%@檢查尿布了"
-          }
-        }
-      }
-    },
-    "Diaper rash": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Windelausschlag"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diaper rash"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dermatitis del pañal"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Érythème fessier"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "おむつかぶれ"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "기저귀 발진"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Assadura"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "尿布疹"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "尿布疹"
-          }
-        }
-      }
-    },
-    "Diaper reminder": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Windel-Erinnerung"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diaper reminder"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recordatorio de pañal"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rappel de couche"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "おむつ替えの通知"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "기저귀 알림"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lembrete de fralda"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "换尿布提醒"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "換尿布提醒"
           }
         }
       }
@@ -6549,7 +6549,7 @@
         }
       }
     },
-    "Feeding reminder": {
+    "Feeding Reminder": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -6560,7 +6560,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Feeding reminder"
+            "value": "Feeding Reminder"
           }
         },
         "es": {
@@ -7767,6 +7767,64 @@
         }
       }
     },
+    "Import Finished": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import abgeschlossen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import Finished"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importación completada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importation terminée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "読み込みが完了しました"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가져오기 완료"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importação concluída"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入完成"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯入完成"
+          }
+        }
+      }
+    },
     "Import backup?": {
       "localizations": {
         "de": {
@@ -7821,64 +7879,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "要匯入備份嗎？"
-          }
-        }
-      }
-    },
-    "Import finished": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Import abgeschlossen"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Import finished"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Importación completada"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Importation terminée"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "読み込みが完了しました"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "가져오기 완료"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Importação concluída"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "导入完成"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "匯入完成"
           }
         }
       }
@@ -7941,7 +7941,7 @@
         }
       }
     },
-    "In arms": {
+    "In Arms": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -7952,7 +7952,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "In arms"
+            "value": "In Arms"
           }
         },
         "es": {
@@ -8232,6 +8232,238 @@
         }
       }
     },
+    "Last Diaper": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzte Windel"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last Diaper"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Último pañal"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernière couche"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前回のおむつ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마지막 기저귀"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Última fralda"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上次换尿布"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上次換尿布"
+          }
+        }
+      }
+    },
+    "Last Feed": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzte Mahlzeit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last Feed"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Última toma"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier repas"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前回の授乳"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마지막 수유"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Última mamada"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上次喂奶"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上次餵奶"
+          }
+        }
+      }
+    },
+    "Last Side": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letzte Seite"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last Side"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Último lado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier côté"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最後の側"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마지막 쪽"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Último lado"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最后一侧"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最後一側"
+          }
+        }
+      }
+    },
+    "Last Synced": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zuletzt synchronisiert"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last Synced"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Última sincronización"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernière synchro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最終同期"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마지막 동기화"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Última sincronização"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上次同步"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上次同步"
+          }
+        }
+      }
+    },
     "Last change was at %@.": {
       "localizations": {
         "de": {
@@ -8290,122 +8522,6 @@
         }
       }
     },
-    "Last diaper": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Letzte Windel"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Last diaper"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Último pañal"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dernière couche"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "前回のおむつ"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "마지막 기저귀"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Última fralda"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上次换尿布"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上次換尿布"
-          }
-        }
-      }
-    },
-    "Last feed": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Letzte Mahlzeit"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Last feed"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Última toma"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dernier repas"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "前回の授乳"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "마지막 수유"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Última mamada"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上次喂奶"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上次餵奶"
-          }
-        }
-      }
-    },
     "Last feed was at %@.": {
       "localizations": {
         "de": {
@@ -8460,122 +8576,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "上次餵奶是 %@。"
-          }
-        }
-      }
-    },
-    "Last side": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Letzte Seite"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Last side"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Último lado"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dernier côté"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "最後の側"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "마지막 쪽"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Último lado"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "最后一侧"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "最後一側"
-          }
-        }
-      }
-    },
-    "Last synced": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zuletzt synchronisiert"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Last synced"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Última sincronización"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dernière synchro"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "最終同期"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "마지막 동기화"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Última sincronização"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上次同步"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上次同步"
           }
         }
       }
@@ -8986,7 +8986,7 @@
         }
       }
     },
-    "Log past": {
+    "Log Past": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -8997,7 +8997,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Log past"
+            "value": "Log Past"
           }
         },
         "es": {
@@ -9040,6 +9040,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "補登"
+          }
+        }
+      }
+    },
+    "Logged By": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingetragen von"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logged By"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrado por"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noté par"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記録した人"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기록한 사람"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrado por"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "记录人"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記錄者"
           }
         }
       }
@@ -9098,64 +9156,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "已記錄尿布：%@。"
-          }
-        }
-      }
-    },
-    "Logged by": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eingetragen von"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Logged by"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registrado por"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noté par"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "記録した人"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "기록한 사람"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registrado por"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "记录人"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "記錄者"
           }
         }
       }
@@ -9392,7 +9392,7 @@
         }
       }
     },
-    "Manage sharing for %@": {
+    "Manage Sharing for %@": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -9403,7 +9403,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Manage sharing for %@"
+            "value": "Manage Sharing for %@"
           }
         },
         "es": {
@@ -10378,7 +10378,7 @@
         }
       }
     },
-    "Nap sweet spot reminder": {
+    "Nap Sweet Spot Reminder": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -10389,7 +10389,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nap sweet spot reminder"
+            "value": "Nap Sweet Spot Reminder"
           }
         },
         "es": {
@@ -10784,6 +10784,122 @@
         }
       }
     },
+    "Next Nap": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nächstes Nickerchen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next Nap"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Próxima siesta"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prochaine sieste"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次のお昼寝"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 낮잠"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Próxima soneca"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下次小睡"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下次小睡"
+          }
+        }
+      }
+    },
+    "Next Nap Sweet Spot": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nächstes Schlaffenster"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next Nap Sweet Spot"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Momento ideal para la próxima siesta"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moment idéal pour la sieste"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次のお昼寝のベストタイミング"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 낮잠 최적 시간"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Melhor horário da próxima soneca"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下次小睡最佳时间"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下次小睡最佳時機"
+          }
+        }
+      }
+    },
     "Next dose of %@ is due.": {
       "localizations": {
         "de": {
@@ -10838,122 +10954,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "該使用下一劑%@了。"
-          }
-        }
-      }
-    },
-    "Next nap": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nächstes Nickerchen"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Next nap"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Próxima siesta"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prochaine sieste"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "次のお昼寝"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "다음 낮잠"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Próxima soneca"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "下次小睡"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "下次小睡"
-          }
-        }
-      }
-    },
-    "Next nap sweet spot": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nächstes Schlaffenster"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Next nap sweet spot"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Momento ideal para la próxima siesta"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Moment idéal pour la sieste"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "次のお昼寝のベストタイミング"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "다음 낮잠 최적 시간"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Melhor horário da próxima soneca"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "下次小睡最佳时间"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "下次小睡最佳時機"
           }
         }
       }
@@ -11074,7 +11074,7 @@
         }
       }
     },
-    "Night ends": {
+    "Night Ends": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -11085,7 +11085,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Night ends"
+            "value": "Night Ends"
           }
         },
         "es": {
@@ -11132,7 +11132,7 @@
         }
       }
     },
-    "Night sleep": {
+    "Night Sleep": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -11143,7 +11143,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Night sleep"
+            "value": "Night Sleep"
           }
         },
         "es": {
@@ -11190,7 +11190,7 @@
         }
       }
     },
-    "Night starts": {
+    "Night Starts": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -11201,7 +11201,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Night starts"
+            "value": "Night Starts"
           }
         },
         "es": {
@@ -11248,7 +11248,7 @@
         }
       }
     },
-    "No entries yet": {
+    "No Entries Yet": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -11259,7 +11259,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No entries yet"
+            "value": "No Entries Yet"
           }
         },
         "es": {
@@ -11422,6 +11422,64 @@
         }
       }
     },
+    "Not Set": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht festgelegt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not Set"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin especificar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non défini"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未設定"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정 안 함"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não definido"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未设置"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未設定"
+          }
+        }
+      }
+    },
     "Not born yet": {
       "localizations": {
         "de": {
@@ -11476,64 +11534,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "尚未出生"
-          }
-        }
-      }
-    },
-    "Not set": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nicht festgelegt"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Not set"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sin especificar"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Non défini"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "未設定"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "설정 안 함"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Não definido"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "未设置"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "未設定"
           }
         }
       }
@@ -11886,7 +11886,7 @@
         }
       }
     },
-    "Nursing minutes": {
+    "Nursing Minutes": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -11897,7 +11897,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nursing minutes"
+            "value": "Nursing Minutes"
           }
         },
         "es": {
@@ -12698,7 +12698,7 @@
         }
       }
     },
-    "Pee amount": {
+    "Pee Amount": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -12709,7 +12709,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pee amount"
+            "value": "Pee Amount"
           }
         },
         "es": {
@@ -13569,7 +13569,7 @@
         }
       }
     },
-    "Remind next dose": {
+    "Remind Next Dose": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -13580,7 +13580,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Remind next dose"
+            "value": "Remind Next Dose"
           }
         },
         "es": {
@@ -13685,7 +13685,7 @@
         }
       }
     },
-    "Remove photo": {
+    "Remove Photo": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -13696,7 +13696,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Remove photo"
+            "value": "Remove Photo"
           }
         },
         "es": {
@@ -14149,7 +14149,7 @@
         }
       }
     },
-    "Screen time": {
+    "Screen Time": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -14160,7 +14160,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Screen time"
+            "value": "Screen Time"
           }
         },
         "es": {
@@ -14671,7 +14671,7 @@
         }
       }
     },
-    "Shared with you": {
+    "Shared with You": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -14682,7 +14682,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Shared with you"
+            "value": "Shared with You"
           }
         },
         "es": {
@@ -14787,7 +14787,7 @@
         }
       }
     },
-    "Show earlier entries": {
+    "Show Earlier Entries": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -14798,7 +14798,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Show earlier entries"
+            "value": "Show Earlier Entries"
           }
         },
         "es": {
@@ -15019,7 +15019,7 @@
         }
       }
     },
-    "Skin to skin": {
+    "Skin to Skin": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -15030,7 +15030,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skin to skin"
+            "value": "Skin to Skin"
           }
         },
         "es": {
@@ -15541,7 +15541,7 @@
         }
       }
     },
-    "Something went wrong": {
+    "Something Went Wrong": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -15552,7 +15552,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Something went wrong"
+            "value": "Something Went Wrong"
           }
         },
         "es": {
@@ -16353,7 +16353,7 @@
         }
       }
     },
-    "Story time": {
+    "Story Time": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -16364,7 +16364,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Story time"
+            "value": "Story Time"
           }
         },
         "es": {
@@ -16527,7 +16527,7 @@
         }
       }
     },
-    "Suggested bedtime": {
+    "Suggested Bedtime": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -16538,7 +16538,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Suggested bedtime"
+            "value": "Suggested Bedtime"
           }
         },
         "es": {
@@ -16875,6 +16875,64 @@
         }
       }
     },
+    "Switch Baby": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baby wechseln"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switch Baby"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar de bebé"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changer de bébé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "赤ちゃんを切り替え"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아기 전환"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trocar de bebê"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "切换宝宝"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "切換寶寶"
+          }
+        }
+      }
+    },
     "Switch Side": {
       "localizations": {
         "de": {
@@ -16929,64 +16987,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "換邊"
-          }
-        }
-      }
-    },
-    "Switch baby": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Baby wechseln"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Switch baby"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cambiar de bebé"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Changer de bébé"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "赤ちゃんを切り替え"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "아기 전환"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trocar de bebê"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "切换宝宝"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "切換寶寶"
           }
         }
       }
@@ -18651,7 +18651,7 @@
         }
       }
     },
-    "Total sleep": {
+    "Total Sleep": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -18662,7 +18662,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Total sleep"
+            "value": "Total Sleep"
           }
         },
         "es": {
@@ -18883,7 +18883,7 @@
         }
       }
     },
-    "Tummy time": {
+    "Tummy Time": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -18894,7 +18894,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tummy time"
+            "value": "Tummy Time"
           }
         },
         "es": {
@@ -19289,7 +19289,7 @@
         }
       }
     },
-    "WHO percentiles": {
+    "WHO Percentiles": {
       "localizations": {
         "de": {
           "stringUnit": {
@@ -19300,7 +19300,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "WHO percentiles"
+            "value": "WHO Percentiles"
           }
         },
         "es": {
@@ -20683,6 +20683,64 @@
         }
       }
     },
+    "iCloud Account": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud-Account"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud Account"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuenta de iCloud"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compte iCloud"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloudアカウント"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud 계정"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conta do iCloud"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud 账户"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud 帳號"
+          }
+        }
+      }
+    },
     "iCloud Sync": {
       "localizations": {
         "de": {
@@ -20737,64 +20795,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "iCloud 同步"
-          }
-        }
-      }
-    },
-    "iCloud account": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud-Account"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud account"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cuenta de iCloud"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compte iCloud"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloudアカウント"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud 계정"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Conta do iCloud"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud 账户"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iCloud 帳號"
           }
         }
       }

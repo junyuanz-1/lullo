@@ -14,9 +14,9 @@ struct TrendsView: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Picker("Range", selection: $range) {
-                            Text("7 days").tag(7)
-                            Text("14 days").tag(14)
-                            Text("30 days").tag(30)
+                            Text("7 Days").tag(7)
+                            Text("14 Days").tag(14)
+                            Text("30 Days").tag(30)
                         }
                         .pickerStyle(.menu)
                     }
@@ -63,7 +63,7 @@ private struct TrendsContent: View {
                 if let average {
                     AveragesCard(average: average, recommended: NapPredictor.recommendedDailySleepHours(ageInMonths: ageMonths))
                 }
-                Card(title: String(localized: "Daily schedule"), systemImage: "calendar.day.timeline.left", tint: .indigo) {
+                Card(title: String(localized: "Daily Schedule"), systemImage: "calendar.day.timeline.left", tint: .indigo) {
                     ScheduleChart(rows: Array(schedules.suffix(min(range, 14)).reversed()))
                 }
                 SleepChart(days: days, recommended: NapPredictor.recommendedDailySleepHours(ageInMonths: ageMonths))
@@ -84,14 +84,14 @@ private struct AveragesCard: View {
     var recommended: ClosedRange<Double>
 
     var body: some View {
-        Card(title: String(localized: "Daily averages"), systemImage: "chart.bar.fill", tint: .blue) {
+        Card(title: String(localized: "Daily Averages"), systemImage: "chart.bar.fill", tint: .blue) {
             Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 12) {
                 GridRow {
-                    item(String(localized: "Total sleep"), Fmt.duration(average.totalSleep), .indigo)
+                    item(String(localized: "Total Sleep"), Fmt.duration(average.totalSleep), .indigo)
                     item(String(localized: "Naps"), "\(average.napCount) · \(Fmt.duration(average.napSleep))", .indigo)
                 }
                 GridRow {
-                    item(String(localized: "Night sleep"), Fmt.duration(average.nightSleep), .indigo)
+                    item(String(localized: "Night Sleep"), Fmt.duration(average.nightSleep), .indigo)
                     item(String(localized: "Feeds"), "\(average.feedCount)", .pink)
                 }
                 GridRow {
@@ -235,7 +235,7 @@ private struct FeedingChart: View {
             .frame(height: 180)
 
             if days.contains(where: { $0.bottleVolumeML > 0 }) {
-                Text("Bottle volume").font(.subheadline.weight(.semibold))
+                Text("Bottle Volume").font(.subheadline.weight(.semibold))
                 Chart(days) { day in
                     LineMark(x: .value("Day", day.day, unit: .day), y: .value("Volume", displayVolume(day.bottleVolumeML)))
                         .foregroundStyle(.orange)
@@ -245,7 +245,7 @@ private struct FeedingChart: View {
                 .frame(height: 140)
             }
             if days.contains(where: { $0.nursingDuration > 0 }) {
-                Text("Nursing minutes").font(.subheadline.weight(.semibold))
+                Text("Nursing Minutes").font(.subheadline.weight(.semibold))
                 Chart(days) { day in
                     BarMark(x: .value("Day", day.day, unit: .day), y: .value("Minutes", day.nursingDuration / 60))
                         .foregroundStyle(.pink.gradient)

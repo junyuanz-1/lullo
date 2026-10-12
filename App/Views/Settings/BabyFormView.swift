@@ -27,7 +27,7 @@ struct BabyFormView: View {
                     Spacer()
                 }
                 .listRowBackground(Color.clear)
-                PhotoField(title: String(localized: "Choose photo"), data: $record.photoData)
+                PhotoField(title: String(localized: "Choose Photo"), data: $record.photoData)
             }
             Section {
                 TextField("Name", text: $record.name)

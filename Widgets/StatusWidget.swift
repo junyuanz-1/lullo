@@ -128,7 +128,7 @@ private struct StatusRows: View {
                           timerStart: nursingTimerStart(nursing))
             } else {
                 StatusRow(systemImage: EventKind.bottle.systemImage, color: .orange,
-                          title: String(localized: "Last feed"),
+                          title: String(localized: "Last Feed"),
                           value: baby.lastFeed.map { Fmt.ago($0.date, now: now) } ?? "—")
             }
             if let sleep = baby.runningSleep {
@@ -140,7 +140,7 @@ private struct StatusRows: View {
                           value: baby.awakeSince.map { Fmt.duration(now.timeIntervalSince($0)) } ?? "—")
             }
             StatusRow(systemImage: EventKind.diaper.systemImage, color: .teal,
-                      title: String(localized: "Last diaper"),
+                      title: String(localized: "Last Diaper"),
                       value: baby.lastDiaper.map { Fmt.ago($0.date, now: now) } ?? "—")
         }
     }
@@ -245,7 +245,7 @@ private struct LargeStatusView: View {
             if let nap = baby.nextNap {
                 HStack {
                     Image(systemName: "sparkles").foregroundStyle(.indigo)
-                    Text(nap.isBedtime ? String(localized: "Bedtime") : String(localized: "Next nap"))
+                    Text(nap.isBedtime ? String(localized: "Bedtime") : String(localized: "Next Nap"))
                         .font(.caption).foregroundStyle(.secondary)
                     Spacer()
                     Text(verbatim: "\(Fmt.time(nap.earliest)) – \(Fmt.time(nap.latest))")

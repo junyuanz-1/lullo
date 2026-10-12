@@ -279,14 +279,14 @@ struct StatusCards: View {
         Grid(horizontalSpacing: 12, verticalSpacing: 12) {
             GridRow {
                 StatusTile(
-                    title: String(localized: "Last feed"),
+                    title: String(localized: "Last Feed"),
                     value: lastFeed.map { Fmt.ago($0.startDate, now: now) } ?? "—",
                     detail: lastFeed.map { "\($0.displayTitle) · \($0.detailText(now: now))" },
                     footnote: lastNursing.map { _ in String(localized: "Next side: \(EventRecord.suggestedNextSide(after: lastNursing).title)") },
                     kind: .bottle
                 )
                 StatusTile(
-                    title: String(localized: "Last diaper"),
+                    title: String(localized: "Last Diaper"),
                     value: lastDiaper.map { Fmt.ago($0.startDate, now: now) } ?? "—",
                     detail: lastDiaper?.diaperType?.title,
                     footnote: nil,
@@ -345,7 +345,7 @@ struct SweetSpotCard: View {
             birthDate: baby.birthDate, sleeps: sleeps, now: now, classifier: AppSettings.sleepClassifier
         )
         if let prediction {
-            Card(title: prediction.isBedtime ? String(localized: "Suggested bedtime") : String(localized: "Next nap sweet spot"),
+            Card(title: prediction.isBedtime ? String(localized: "Suggested Bedtime") : String(localized: "Next Nap Sweet Spot"),
                  systemImage: "sparkles", tint: .indigo) {
                 HStack(alignment: .firstTextBaseline) {
                     Text(verbatim: "\(Fmt.time(prediction.earliest)) – \(Fmt.time(prediction.latest))")

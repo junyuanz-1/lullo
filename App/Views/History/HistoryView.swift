@@ -33,7 +33,7 @@ struct HistoryView: View {
                     } label: {
                         Image(systemName: "plus.circle.fill").font(.title3)
                     }
-                    .accessibilityLabel(Text("Add entry"))
+                    .accessibilityLabel(Text("Add Entry"))
                 }
             }
             .sheet(item: $editor) { route in
@@ -134,7 +134,7 @@ private struct HistoryList: View {
                 }
             }
             if !events.isEmpty {
-                Button("Show earlier entries", action: loadMore)
+                Button("Show Earlier Entries", action: loadMore)
                     .frame(maxWidth: .infinity)
             }
         }
@@ -143,7 +143,7 @@ private struct HistoryList: View {
         // screen instead of as a card at the top with blank space below it.
         .overlay {
             if events.isEmpty {
-                ContentUnavailableView("No entries yet", systemImage: "tray", description: Text("Entries you log will appear here."))
+                ContentUnavailableView("No Entries Yet", systemImage: "tray", description: Text("Entries you log will appear here."))
             }
         }
     }

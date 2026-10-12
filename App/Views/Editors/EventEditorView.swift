@@ -45,7 +45,7 @@ struct EventEditorView: View {
                     PillSegmentedControl<Mode>(
                         segments: [
                             .init(value: Mode.timer, title: String(localized: "Timer"), systemImage: "timer"),
-                            .init(value: Mode.manual, title: String(localized: "Log past"), systemImage: "clock.arrow.circlepath"),
+                            .init(value: Mode.manual, title: String(localized: "Log Past"), systemImage: "clock.arrow.circlepath"),
                         ],
                         selection: $mode,
                         tint: kind.color
@@ -69,13 +69,13 @@ struct EventEditorView: View {
                     set: { draft.note = $0 }
                 ), axis: .vertical)
                 .lineLimit(1...5)
-                PhotoField(title: String(localized: "Add photo"), data: $draft.photoData)
+                PhotoField(title: String(localized: "Add Photo"), data: $draft.photoData)
             }
 
             if !isNew {
                 Section {
                     if let author = draft.authorName {
-                        LabeledContent("Logged by", value: author)
+                        LabeledContent("Logged By", value: author)
                     }
                     Button("Delete Entry", role: .destructive) { confirmingDelete = true }
                 }
@@ -163,6 +163,16 @@ struct EventEditorView: View {
                     activityTypePicker
                 }
                 DatePicker("Start", selection: $timerStart, in: ...Date())
+            }
+        } footer: {
+            if kind == .nursing {
+                Text("The timer keeps running on your Lock Screen and Dynamic Island.")
+            }
+        }
+        if kind != .nursing {
+            // Its own section, so the card above keeps its rounded bottom instead of
+            // looking cut off where the clear button row starts.
+            Section {
                 Button {
                     startTimer()
                 } label: {
@@ -173,10 +183,11 @@ struct EventEditorView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(kind.color)
+                .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
+            } footer: {
+                Text("The timer keeps running on your Lock Screen and Dynamic Island.")
             }
-        } footer: {
-            Text("The timer keeps running on your Lock Screen and Dynamic Island.")
         }
     }
 
@@ -187,7 +198,7 @@ struct EventEditorView: View {
             if kind == .nursing {
                 durationStepper(String(localized: "Left"), value: $draft.leftDuration)
                 durationStepper(String(localized: "Right"), value: $draft.rightDuration)
-                ChipPicker(title: String(localized: "Last side"), options: BreastSide.allCases, selection: $draft.lastSide, tint: .pink, label: \.title)
+                ChipPicker(title: String(localized: "Last Side"), options: BreastSide.allCases, selection: $draft.lastSide, tint: .pink, label: \.title)
             } else if kind.hasDuration {
                 if draft.endDate == nil && !isNew {
                     LabeledContent("End", value: String(localized: "Running"))
@@ -269,7 +280,7 @@ struct EventEditorView: View {
                 TextField("Dose (e.g. 2.5 ml)", text: optionalText($draft.dosage))
                 if isNew {
                     ChipPicker(
-                        title: String(localized: "Remind next dose"),
+                        title: String(localized: "Remind Next Dose"),
                         options: [0.0, 4, 6, 8, 12, 24],
                         value: $medicationReminderHours,
                         tint: EventKind.medication.color
@@ -343,7 +354,7 @@ struct EventEditorView: View {
             .listRowBackground(Color.clear)
         }
         if draft.diaperType?.isWet == true {
-            Section("Pee amount") {
+            Section("Pee Amount") {
                 ChipPicker(title: nil, options: PeeAmount.allCases, selection: $draft.peeAmount, tint: .teal, label: \.title)
             }
         }
@@ -377,7 +388,7 @@ struct EventEditorView: View {
             }
         }
         Section {
-            Toggle("Diaper rash", isOn: $draft.hasRash)
+            Toggle("Diaper Rash", isOn: $draft.hasRash)
         }
     }
 
@@ -391,7 +402,7 @@ struct EventEditorView: View {
             MeasurementField(title: String(localized: "Head"), metricValue: $draft.headCm, quantity: .length)
         }
         if record.sex != .unspecified {
-            Section("WHO percentiles") {
+            Section("WHO Percentiles") {
                 ForEach(GrowthMetric.allCases) { metric in
                     if let value = metric.value(of: draft),
                        let p = GrowthStandards.percentile(of: value, metric: metric, sex: record.sex, ageInMonths: age) {

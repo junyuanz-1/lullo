@@ -407,7 +407,7 @@ struct PhotoField: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
             }
             PhotosPicker(selection: $item, matching: .images) {
-                Label(data == nil ? title : String(localized: "Change photo"), systemImage: "photo")
+                Label(data == nil ? title : String(localized: "Change Photo"), systemImage: "photo")
             }
             if data != nil {
                 Spacer()
@@ -418,7 +418,7 @@ struct PhotoField: View {
                     Image(systemName: "trash")
                 }
                 .buttonStyle(.borderless)
-                .accessibilityLabel(Text("Remove photo"))
+                .accessibilityLabel(Text("Remove Photo"))
             }
         }
         .onChange(of: item) { _, newItem in

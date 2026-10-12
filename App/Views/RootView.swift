@@ -72,7 +72,7 @@ struct BabySwitcher: View {
                 Image(systemName: "chevron.down").font(.caption.bold()).foregroundStyle(.secondary)
             }
         }
-        .accessibilityLabel(Text("Switch baby"))
+        .accessibilityLabel(Text("Switch Baby"))
         .sheet(isPresented: $showingAddBaby) {
             NavigationStack { BabyFormView(baby: nil) }
         }
