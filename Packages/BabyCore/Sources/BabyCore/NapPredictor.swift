@@ -74,13 +74,14 @@ public enum NapPredictor {
         sleeps: [EventRecord],
         since: Date,
         classifier: SleepClassifier,
+        now: Date = Date(),
         calendar: Calendar = .current
     ) -> [TimeInterval] {
         let sorted = sleeps.filter { $0.kind == .sleep }.sorted { $0.startDate < $1.startDate }
         var result: [TimeInterval] = []
         for (previous, next) in zip(sorted, sorted.dropFirst()) {
             guard let end = previous.endDate, end >= since else { continue }
-            guard !classifier.isNight(next.startDate, calendar: calendar) else { continue }
+            guard !classifier.isNight(next, now: now, calendar: calendar) else { continue }
             let gap = next.startDate.timeIntervalSince(end)
             if gap >= 10 * 60 && gap <= 8 * 3600 { result.append(gap) }
         }
@@ -102,7 +103,7 @@ public enum NapPredictor {
         var window = typicalWakeWindow(ageInMonths: age)
 
         let weekAgo = now.addingTimeInterval(-7 * 86_400)
-        let observed = observedWakeWindows(sleeps: sorted, since: weekAgo, classifier: classifier, calendar: calendar)
+        let observed = observedWakeWindows(sleeps: sorted, since: weekAgo, classifier: classifier, now: now, calendar: calendar)
         let personalized = observed.count >= 5
         if personalized {
             let median = observed.sorted()[observed.count / 2]
@@ -113,7 +114,7 @@ public enum NapPredictor {
         // Later wake windows in the day tend to be longer.
         let dayStart = calendar.startOfDay(for: awakeSince)
         let napsToday = sorted.filter {
-            $0.startDate >= dayStart && $0.startDate <= awakeSince && !classifier.isNight($0.startDate, calendar: calendar)
+            $0.startDate >= dayStart && $0.startDate <= awakeSince && !classifier.isNight($0, now: now, calendar: calendar)
         }.count
         let t = min(0.5, 0.2 * Double(napsToday))
         let earliest = awakeSince.addingTimeInterval(window.min + window.width * t)

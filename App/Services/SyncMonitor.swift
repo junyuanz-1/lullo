@@ -59,6 +59,7 @@ final class SyncMonitor: ObservableObject {
         isSyncing = false
         if event.succeeded {
             if event.type != .setup { lastSync = event.endDate }
+            if event.type == .import { AppSettings.initialCloudImportDone = true }
             lastError = nil
         } else if let error = event.error {
             lastError = error.localizedDescription

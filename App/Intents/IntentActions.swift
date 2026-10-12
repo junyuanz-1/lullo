@@ -7,14 +7,29 @@ import Foundation
 enum IntentActions {
     private static var store: TrackerStore { TrackerStore.shared }
 
+    /// The baby a widget or Shortcut named, or the selected baby when none was
+    /// named. A named baby that no longer exists gives nil rather than quietly
+    /// logging to someone else.
     private static func baby(_ id: UUID?) -> Baby? {
-        store.baby(id: id) ?? store.selectedBaby
+        guard let id else { return store.selectedBaby }
+        return store.baby(id: id)
+    }
+
+    /// A timer the Live Activity or widget still shows as running. Buttons on an
+    /// out-of-date display (stopped or deleted on another phone) must not reopen
+    /// or re-end it; refreshing makes the display catch up instead.
+    private static func runningEvent(_ id: UUID, kind: EventKind? = nil) -> Event? {
+        guard let event = store.event(id: id), event.record.isOngoing,
+              kind.map({ event.eventKind == $0 }) ?? true else {
+            store.refreshSideEffects()
+            return nil
+        }
+        return event
     }
 
     /// Returns the baby's name, or nil when there is no baby.
     static func startSleep(babyID: UUID?) -> String? {
-        guard let baby = baby(babyID) else { return nil }
-        store.startTimer(.sleep, for: baby)
+        guard let baby = baby(babyID), store.startTimer(.sleep, for: baby) != nil else { return nil }
         store.refreshSideEffects()
         return baby.displayName
     }
@@ -44,32 +59,34 @@ enum IntentActions {
     static func logBottle(babyID: UUID?, amountML: Double) -> Bool {
         guard let baby = baby(babyID), let id = baby.id else { return false }
         let content = store.lastEvent(of: [.bottle], for: baby)?.record.bottleContent ?? .formula
-        store.save(EventRecord(babyID: id, kind: .bottle, startDate: Date(), amountML: amountML, bottleContent: content))
+        // A finished bottle: without an end it would read as a running bottle timer.
+        let now = Date()
+        let saved = store.save(EventRecord(babyID: id, kind: .bottle, startDate: now, endDate: now, amountML: amountML, bottleContent: content))
         store.refreshSideEffects()
-        return true
+        return saved != nil
     }
 
     static func logDiaper(babyID: UUID?, type: DiaperType) -> Bool {
         guard let baby = baby(babyID) else { return false }
-        store.logDiaper(type, for: baby)
+        let saved = store.logDiaper(type, for: baby)
         store.refreshSideEffects()
-        return true
+        return saved != nil
     }
 
     static func stopTimer(eventID: UUID) {
-        guard let event = store.event(id: eventID) else { return }
+        guard let event = runningEvent(eventID) else { return }
         store.stopTimer(event)
         store.refreshSideEffects()
     }
 
     static func switchNursingSide(eventID: UUID) {
-        guard let event = store.event(id: eventID) else { return }
+        guard let event = runningEvent(eventID, kind: .nursing) else { return }
         store.switchNursingSide(event)
         store.refreshSideEffects()
     }
 
     static func toggleNursingPause(eventID: UUID) {
-        guard let event = store.event(id: eventID) else { return }
+        guard let event = runningEvent(eventID, kind: .nursing) else { return }
         store.toggleNursingPause(event)
         store.refreshSideEffects()
     }

@@ -25,6 +25,38 @@ public struct BackupFile: Codable, Equatable, Sendable {
         self.babies = babies
         self.events = events
     }
+
+    /// Babies and events that fail to decode (an event kind or a field value from a
+    /// newer version) are skipped, so one bad record does not fail the whole file.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        formatVersion = try c.decode(Int.self, forKey: .formatVersion)
+        exportedAt = try c.decode(Date.self, forKey: .exportedAt)
+        appVersion = try c.decodeIfPresent(String.self, forKey: .appVersion)
+        babies = try c.decode(LossyArray<BabyRecord>.self, forKey: .babies).elements
+        events = try c.decode(LossyArray<EventRecord>.self, forKey: .events).elements
+    }
+}
+
+/// Decodes the elements that it can and skips the rest.
+struct LossyArray<Element: Decodable>: Decodable {
+    var elements: [Element] = []
+
+    init(from decoder: Decoder) throws {
+        var c = try decoder.unkeyedContainer()
+        while !c.isAtEnd {
+            if let element = try? c.decode(Element.self) {
+                elements.append(element)
+            } else if (try? c.decode(Skip.self)) == nil {
+                break
+            }
+        }
+    }
+
+    /// Consumes one element of any shape, to move past one that failed.
+    private struct Skip: Decodable {
+        init(from decoder: Decoder) throws {}
+    }
 }
 
 public enum BackupError: Error, Equatable {
@@ -56,16 +88,26 @@ public enum BackupCodec {
             }
             return date
         }
-        let file: BackupFile
+        // Check the version first: a newer format may not decode at all, and that
+        // should read as "update the app" rather than "not a valid backup".
+        let version: Int
         do {
-            file = try decoder.decode(BackupFile.self, from: data)
+            version = try JSONDecoder().decode(VersionHeader.self, from: data).formatVersion
         } catch {
             throw BackupError.corrupt(String(describing: error))
         }
-        guard file.formatVersion <= BackupFile.currentFormatVersion else {
-            throw BackupError.unsupportedVersion(file.formatVersion)
+        guard version <= BackupFile.currentFormatVersion else {
+            throw BackupError.unsupportedVersion(version)
         }
-        return file
+        do {
+            return try decoder.decode(BackupFile.self, from: data)
+        } catch {
+            throw BackupError.corrupt(String(describing: error))
+        }
+    }
+
+    private struct VersionHeader: Decodable {
+        var formatVersion: Int
     }
 }
 
@@ -134,8 +176,11 @@ public enum BackupMerge {
 }
 
 /// What restoring a backup changes, as "roll back to that moment": for every
-/// baby in scope, entries added since the backup are deleted, edited ones are
-/// put back and deleted ones come back. Babies not in the backup are left alone.
+/// baby in scope, entries added or edited since the backup was made and missing
+/// from it are deleted, edited ones are put back and deleted ones come back.
+/// Entries missing from the backup that were created and last edited before it
+/// (logged elsewhere and synced late) are kept. Babies not in the backup are
+/// left alone.
 public struct RollbackPlan: Sendable {
     public var upsertBabies: [BabyRecord] = []
     public var upsertEvents: [EventRecord] = []
@@ -177,8 +222,13 @@ public enum BackupRollback {
             restored.updatedAt = now
             plan.upsertEvents.append(restored)
         }
+        // `updatedAt` counts too: entries put back by an earlier restore keep their
+        // old `createdAt`, and undoing that restore must still remove them.
         plan.deleteEventIDs = currentEvents
-            .filter { babyIDs.contains($0.babyID) && !kept.contains($0.id) }
+            .filter {
+                babyIDs.contains($0.babyID) && !kept.contains($0.id)
+                    && max($0.createdAt, $0.updatedAt) > backup.exportedAt
+            }
             .map(\.id)
         return plan
     }

@@ -22735,6 +22735,64 @@
         }
       }
     },
+    "That time has already passed, so no reminder will be set.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Zeitpunkt ist schon vorbei, daher wird keine Erinnerung gesetzt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That time has already passed, so no reminder will be set."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esa hora ya pasó, así que no se programará ningún recordatorio."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette heure est déjà passée, aucun rappel ne sera programmé."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その時刻はすでに過ぎているため、リマインダーは設定されません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미 지난 시간이라 알림이 설정되지 않아요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esse horário já passou, então nenhum lembrete será definido."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这个时间已经过了，所以不会设置提醒。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "這個時間已經過了，所以不會設定提醒。"
+          }
+        }
+      }
+    },
     "The file contains %lld babies and %lld entries. Entries you already have are kept; newer copies replace older ones.": {
       "localizations": {
         "de": {
@@ -27235,6 +27293,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "iCloud 同步"
+          }
+        }
+      }
+    },
+    "iCloud is still downloading your data. Try again once it has finished.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud lädt deine Daten noch herunter. Versuche es erneut, wenn der Download abgeschlossen ist."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud is still downloading your data. Try again once it has finished."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud todavía está descargando tus datos. Vuelve a intentarlo cuando termine."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud télécharge encore vos données. Réessayez une fois le téléchargement terminé."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud がまだデータをダウンロードしています。完了してからもう一度お試しください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud가 아직 데이터를 내려받는 중이에요. 완료된 후 다시 시도하세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O iCloud ainda está baixando seus dados. Tente novamente quando terminar."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud 仍在下载你的数据，请等下载完成后再试。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud 仍在下載你的資料，請等下載完成後再試。"
           }
         }
       }

@@ -100,6 +100,8 @@ final class TipJar: ObservableObject {
             switch try await product.purchase() {
             case .success(let verification):
                 guard case .verified(let transaction) = verification else {
+                    // Finished without granting anything, so it isn't delivered again on every launch.
+                    if case .unverified(let transaction, _) = verification { await transaction.finish() }
                     return .failed(String(localized: "The purchase could not be verified."))
                 }
                 await transaction.finish()
@@ -119,7 +121,11 @@ final class TipJar: ObservableObject {
     }
 
     private func handle(_ update: VerificationResult<Transaction>) async {
-        guard case .verified(let transaction) = update else { return }
+        guard case .verified(let transaction) = update else {
+            // Nothing is granted for it, but it is finished so it stops coming back.
+            if case .unverified(let transaction, _) = update { await transaction.finish() }
+            return
+        }
         if Tier(rawValue: transaction.productID) != nil, transaction.revocationDate == nil {
             recordTip()
         }

@@ -31,7 +31,9 @@ final class Supporter: ObservableObject {
             guard case .verified(let transaction) = result,
                   Self.productIDs.contains(transaction.productID),
                   transaction.revocationDate == nil else { continue }
-            if let expiry = transaction.expirationDate, expiry < Date() { continue }
+            // No expiry check: current entitlements are the active ones, which
+            // include a subscription in its billing grace period (already past
+            // its expiration date while Apple retries the payment).
             active = true
         }
         if isSupporter != active { logger.info("Supporter status changed: \(active)") }

@@ -101,9 +101,12 @@ private struct HistoryList: View {
     @Binding var toast: UndoToast?
     var loadMore: () -> Void
     private let isFiltered: Bool
+    /// False for a read-only caregiver, who gets no swipe to delete.
+    private let canEdit: Bool
 
     init(baby: Baby, category: EventCategory?, days: Int, editor: Binding<EditorRoute?>, toast: Binding<UndoToast?>, loadMore: @escaping () -> Void) {
         isFiltered = category != nil
+        canEdit = TrackerStore.shared.canEdit(baby)
         let since = Calendar.current.date(byAdding: .day, value: -days, to: Calendar.current.startOfDay(for: AppClock.now))!
         var predicates = [
             NSPredicate(format: "baby == %@", baby),
@@ -139,12 +142,14 @@ private struct HistoryList: View {
                         }
                         .buttonStyle(.plain)
                         .swipeActions {
-                            Button(role: .destructive) {
-                                let record = event.record
-                                store.delete(event)
-                                toast = UndoToast(message: String(localized: "Entry deleted")) { store.save(record) }
-                            } label: {
-                                Label("Delete", systemImage: "trash")
+                            if canEdit {
+                                Button(role: .destructive) {
+                                    let record = event.record
+                                    store.delete(event)
+                                    toast = UndoToast(message: String(localized: "Entry deleted")) { store.save(record) }
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
                             }
                         }
                     }

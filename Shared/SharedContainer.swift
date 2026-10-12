@@ -46,6 +46,7 @@ enum SettingsKey {
     static let diaperReminderHours = "diaperReminderHours"
     static let napReminderEnabled = "napReminderEnabled"
     static let liveActivitiesEnabled = "liveActivitiesEnabled"
+    static let initialCloudImportDone = "initialCloudImportDone"
 }
 
 enum AppSettings {
@@ -79,6 +80,18 @@ enum AppSettings {
 
     static var liveActivitiesEnabled: Bool {
         defaults.object(forKey: SettingsKey.liveActivitiesEnabled) as? Bool ?? true
+    }
+
+    /// Set once iCloud has finished a first download on this device.
+    static var initialCloudImportDone: Bool {
+        get { defaults.bool(forKey: SettingsKey.initialCloudImportDone) }
+        set { defaults.set(newValue, forKey: SettingsKey.initialCloudImportDone) }
+    }
+
+    /// True while a signed-in device may still be downloading its iCloud data
+    /// (fresh install, new phone). Backups taken or restored now would miss it.
+    static var awaitingFirstCloudImport: Bool {
+        FileManager.default.ubiquityIdentityToken != nil && !initialCloudImportDone
     }
 }
 

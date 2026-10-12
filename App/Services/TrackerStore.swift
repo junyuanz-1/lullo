@@ -72,6 +72,10 @@ final class TrackerStore: ObservableObject {
 
     func deleteBaby(_ baby: Baby) {
         let wasSelected = baby.id == selectedBabyID
+        // The events go with the baby (cascade), so their reminders go first.
+        for case let event as Event in baby.events ?? [] {
+            if let id = event.id { NotificationManager.cancelMedicationReminder(eventID: id) }
+        }
         context.delete(baby)
         commit()
         if wasSelected { selectedBabyID = babies().first?.id }
@@ -115,17 +119,26 @@ final class TrackerStore: ObservableObject {
         runningTimers(for: baby).first { $0.eventKind == kind }
     }
 
+    /// Whether this device may change the baby's data. Read-only caregivers of
+    /// a shared baby can look but not change: a write would be saved here, be
+    /// refused by iCloud, and leave this phone out of step with everyone else.
+    func canEdit(_ baby: Baby?) -> Bool {
+        guard let baby else { return false }
+        return persistence.canEdit(baby)
+    }
+
     /// Inserts or updates an event from a value record.
     @discardableResult
     func save(_ record: EventRecord) -> Event? {
         var record = record
         record.updatedAt = Date()
         if let existing = event(id: record.id) {
+            guard canEdit(existing.baby) else { return nil }
             existing.apply(record)
             commit()
             return existing
         }
-        guard let baby = baby(id: record.babyID) else { return nil }
+        guard let baby = baby(id: record.babyID), canEdit(baby) else { return nil }
         if record.authorName == nil { record.authorName = AppSettings.caregiverName }
         let event = persistence.newEvent(for: baby, in: context)
         event.apply(record)
@@ -134,6 +147,8 @@ final class TrackerStore: ObservableObject {
     }
 
     func delete(_ event: Event) {
+        // Already gone (deleted here or by another device): nothing to do.
+        guard !event.isDeleted, event.managedObjectContext != nil, canEdit(event.baby) else { return }
         if let id = event.id { NotificationManager.cancelMedicationReminder(eventID: id) }
         context.delete(event)
         commit()
@@ -144,6 +159,7 @@ final class TrackerStore: ObservableObject {
     @discardableResult
     func startTimer(_ kind: EventKind, for baby: Baby, activityType: ActivityType? = nil, at date: Date = Date()) -> Event? {
         if kind == .nursing { return startNursing(for: baby, side: nil, at: date) }
+        guard canEdit(baby) else { return nil }
         if let running = runningTimer(kind, for: baby), kind != .activity { return running }
         guard let babyID = baby.id else { return nil }
         let record = EventRecord(babyID: babyID, kind: kind, startDate: date, activityType: activityType)
@@ -154,6 +170,7 @@ final class TrackerStore: ObservableObject {
     /// already running, switches it to that side instead.
     @discardableResult
     func startNursing(for baby: Baby, side: BreastSide?, at date: Date = Date()) -> Event? {
+        guard canEdit(baby) else { return nil }
         if let running = runningTimer(.nursing, for: baby) {
             mutate(running) { $0.startNursing(side ?? ($0.activeSide ?? .left).other, at: date) }
             return running
@@ -208,6 +225,10 @@ final class TrackerStore: ObservableObject {
     }
 
     private func mutate(_ event: Event, _ change: (inout EventRecord) -> Void) {
+        guard !event.isDeleted, event.managedObjectContext != nil, canEdit(event.baby) else { return }
+        // Start from the latest stored values (a change from another device may
+        // have landed since this object was read).
+        if !event.hasChanges { context.refresh(event, mergeChanges: false) }
         var record = event.record
         change(&record)
         record.updatedAt = Date()
@@ -247,6 +268,13 @@ final class TrackerStore: ObservableObject {
             running: all.flatMap { runningTimers(for: $0) }.map(\.record),
             babyNames: Dictionary(all.compactMap { b in b.id.map { ($0, b.displayName) } }, uniquingKeysWith: { a, _ in a })
         )
+        // Medication reminders for entries that are gone (deleted on another
+        // device, removed by a restore, or with their baby) are dropped.
+        Task {
+            for id in await NotificationManager.pendingMedicationReminderEventIDs() where event(id: id) == nil {
+                NotificationManager.cancelMedicationReminder(eventID: id)
+            }
+        }
     }
 
     func makeSnapshot(now: Date = Date()) -> WidgetSnapshot {
@@ -262,6 +290,10 @@ final class TrackerStore: ObservableObject {
                 }
             }
             records.append(contentsOf: runningTimers(for: baby).filter { ($0.startDate ?? now) < since }.map(\.record))
+            // An old running timer can be both "the last sleep" and "running":
+            // keep each event once so it isn't counted twice.
+            var seen = Set<UUID>()
+            records = records.filter { seen.insert($0.id).inserted }
             return WidgetSnapshotBuilder.make(baby: baby.record, events: records, now: now, classifier: classifier)
         }
         return WidgetSnapshot(

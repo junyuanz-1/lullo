@@ -19,17 +19,33 @@ struct StatusProvider: AppIntentTimelineProvider {
     }
 
     func timeline(for configuration: SelectBabyIntent, in context: Context) async -> Timeline<StatusEntry> {
-        let baby = resolve(configuration)
+        let snapshot = SharedContainer.loadSnapshot()
+        let baby = snapshot.baby(configuration.baby.flatMap { UUID(uuidString: $0.id) })
         let now = Date()
         // "x ago" labels are computed per entry, so add an entry every 5 minutes.
         let entries = (0..<36).map { i in
-            StatusEntry(date: now.addingTimeInterval(Double(i) * 300), baby: baby)
+            let date = now.addingTimeInterval(Double(i) * 300)
+            return StatusEntry(date: date, baby: baby.map { Self.today($0, madeAt: snapshot.generatedAt, shownAt: date) })
         }
         return Timeline(entries: entries, policy: .atEnd)
     }
 
     private func resolve(_ configuration: SelectBabyIntent) -> BabySnapshot? {
         SharedContainer.loadSnapshot().baby(configuration.baby.flatMap { UUID(uuidString: $0.id) })
+    }
+
+    /// The snapshot's "today" totals belong to the day it was made. Shown after
+    /// midnight (the app not opened since), the new day starts from zero instead
+    /// of repeating yesterday's numbers.
+    private static func today(_ baby: BabySnapshot, madeAt: Date, shownAt date: Date) -> BabySnapshot {
+        guard !Calendar.current.isDate(madeAt, inSameDayAs: date), date > madeAt else { return baby }
+        var baby = baby
+        baby.today.sleep = 0
+        baby.today.feeds = 0
+        baby.today.bottleML = 0
+        baby.today.wetDiapers = 0
+        baby.today.dirtyDiapers = 0
+        return baby
     }
 }
 

@@ -24,9 +24,16 @@ public enum UnitConversion {
     public static func fahrenheit(fromCelsius c: Double) -> Double { c * 9 / 5 + 32 }
     public static func celsius(fromFahrenheit f: Double) -> Double { (f - 32) * 5 / 9 }
 
+    /// Upper bound for `poundsAndOunces`, far above any real weight.
+    static let maxPounds = 10_000.0
+
     /// Splits a weight into whole pounds and remaining ounces (16 oz per lb).
+    /// Non-finite or negative weights give zero and huge ones are clamped, since
+    /// converting them to `Int` would trap.
     public static func poundsAndOunces(fromKg kg: Double) -> (pounds: Int, ounces: Double) {
-        let totalPounds = pounds(fromKg: kg)
+        var totalPounds = pounds(fromKg: kg)
+        guard totalPounds.isFinite, totalPounds > 0 else { return (0, 0) }
+        totalPounds = min(totalPounds, maxPounds)
         var whole = Int(totalPounds.rounded(.down))
         var ounces = (totalPounds - Double(whole)) * 16
         if ounces >= 15.95 {

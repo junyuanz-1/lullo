@@ -30,7 +30,7 @@ public enum CSVExporter {
             let durationMinutes: String = e.kind.hasDuration ? number(e.duration(at: now) / 60) : ""
             let row: [String] = [
                 e.id.uuidString,
-                names[e.babyID] ?? "",
+                text(names[e.babyID]),
                 e.kind.rawValue,
                 formatter.string(from: e.startDate),
                 e.endDate.map(formatter.string(from:)) ?? "",
@@ -42,7 +42,7 @@ public enum CSVExporter {
                 number(e.leftAmountML),
                 number(e.rightAmountML),
                 e.bottleContent?.rawValue ?? "",
-                e.foodName ?? "",
+                text(e.foodName),
                 e.foodReaction?.rawValue ?? "",
                 e.diaperType?.rawValue ?? "",
                 e.diaperType?.isWet == true ? (e.peeAmount?.rawValue ?? "") : "",
@@ -52,15 +52,15 @@ public enum CSVExporter {
                 number(e.weightKg, digits: 3),
                 number(e.heightCm),
                 number(e.headCm),
-                e.medicationName ?? "",
-                e.dosage ?? "",
+                text(e.medicationName),
+                text(e.dosage),
                 number(e.temperatureC),
-                e.symptoms ?? "",
-                e.vaccineName ?? "",
+                text(e.symptoms),
+                text(e.vaccineName),
                 e.activityType?.rawValue ?? "",
                 e.sleepLocation?.rawValue ?? "",
-                e.note ?? "",
-                e.authorName ?? "",
+                text(e.note),
+                text(e.authorName),
             ]
             lines.append(row.map(escape).joined(separator: ","))
         }
@@ -70,6 +70,15 @@ public enum CSVExporter {
     static func number(_ value: Double?, digits: Int = 1) -> String {
         guard let value, value.isFinite else { return "" }
         return String(format: "%.\(digits)f", value)
+    }
+
+    /// Free text typed by a user. A leading `=`, `+`, `-`, `@`, tab or CR would make
+    /// a spreadsheet run it as a formula, so it gets a `'` prefix and shows as text.
+    /// Only used for text columns, so negative numbers stay numbers.
+    static func text(_ value: String?) -> String {
+        guard let value, let first = value.unicodeScalars.first else { return "" }
+        let formulaStarts: Set<Unicode.Scalar> = ["=", "+", "-", "@", "\t", "\r"]
+        return formulaStarts.contains(first) ? "'" + value : value
     }
 
     static func escape(_ field: String) -> String {

@@ -62,5 +62,8 @@ final class LiveActivityManager {
         for activity in Activity<TrackerActivityAttributes>.activities {
             Task { await activity.end(nil, dismissalPolicy: .immediate) }
         }
+        // Forget them too, so switching Live Activities back on brings back the
+        // ones for timers that are still running.
+        SharedContainer.defaults.removeObject(forKey: startedKey)
     }
 }

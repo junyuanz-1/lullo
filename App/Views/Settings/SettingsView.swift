@@ -410,6 +410,10 @@ struct SettingsView: View {
     }
 
     private func handleImportSelection(_ result: Result<URL, Error>) {
+        if !store.persistence.inMemory && AppSettings.awaitingFirstCloudImport {
+            errorMessage = BackupService.SyncPending().errorDescription
+            return
+        }
         do {
             pendingImport = try BackupService.readBackup(at: result.get())
         } catch BackupError.unsupportedVersion {

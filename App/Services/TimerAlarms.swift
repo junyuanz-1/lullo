@@ -67,7 +67,21 @@ final class TimerAlarms: ObservableObject {
         durations[eventID] = duration
         saveDurations()
         TrackerStore.shared.scheduleSideEffects()
-        if duration != nil { Task { await requestAuthorization() } }
+        if duration != nil {
+            Task {
+                await requestAuthorization()
+                // The first sync ran while the permission prompt was still up, when
+                // the alarm couldn't be scheduled; forget it so it is scheduled now.
+                forgetScheduled(eventID)
+                TrackerStore.shared.scheduleSideEffects()
+            }
+        }
+    }
+
+    private func forgetScheduled(_ eventID: UUID) {
+        var scheduled = defaults.dictionary(forKey: scheduledKey) as? [String: Double] ?? [:]
+        scheduled[eventID.uuidString] = nil
+        defaults.set(scheduled, forKey: scheduledKey)
     }
 
     /// The countdown last chosen for this kind, offered again next time.
