@@ -416,7 +416,7 @@ struct QuickActionsGrid: View {
                 } label: {
                     QuickActionTile(
                         title: EventKind.nursing.title,
-                        subtitle: String(localized: "Next side: \(suggestedSide.shortTitle)"),
+                        subtitle: String(localized: "Next Side: \(suggestedSide.shortTitle)"),
                         systemImage: EventKind.nursing.systemImage,
                         color: EventKind.nursing.color
                     )
@@ -641,7 +641,7 @@ struct StatusCards: View {
                     title: String(localized: "Last Feed"),
                     value: lastFeed.map { Fmt.ago($0.startDate, now: now) } ?? "—",
                     detail: lastFeed.map { "\($0.displayTitle) · \($0.detailText(now: now))" },
-                    footnote: lastNursing.map { _ in String(localized: "Next side: \(EventRecord.suggestedNextSide(after: lastNursing).title)") },
+                    footnote: lastNursing.map { _ in String(localized: "Next Side: \(EventRecord.suggestedNextSide(after: lastNursing).title)") },
                     kind: .bottle
                 )
                 StatusTile(
@@ -723,7 +723,7 @@ struct SweetSpotCard: View {
     private func status(_ p: NapPrediction) -> String {
         if now < p.earliest { return String(localized: "in \(Fmt.duration(p.earliest.timeIntervalSince(now)))") }
         if now <= p.latest { return String(localized: "Now") }
-        return String(localized: "Overtired risk")
+        return String(localized: "Overtired Risk")
     }
 }
 

@@ -348,9 +348,9 @@ struct SettingsView: View {
     private var accountText: String {
         switch sync.account {
         case .available: return String(localized: "Signed in")
-        case .noAccount: return String(localized: "Not signed in")
+        case .noAccount: return String(localized: "Not Signed In")
         case .restricted: return String(localized: "Restricted")
-        case .temporarilyUnavailable: return String(localized: "Temporarily unavailable")
+        case .temporarilyUnavailable: return String(localized: "Temporarily Unavailable")
         case .unknown: return String(localized: "Checking…")
         }
     }
