@@ -3,7 +3,8 @@ name: Record snapshots
 # Re-records the reference images for the screenshot diff tests and commits them
 # to the pull request's branch. After an intentional UI change, either add the
 # `record-snapshots` label to the pull request, or run this workflow on the
-# branch (Actions → Record snapshots → Run workflow).
+# branch (Actions → Record snapshots → Run workflow). When the images are
+# committed, approve the CI run that appears on the pull request to check them.
 on:
   workflow_dispatch:
   pull_request:
@@ -11,7 +12,6 @@ on:
 
 permissions:
   contents: write
-  actions: write
   pull-requests: write
 
 env:
@@ -64,8 +64,9 @@ jobs:
           git reset --hard HEAD
           git pull --rebase origin "$BRANCH"
           git push origin "HEAD:$BRANCH"
-          # Pushes made with the workflow token don't trigger other workflows, so start CI here.
-          gh workflow run ci.yml --ref "$BRANCH"
+          # This push opens a CI run on the pull request that waits for approval
+          # ("Approve and run" on the PR), because the workflow token made it.
+          # That run is the check of the new images; nothing else is started here.
 
       - name: Remove the label
         if: always() && github.event_name == 'pull_request'
