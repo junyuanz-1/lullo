@@ -217,26 +217,14 @@ struct EventEditorView: View {
         )
     }
 
-    /// The countdown on the running timer being edited; changes apply right away.
-    private var runningAlarm: Binding<Int?> {
-        Binding(
-            get: { alarms.duration(for: existing?.id).map { Int($0 / 60) } },
-            set: { minutes in
-                guard let id = existing?.id else { return }
-                let duration = minutes.map { TimeInterval($0 * 60) }
-                alarms.setDuration(duration, for: id)
-                alarms.rememberLastUsed(duration, for: kind)
-            }
-        )
-    }
-
     @ViewBuilder
     private var timeSection: some View {
         Section {
             if kind == .nursing && draft.isOngoing && !isNew {
-                // A running session: show what is happening, don't offer to edit
-                // minutes that are still counting. The timer card has the controls.
-                LabeledContent("Started", value: Fmt.time(draft.startDate))
+                // A running session: the start can be corrected ("it actually began
+                // earlier"), the side times keep counting. The timer card has the
+                // controls and the alarm.
+                DatePicker("Start", selection: $draft.startDate, in: ...AppClock.now)
                 ForEach(BreastSide.allCases, id: \.self) { side in
                     ClockTimeline(every: 1) { now in
                         LabeledContent(side.title, value: Fmt.duration(draft.nursingElapsed(side, at: now)))
@@ -245,8 +233,6 @@ struct EventEditorView: View {
                 Button("Stop Now") {
                     if let existing { store.stopTimer(existing) }
                 }
-                alarmPicker(selection: runningAlarm)
-                alarmTimeNote
             } else if kind == .nursing {
                 DatePicker("Start", selection: $draft.startDate)
                 minutesField(BreastSide.left.title, value: $draft.leftDuration)
@@ -269,10 +255,6 @@ struct EventEditorView: View {
                     ClockTimeline(every: 1) { now in
                         LabeledContent("Duration", value: Fmt.duration(draft.duration(at: now)))
                     }
-                    if TimerAlarm.supportedKinds.contains(kind) {
-                        alarmPicker(selection: runningAlarm)
-                        alarmTimeNote
-                    }
                 } else {
                     DatePicker("End", selection: Binding(
                         get: { draft.endDate ?? draft.startDate },
@@ -281,19 +263,6 @@ struct EventEditorView: View {
                     LabeledContent("Duration", value: Fmt.duration(draft.duration()))
                 }
             }
-        }
-    }
-
-    @ViewBuilder
-    private var alarmTimeNote: some View {
-        if let date = alarms.fireDate(for: draft) {
-            Label(String(localized: "Rings at \(Fmt.time(date))"), systemImage: "bell.fill")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-        } else if draft.isNursingPaused, alarms.duration(for: existing?.id) != nil {
-            Label("Paused: the alarm continues when nursing resumes.", systemImage: "bell.slash")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
         }
     }
 
@@ -571,6 +540,19 @@ struct EventEditorView: View {
         closing = true
         var record = draft
         if record.diaperType?.isWet != true { record.peeAmount = nil }
+        if kind == .nursing, !isNew, record.isOngoing, let base = baseline, record.startDate != base.startDate {
+            // Moving the start of a running session moves the time already
+            // counted with it: 10 minutes earlier means 10 more minutes nursed.
+            let delta = record.startDate.timeIntervalSince(base.startDate)
+            if let since = record.activeSideStartedAt {
+                record.activeSideStartedAt = min(AppClock.now, since.addingTimeInterval(delta))
+            } else if let side = record.lastSide {
+                switch side {
+                case .left: record.leftDuration = max(0, record.leftDuration - delta)
+                case .right: record.rightDuration = max(0, record.rightDuration - delta)
+                }
+            }
+        }
         if isNew && kind.hasDuration {
             if kind == .nursing {
                 record.activeSide = nil

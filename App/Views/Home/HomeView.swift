@@ -128,9 +128,8 @@ struct HomeView: View {
         show(String(localized: "Nursing started · \(chosen.title)")) { store.delete(event) }
     }
 
-    /// Stops the running timer of `kind` (the oldest one if several are running).
-    private func stopRunning(_ kind: EventKind) {
-        guard let event = running.first(where: { $0.eventKind == kind }) else { return }
+    private func stopRunning(_ record: EventRecord) {
+        guard let event = running.first(where: { $0.id == record.id }) else { return }
         stop(event)
     }
 
@@ -234,6 +233,9 @@ struct TimerCard: View {
                     }
                 }
                 Spacer()
+                if TimerAlarm.supportedKinds.contains(record.kind) {
+                    alarmMenu(for: record)
+                }
                 Button(action: onEdit) { Image(systemName: "pencil.circle.fill").font(.title2) }
                     .buttonStyle(.borderless)
                     .accessibilityLabel(Text("Edit"))
@@ -258,6 +260,46 @@ struct TimerCard: View {
                 }
             }
         }
+    }
+}
+
+extension TimerCard {
+    /// Countdown for this timer, set right on the card: Off or one of the presets.
+    fileprivate func alarmMenu(for record: EventRecord) -> some View {
+        let current = alarms.duration(for: record.id).map { Int($0 / 60) }
+        return Menu {
+            Section(record.kind == .nursing ? String(localized: "Alarm per Side") : String(localized: "Alarm")) {
+                Button {
+                    setAlarm(nil, for: record)
+                } label: {
+                    if current == nil {
+                        Label("Off", systemImage: "checkmark")
+                    } else {
+                        Text("Off")
+                    }
+                }
+                ForEach(TimerAlarm.presetMinutes(for: record.kind), id: \.self) { minutes in
+                    Button {
+                        setAlarm(TimeInterval(minutes * 60), for: record)
+                    } label: {
+                        let title = Fmt.duration(TimeInterval(minutes * 60), style: .short)
+                        if current == minutes {
+                            Label(title, systemImage: "checkmark")
+                        } else {
+                            Text(title)
+                        }
+                    }
+                }
+            }
+        } label: {
+            Image(systemName: current == nil ? "bell" : "bell.fill").font(.title2)
+        }
+        .accessibilityLabel(Text("Alarm"))
+    }
+
+    private func setAlarm(_ duration: TimeInterval?, for record: EventRecord) {
+        alarms.setDuration(duration, for: record.id)
+        alarms.rememberLastUsed(duration, for: record.kind)
     }
 }
 
@@ -322,12 +364,17 @@ struct QuickActionsGrid: View {
     @Binding var editor: EditorRoute?
     var startTimer: (EventKind, ActivityType?) -> Void
     var startNursing: (BreastSide?) -> Void
-    var stopRunning: (EventKind) -> Void
+    var stopRunning: (EventRecord) -> Void
     var logDiaper: (DiaperType) -> Void
 
     private let columns = [GridItem(.adaptive(minimum: 76), spacing: 12)]
 
     private func isRunning(_ kind: EventKind) -> Bool { running.contains { $0.kind == kind } }
+
+    /// Stops the oldest running timer of `kind`.
+    private func stopRunning(_ kind: EventKind) {
+        if let record = running.first(where: { $0.kind == kind }) { stopRunning(record) }
+    }
 
     private var suggestedSide: BreastSide {
         EventRecord.suggestedNextSide(after: records.first { $0.kind == .nursing })
@@ -369,7 +416,7 @@ struct QuickActionsGrid: View {
                 } label: {
                     QuickActionTile(
                         title: EventKind.nursing.title,
-                        subtitle: String(localized: "Next side: \(suggestedSide.shortTitle)"),
+                        subtitle: String(localized: "Next Side: \(suggestedSide.shortTitle)"),
                         systemImage: EventKind.nursing.systemImage,
                         color: EventKind.nursing.color
                     )
@@ -434,30 +481,38 @@ struct QuickActionsGrid: View {
         }
     }
 
+    /// Several activities can run at once (a bath during tummy time), so the
+    /// menu keeps offering types; running ones get a Stop entry at the top.
     private var activityTile: some View {
-        Group {
-            if isRunning(.activity) {
-                Button {
-                    stopRunning(.activity)
-                } label: {
-                    QuickActionTile(title: String(localized: "Stop"), systemImage: "stop.fill", color: EventKind.activity.color)
-                }
-                .buttonStyle(.plain)
-            } else {
-                Menu {
-                    ForEach(ActivityType.allCases, id: \.self) { type in
+        let active = running.filter { $0.kind == .activity }
+        return Menu {
+            if !active.isEmpty {
+                Section {
+                    ForEach(active) { record in
                         Button {
-                            startTimer(.activity, type)
+                            stopRunning(record)
                         } label: {
-                            Label(type.title, systemImage: type.systemImage)
+                            Label(String(localized: "Stop \(record.displayTitle)"), systemImage: "stop.fill")
                         }
                     }
-                    Divider()
-                    logPastButton(.activity)
-                } label: {
-                    QuickActionTile(title: EventKind.activity.title, systemImage: EventKind.activity.systemImage, color: EventKind.activity.color)
                 }
             }
+            ForEach(ActivityType.allCases, id: \.self) { type in
+                Button {
+                    startTimer(.activity, type)
+                } label: {
+                    Label(type.title, systemImage: type.systemImage)
+                }
+            }
+            Divider()
+            logPastButton(.activity)
+        } label: {
+            QuickActionTile(
+                title: EventKind.activity.title,
+                subtitle: active.first.map(\.displayTitle),
+                systemImage: active.isEmpty ? EventKind.activity.systemImage : "stop.fill",
+                color: EventKind.activity.color
+            )
         }
     }
 
@@ -578,13 +633,15 @@ struct StatusCards: View {
         let lastWake = sleeps.compactMap(\.endDate).max()
         let lastNursing = records.first { $0.kind == .nursing }
 
-        Grid(horizontalSpacing: 12, verticalSpacing: 12) {
-            GridRow {
+        VStack(spacing: 12) {
+            // An HStack proposes its full height to both tiles, so the shorter
+            // one stretches to match.
+            HStack(alignment: .top, spacing: 12) {
                 StatusTile(
                     title: String(localized: "Last Feed"),
                     value: lastFeed.map { Fmt.ago($0.startDate, now: now) } ?? "—",
                     detail: lastFeed.map { "\($0.displayTitle) · \($0.detailText(now: now))" },
-                    footnote: lastNursing.map { _ in String(localized: "Next side: \(EventRecord.suggestedNextSide(after: lastNursing).title)") },
+                    footnote: lastNursing.map { _ in String(localized: "Next Side: \(EventRecord.suggestedNextSide(after: lastNursing).title)") },
                     kind: .bottle
                 )
                 StatusTile(
@@ -595,16 +652,13 @@ struct StatusCards: View {
                     kind: .diaper
                 )
             }
-            GridRow {
-                StatusTile(
+            StatusTile(
                     title: sleeping != nil ? String(localized: "Asleep for") : String(localized: "Awake for"),
                     value: sleeping.map { Fmt.duration($0.duration(at: now)) } ?? lastWake.map { Fmt.duration(now.timeIntervalSince($0)) } ?? "—",
                     detail: sleeping.map { String(localized: "Since \(Fmt.time($0.startDate))") } ?? lastWake.map { String(localized: "Woke at \(Fmt.time($0))") },
                     footnote: nil,
                     kind: .sleep
-                )
-                .gridCellColumns(2)
-            }
+            )
         }
     }
 }
@@ -629,7 +683,7 @@ struct StatusTile: View {
                 Text(footnote).font(.caption2.weight(.medium)).foregroundStyle(.pink)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(12)
         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
@@ -669,7 +723,7 @@ struct SweetSpotCard: View {
     private func status(_ p: NapPrediction) -> String {
         if now < p.earliest { return String(localized: "in \(Fmt.duration(p.earliest.timeIntervalSince(now)))") }
         if now <= p.latest { return String(localized: "Now") }
-        return String(localized: "Overtired risk")
+        return String(localized: "Overtired Risk")
     }
 }
 

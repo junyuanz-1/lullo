@@ -28,7 +28,7 @@ enum Fmt {
 
     static func ago(_ date: Date, now: Date = AppClock.now) -> String {
         let seconds = now.timeIntervalSince(date)
-        if seconds < 60 { return String(localized: "just now") }
+        if seconds < 60 { return String(localized: "Just now") }
         return String(localized: "\(duration(seconds)) ago")
     }
 
@@ -88,7 +88,7 @@ enum Fmt {
 
     /// "3 months, 2 weeks" / "3个月2周"
     static func age(birthDate: Date, at now: Date = AppClock.now, calendar: Calendar = .current) -> String {
-        guard now >= birthDate else { return String(localized: "Not born yet") }
+        guard now >= birthDate else { return String(localized: "Not Born Yet") }
         let components = calendar.dateComponents([.year, .month, .weekOfMonth, .day], from: birthDate, to: now)
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .full
