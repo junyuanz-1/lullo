@@ -147,11 +147,7 @@ private struct HistoryList: View {
                         }
                     }
                 } header: {
-                    HStack {
-                        Text(Fmt.dayTitle(section.day))
-                        Spacer()
-                        Text(daySummary(section.events)).textCase(nil)
-                    }
+                    DayHeader(day: section.day, records: section.events.map(\.record))
                 }
             }
             if !events.isEmpty {
@@ -168,16 +164,54 @@ private struct HistoryList: View {
             }
         }
     }
+}
 
-    private func daySummary(_ events: [Event]) -> String {
-        let records = events.map(\.record)
+/// The day title with that day's totals. Each total keeps its icon and number
+/// together; when they don't fit beside the title they move to a line below it.
+private struct DayHeader: View {
+    var day: Date
+    var records: [EventRecord]
+
+    var body: some View {
+        let sleep = records.filter { $0.kind == .sleep }.reduce(0) { $0 + $1.duration(at: AppClock.now) }
         let feeds = records.filter { $0.kind.isFeeding }.count
         let diapers = records.filter { $0.kind == .diaper }.count
-        let sleep = records.filter { $0.kind == .sleep }.reduce(0) { $0 + $1.duration(at: AppClock.now) }
+        let totals = HStack(spacing: 10) {
+            if sleep > 0 { total(.sleep, Fmt.duration(sleep)) }
+            if feeds > 0 { total(.bottle, "\(feeds)") }
+            if diapers > 0 { total(.diaper, "\(diapers)") }
+        }
+        .textCase(nil)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(accessibilitySummary(sleep: sleep, feeds: feeds, diapers: diapers)))
+
+        ViewThatFits(in: .horizontal) {
+            HStack {
+                Text(Fmt.dayTitle(day))
+                Spacer()
+                totals
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                Text(Fmt.dayTitle(day))
+                totals
+            }
+        }
+    }
+
+    private func total(_ kind: EventKind, _ value: String) -> some View {
+        HStack(spacing: 3) {
+            Image(systemName: kind.systemImage).foregroundStyle(kind.color)
+            Text(value).monospacedDigit()
+        }
+        .lineLimit(1)
+        .fixedSize()
+    }
+
+    private func accessibilitySummary(sleep: TimeInterval, feeds: Int, diapers: Int) -> String {
         var parts: [String] = []
-        if sleep > 0 { parts.append("💤 \(Fmt.duration(sleep))") }
-        if feeds > 0 { parts.append("🍼 \(feeds)") }
-        if diapers > 0 { parts.append("🧷 \(diapers)") }
-        return parts.joined(separator: "  ")
+        if sleep > 0 { parts.append(String(localized: "Sleep \(Fmt.duration(sleep))")) }
+        if feeds > 0 { parts.append(String(localized: "Feeds \(feeds)")) }
+        if diapers > 0 { parts.append(String(localized: "Diapers \(diapers)")) }
+        return parts.joined(separator: ", ")
     }
 }

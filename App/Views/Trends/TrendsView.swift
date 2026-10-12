@@ -60,7 +60,8 @@ private struct TrendsContent: View {
         let now = AppClock.now
         let classifier = AppSettings.sleepClassifier
         let days = Statistics.dailySummaries(events: records, from: from, to: to, now: now, classifier: classifier)
-        let average = Statistics.average(days)
+        // Today is still in progress, so it would pull every average down.
+        let average = Statistics.average(days.filter { !$0.isToday }) ?? Statistics.average(days)
         let schedules = Statistics.schedules(events: records, from: from, to: to, now: now)
         let ageMonths = baby.record.ageInMonths(at: AppClock.now)
 
@@ -106,6 +107,9 @@ private struct AveragesCard: View {
                 }
             }
             Text("Recommended total sleep for this age: \(Fmt.number(recommended.lowerBound, digits: 0))–\(Fmt.number(recommended.upperBound, digits: 0)) h")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text("Today is still in progress: it is drawn lighter in the charts and left out of the averages.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -223,8 +227,10 @@ private struct SleepChart: View {
                 ForEach(days) { day in
                     BarMark(x: .value("Day", day.day, unit: .day), y: .value("Hours", day.nightSleep / 3600))
                         .foregroundStyle(by: .value("Type", String(localized: "Night")))
+                        .opacity(day.chartOpacity)
                     BarMark(x: .value("Day", day.day, unit: .day), y: .value("Hours", day.napSleep / 3600))
                         .foregroundStyle(by: .value("Type", String(localized: "Naps")))
+                        .opacity(day.chartOpacity)
                 }
             }
             .chartForegroundStyleScale([String(localized: "Night"): Color.indigo, String(localized: "Naps"): Color.purple.opacity(0.6)])
@@ -242,10 +248,13 @@ private struct FeedingChart: View {
             Chart(days) { day in
                 BarMark(x: .value("Day", day.day, unit: .day), y: .value("Feeds", day.nursingCount))
                     .foregroundStyle(by: .value("Type", EventKind.nursing.title))
+                    .opacity(day.chartOpacity)
                 BarMark(x: .value("Day", day.day, unit: .day), y: .value("Feeds", day.bottleCount))
                     .foregroundStyle(by: .value("Type", EventKind.bottle.title))
+                    .opacity(day.chartOpacity)
                 BarMark(x: .value("Day", day.day, unit: .day), y: .value("Feeds", day.solidsCount))
                     .foregroundStyle(by: .value("Type", EventKind.solids.title))
+                    .opacity(day.chartOpacity)
             }
             .chartForegroundStyleScale([
                 EventKind.nursing.title: Color.pink,
@@ -256,10 +265,18 @@ private struct FeedingChart: View {
 
             if days.contains(where: { $0.bottleVolumeML > 0 }) {
                 Text("Bottle Volume").font(.subheadline.weight(.semibold))
-                Chart(days) { day in
-                    LineMark(x: .value("Day", day.day, unit: .day), y: .value("Volume", displayVolume(day.bottleVolumeML)))
-                        .foregroundStyle(.orange)
-                        .symbol(.circle)
+                Chart {
+                    // The line stops at yesterday; today so far is a lighter dot,
+                    // so a half-finished day doesn't read as a sudden drop.
+                    ForEach(days.filter { !$0.isToday }) { day in
+                        LineMark(x: .value("Day", day.day, unit: .day), y: .value("Volume", displayVolume(day.bottleVolumeML)))
+                            .foregroundStyle(.orange)
+                            .symbol(.circle)
+                    }
+                    ForEach(days.filter(\.isToday)) { day in
+                        PointMark(x: .value("Day", day.day, unit: .day), y: .value("Volume", displayVolume(day.bottleVolumeML)))
+                            .foregroundStyle(.orange.opacity(0.4))
+                    }
                 }
                 .chartYAxisLabel(AppSettings.unitSystem == .metric ? String(localized: "ml") : String(localized: "oz"))
                 .frame(height: 140)
@@ -269,6 +286,7 @@ private struct FeedingChart: View {
                 Chart(days) { day in
                     BarMark(x: .value("Day", day.day, unit: .day), y: .value("Minutes", day.nursingDuration / 60))
                         .foregroundStyle(.pink.gradient)
+                        .opacity(day.chartOpacity)
                 }
                 .frame(height: 140)
             }
@@ -288,8 +306,10 @@ private struct DiaperChart: View {
             Chart(days) { day in
                 BarMark(x: .value("Day", day.day, unit: .day), y: .value("Count", day.wetDiapers))
                     .foregroundStyle(by: .value("Type", String(localized: "Wet")))
+                    .opacity(day.chartOpacity)
                 BarMark(x: .value("Day", day.day, unit: .day), y: .value("Count", day.dirtyDiapers))
                     .foregroundStyle(by: .value("Type", String(localized: "Dirty")))
+                    .opacity(day.chartOpacity)
             }
             .chartForegroundStyleScale([String(localized: "Wet"): Color.teal, String(localized: "Dirty"): Color.brown])
             .frame(height: 180)
@@ -311,9 +331,17 @@ private struct PumpingChart: View {
                     y: .value("Volume", AppSettings.unitSystem == .metric ? day.pumpingVolumeML : UnitConversion.ounces(fromML: day.pumpingVolumeML))
                 )
                 .foregroundStyle(.purple.gradient)
+                .opacity(day.chartOpacity)
             }
             .chartYAxisLabel(AppSettings.unitSystem == .metric ? String(localized: "ml") : String(localized: "oz"))
             .frame(height: 160)
         }
     }
+}
+
+private extension DailySummary {
+    var isToday: Bool { Calendar.current.isDate(day, inSameDayAs: AppClock.now) }
+
+    /// Today is still in progress, so its bars are drawn lighter.
+    var chartOpacity: Double { isToday ? 0.4 : 1 }
 }

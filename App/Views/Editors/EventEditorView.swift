@@ -157,7 +157,7 @@ struct EventEditorView: View {
             Section {
                 alarmPicker(selection: $newTimerAlarm)
             } footer: {
-                Text("Rings with a gentle sound. Choose the sound in More → Timer Alarm.")
+                Text("Rings with a gentle sound. Choose the sound in Settings → Timer Alarm.")
             }
         }
         // The start buttons get their own section with no card behind them, so
@@ -205,15 +205,19 @@ struct EventEditorView: View {
         .listRowBackground(Color.clear)
     }
 
-    /// Countdown choices ("ring after 10 min"). Nursing counts each side separately.
+    /// Countdown choices ("ring after 10 min"), with Off as a choice of its own
+    /// like the bell menu on the timer card. Nursing counts each side separately.
     private func alarmPicker(selection: Binding<Int?>) -> some View {
         ChipPicker(
             title: kind == .nursing ? String(localized: "Alarm per Side") : String(localized: "Alarm"),
-            options: TimerAlarm.presetMinutes(for: kind),
-            selection: selection,
+            options: [0] + TimerAlarm.presetMinutes(for: kind),
+            value: Binding(
+                get: { selection.wrappedValue ?? 0 },
+                set: { selection.wrappedValue = $0 == 0 ? nil : $0 }
+            ),
             tint: kind.color,
-            label: { Fmt.duration(TimeInterval($0 * 60), style: .short) },
-            systemImage: { _ in "bell.fill" }
+            label: { $0 == 0 ? String(localized: "Off") : Fmt.duration(TimeInterval($0 * 60), style: .short) },
+            systemImage: { $0 == 0 ? "bell.slash" : "bell.fill" }
         )
     }
 
@@ -505,6 +509,7 @@ struct EventEditorView: View {
         }
         applyDraftDetails(to: event)
         applyNewTimerAlarm(to: event)
+        TinytideTips.logged()
         dismiss()
     }
 
@@ -512,6 +517,7 @@ struct EventEditorView: View {
         let event = store.startNursing(for: baby, side: side)
         applyDraftDetails(to: event)
         applyNewTimerAlarm(to: event)
+        TinytideTips.logged()
         dismiss()
     }
 
@@ -565,6 +571,7 @@ struct EventEditorView: View {
             }
         }
         store.save(record)
+        if isNew { TinytideTips.logged() }
         if kind == .medication, isNew, medicationReminderHours > 0, let name = record.medicationName {
             NotificationManager.scheduleMedicationReminder(
                 eventID: record.id,
