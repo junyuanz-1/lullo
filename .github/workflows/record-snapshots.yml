@@ -58,6 +58,8 @@ jobs:
             exit 0
           fi
           git commit -m "Record snapshot reference images"
+          # Someone may have pushed while this ran; the images only touch __Snapshots__.
+          git pull --rebase origin "$BRANCH"
           git push origin "HEAD:$BRANCH"
           # Pushes made with the workflow token don't trigger other workflows, so start CI here.
           gh workflow run ci.yml --ref "$BRANCH"
