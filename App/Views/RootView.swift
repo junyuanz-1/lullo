@@ -19,19 +19,24 @@ struct RootView: View {
     @ViewBuilder
     private var content: some View {
         if let baby = selectedBaby {
+            // Each tab is rebuilt for the new baby (their fetch requests are set up
+            // in init), while the TabView itself keeps the selected tab.
             TabView {
                 HomeView(baby: baby)
+                    .id(baby.objectID)
                     .tabItem { Label("Today", systemImage: "house.fill") }
                 HistoryView(baby: baby)
+                    .id(baby.objectID)
                     .tabItem { Label("Log", systemImage: "list.bullet.rectangle") }
                 TrendsView(baby: baby)
+                    .id(baby.objectID)
                     .tabItem { Label("Trends", systemImage: "chart.bar.xaxis") }
                 GrowthView(baby: baby)
+                    .id(baby.objectID)
                     .tabItem { Label("Growth", systemImage: "chart.line.uptrend.xyaxis") }
                 SettingsView()
                     .tabItem { Label("More", systemImage: "gearshape.fill") }
             }
-            .id(baby.objectID)
         } else {
             OnboardingView()
         }
@@ -47,6 +52,16 @@ struct BabySwitcher: View {
     @State private var showingAddBaby = false
 
     var body: some View {
+        if babies.count > 1 {
+            menu
+        } else {
+            // One baby: nothing to switch to, so no drop-down affordance. Adding a
+            // baby lives in More.
+            label(showsChevron: false)
+        }
+    }
+
+    private var menu: some View {
         Menu {
             ForEach(babies) { candidate in
                 Button {
@@ -66,15 +81,21 @@ struct BabySwitcher: View {
                 Label("Add Baby", systemImage: "plus")
             }
         } label: {
-            HStack(spacing: 8) {
-                BabyAvatar(photoData: baby.photoData, name: baby.displayName, size: 30)
-                Text(baby.displayName).font(.headline).foregroundStyle(.primary)
-                Image(systemName: "chevron.down").font(.caption.bold()).foregroundStyle(.secondary)
-            }
+            label(showsChevron: true)
         }
         .accessibilityLabel(Text("Switch Baby"))
         .sheet(isPresented: $showingAddBaby) {
             NavigationStack { BabyFormView(baby: nil) }
+        }
+    }
+
+    private func label(showsChevron: Bool) -> some View {
+        HStack(spacing: 8) {
+            BabyAvatar(photoData: baby.photoData, name: baby.displayName, size: 30)
+            Text(baby.displayName).font(.headline).foregroundStyle(.primary)
+            if showsChevron {
+                Image(systemName: "chevron.down").font(.caption.bold()).foregroundStyle(.secondary)
+            }
         }
     }
 }

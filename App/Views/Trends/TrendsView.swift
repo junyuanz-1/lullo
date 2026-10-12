@@ -11,15 +11,21 @@ struct TrendsView: View {
         NavigationStack {
             TrendsContent(baby: baby, range: range)
                 .navigationTitle("Trends")
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Picker("Range", selection: $range) {
-                            Text("7 Days").tag(7)
-                            Text("14 Days").tag(14)
-                            Text("30 Days").tag(30)
-                        }
-                        .pickerStyle(.menu)
+                .navigationBarTitleDisplayMode(.inline)
+                // One tap to change the range, instead of opening a menu first.
+                .safeAreaInset(edge: .top, spacing: 0) {
+                    Picker("Range", selection: $range) {
+                        Text("7 Days").tag(7)
+                        Text("14 Days").tag(14)
+                        Text("30 Days").tag(30)
                     }
+                    .pickerStyle(.segmented)
+                    .padding(.horizontal)
+                    .padding(.vertical, 8)
+                    .background(Color(.systemGroupedBackground))
+                }
+                .toolbar {
+                    ToolbarItem(placement: .principal) { BabySwitcher(baby: baby) }
                 }
         }
     }

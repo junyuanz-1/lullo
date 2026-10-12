@@ -23,18 +23,21 @@ struct EventEditorView: View {
     @State private var newTimerAlarm: Int?
     @ObservedObject private var alarms = TimerAlarms.shared
 
-    init(baby: Baby, kind: EventKind, existing: Event?) {
+    /// - Parameter mode: timer or "log past" for a new entry; nil picks the
+    ///   default (timer for kinds that support one).
+    init(baby: Baby, kind: EventKind, existing: Event?, mode: Mode? = nil) {
         self.baby = baby
         self.existing = existing
         let now = Date()
         var record = existing?.record ?? EventRecord(babyID: baby.id ?? UUID(), kind: kind, startDate: now)
         if existing == nil {
-            Self.applyDefaults(to: &record, now: now)
+            let lastOfKind = TrackerStore.shared.lastEvent(of: [kind], for: baby)?.record
+            Self.applyDefaults(to: &record, now: now, lastOfKind: lastOfKind)
         }
         _draft = State(initialValue: record)
         _baseline = State(initialValue: existing?.record)
         _newTimerAlarm = State(initialValue: TimerAlarms.shared.lastUsed(for: kind).map { Int($0 / 60) })
-        _mode = State(initialValue: existing == nil && kind.supportsTimer ? .timer : .manual)
+        _mode = State(initialValue: mode ?? (existing == nil && kind.supportsTimer ? .timer : .manual))
     }
 
     private var isNew: Bool { existing == nil }
@@ -43,48 +46,11 @@ struct EventEditorView: View {
 
     var body: some View {
         Form {
-            if isNew && kind.supportsTimer {
-                Section {
-                    PillSegmentedControl<Mode>(
-                        segments: [
-                            .init(value: Mode.timer, title: String(localized: "Timer"), systemImage: "timer"),
-                            .init(value: Mode.manual, title: String(localized: "Log Past"), systemImage: "clock.arrow.circlepath"),
-                        ],
-                        selection: $mode,
-                        tint: kind.color
-                    )
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
-                }
-            }
-
-            if mode == .timer && isNew {
-                timerStartSection
-            } else {
-                timeSection
-            }
-
-            detailSections
-
-            Section("Notes") {
-                TextField("Add a note", text: Binding(
-                    get: { draft.note ?? "" },
-                    set: { draft.note = $0 }
-                ), axis: .vertical)
-                .lineLimit(1...5)
-                PhotoField(title: String(localized: "Add Photo"), data: $draft.photoData)
-            }
-
-            if !isNew {
-                Section {
-                    if let author = draft.authorName {
-                        LabeledContent("Logged By", value: author)
-                    }
-                    Button("Delete Entry", role: .destructive) { confirmingDelete = true }
-                }
-            }
+            // Read-only caregivers can look but not change; Cancel in the
+            // toolbar stays enabled so the sheet can still be closed.
+            Group { formContent }
+                .disabled(!canEdit)
         }
-        .disabled(!canEdit)
         .navigationTitle(kind.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -110,6 +76,50 @@ struct EventEditorView: View {
         // widget, or edited by a caregiver on another device.
         .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextObjectsDidChange, object: store.context)) { note in
             syncWithStore(note)
+        }
+    }
+
+    @ViewBuilder
+    private var formContent: some View {
+        if isNew && kind.supportsTimer {
+            Section {
+                PillSegmentedControl<Mode>(
+                    segments: [
+                        .init(value: Mode.timer, title: String(localized: "Timer"), systemImage: "timer"),
+                        .init(value: Mode.manual, title: String(localized: "Log Past"), systemImage: "clock.arrow.circlepath"),
+                    ],
+                    selection: $mode,
+                    tint: kind.color
+                )
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+            }
+        }
+
+        if mode == .timer && isNew {
+            timerStartSection
+        } else {
+            timeSection
+        }
+
+        detailSections
+
+        Section("Notes") {
+            TextField("Add a note", text: Binding(
+                get: { draft.note ?? "" },
+                set: { draft.note = $0 }
+            ), axis: .vertical)
+            .lineLimit(1...5)
+            PhotoField(title: String(localized: "Add Photo"), data: $draft.photoData)
+        }
+
+        if !isNew {
+            Section {
+                if let author = draft.authorName {
+                    LabeledContent("Logged By", value: author)
+                }
+                Button("Delete Entry", role: .destructive) { confirmingDelete = true }
+            }
         }
     }
 
@@ -225,8 +235,8 @@ struct EventEditorView: View {
         Section {
             DatePicker(kind.hasDuration ? String(localized: "Start") : String(localized: "Time"), selection: $draft.startDate)
             if kind == .nursing {
-                durationStepper(String(localized: "Left"), value: $draft.leftDuration)
-                durationStepper(String(localized: "Right"), value: $draft.rightDuration)
+                durationField(String(localized: "Left"), value: $draft.leftDuration)
+                durationField(String(localized: "Right"), value: $draft.rightDuration)
                 ChipPicker(title: String(localized: "Last Side"), options: BreastSide.allCases, selection: $draft.lastSide, tint: .pink, label: \.title)
                 if draft.isOngoing && !isNew {
                     alarmPicker(selection: runningAlarm)
@@ -271,12 +281,27 @@ struct EventEditorView: View {
         }
     }
 
-    private func durationStepper(_ title: String, value: Binding<TimeInterval>) -> some View {
-        Stepper(value: Binding(
-            get: { (value.wrappedValue / 60).rounded() },
-            set: { value.wrappedValue = $0 * 60 }
-        ), in: 0...180) {
-            LabeledContent(title, value: Fmt.duration(value.wrappedValue))
+    /// Minutes per side: common lengths are one tap, the stepper fine-tunes.
+    private func durationField(_ title: String, value: Binding<TimeInterval>) -> some View {
+        let minutes = Binding<Int?>(
+            get: { Int((value.wrappedValue / 60).rounded()) },
+            set: { if let m = $0 { value.wrappedValue = TimeInterval(m * 60) } }
+        )
+        return VStack(alignment: .leading, spacing: 4) {
+            Stepper(value: Binding(
+                get: { (value.wrappedValue / 60).rounded() },
+                set: { value.wrappedValue = $0 * 60 }
+            ), in: 0...180) {
+                LabeledContent(title, value: Fmt.duration(value.wrappedValue))
+            }
+            ChipPicker(
+                title: nil,
+                options: [5, 10, 15, 20, 30],
+                selection: minutes,
+                allowsDeselect: false,
+                tint: .pink,
+                label: { Fmt.duration(TimeInterval($0 * 60), style: .short) }
+            )
         }
     }
 
@@ -497,13 +522,29 @@ struct EventEditorView: View {
         } else {
             event = store.startTimer(kind, for: baby, at: timerStart)
         }
+        applyDraftDetails(to: event)
         applyNewTimerAlarm(to: event)
         dismiss()
     }
 
     private func startNursing(_ side: BreastSide) {
-        applyNewTimerAlarm(to: store.startNursing(for: baby, side: side))
+        let event = store.startNursing(for: baby, side: side)
+        applyDraftDetails(to: event)
+        applyNewTimerAlarm(to: event)
         dismiss()
+    }
+
+    /// Carries over what was filled in before tapping Start (sleep location,
+    /// pumped amounts, note, photo) so it is not silently lost.
+    private func applyDraftDetails(to event: Event?) {
+        guard let event else { return }
+        var record = event.record
+        if let location = draft.sleepLocation { record.sleepLocation = location }
+        if let left = draft.leftAmountML { record.leftAmountML = left }
+        if let right = draft.rightAmountML { record.rightAmountML = right }
+        if let note = draft.note?.nilIfBlank { record.note = note }
+        if let photo = draft.photoData { record.photoData = photo }
+        if record != event.record { store.save(record) }
     }
 
     private func applyNewTimerAlarm(to event: Event?) {
@@ -538,10 +579,13 @@ struct EventEditorView: View {
     }
 
     /// Sensible defaults for a new entry, based on what was logged last.
-    private static func applyDefaults(to record: inout EventRecord, now: Date) {
+    private static func applyDefaults(to record: inout EventRecord, now: Date, lastOfKind: EventRecord?) {
         switch record.kind {
         case .bottle:
-            record.bottleContent = .formula
+            // Most bottles are the same as the last one: amount and contents are
+            // prefilled so a repeat is just "Save".
+            record.amountML = lastOfKind?.amountML
+            record.bottleContent = lastOfKind?.bottleContent ?? .formula
         case .diaper:
             record.diaperType = .wet
         case .activity:
