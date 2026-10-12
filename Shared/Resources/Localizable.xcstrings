@@ -5447,6 +5447,64 @@
         }
       }
     },
+    "Checking iCloud…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud wird geprüft …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking iCloud…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comprobando iCloud…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérification d’iCloud…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloudを確認しています…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud 확인 중…"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verificando o iCloud…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在检查 iCloud…"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在檢查 iCloud…"
+          }
+        }
+      }
+    },
     "Checking…": {
       "localizations": {
         "de": {
@@ -11070,6 +11128,64 @@
           "stringUnit": {
             "state": "translated",
             "value": "餓了"
+          }
+        }
+      }
+    },
+    "If you've used Tinytide before, your babies will appear here in a moment.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn du Tinytide schon benutzt hast, erscheinen deine Babys gleich hier."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If you've used Tinytide before, your babies will appear here in a moment."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si ya has usado Tinytide, tus bebés aparecerán aquí en un momento."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si vous avez déjà utilisé Tinytide, vos bébés apparaîtront ici dans un instant."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "以前にTinytideを使っていた場合は、まもなく赤ちゃんのデータがここに表示されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전에 Tinytide를 사용했다면 잠시 후 아기 정보가 여기에 표시돼요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se você já usou o Tinytide, seus bebês aparecerão aqui em instantes."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "如果你以前用过摇摇，宝宝的资料稍后就会出现在这里。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "如果你以前用過搖搖，寶寶的資料稍後就會出現在這裡。"
           }
         }
       }

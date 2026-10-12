@@ -66,6 +66,17 @@ final class ScreenSnapshotTests: XCTestCase {
         verify(NavigationStack { AppearanceView() })
     }
 
+    // MARK: Welcome
+
+    func testWelcome() {
+        verify(OnboardingView())
+    }
+
+    /// A new iPhone or a reinstall, while iCloud may still be bringing the babies in.
+    func testWelcomeCheckingICloud() {
+        verify(OnboardingView(checkingICloud: true), height: 1000)
+    }
+
     // MARK: Editors
 
     func testNewNursing() {

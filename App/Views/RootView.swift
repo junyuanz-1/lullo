@@ -12,6 +12,9 @@ struct RootView: View {
     @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "createdAt", ascending: true)])
     private var babies: FetchedResults<Baby>
     @AppStorage(Appearance.themeKey, store: SharedContainer.defaults) private var theme: AppTheme = .lullaby
+    @EnvironmentObject private var sync: SyncMonitor
+    // Read through AppSettings below; observed here so the screen updates when it flips.
+    @AppStorage(SettingsKey.initialCloudImportDone, store: SharedContainer.defaults) private var cloudImportDone = false
 
     private var selectedBaby: Baby? {
         babies.first { $0.id == store.selectedBabyID } ?? babies.first
@@ -48,7 +51,19 @@ struct RootView: View {
                     .tag(RootTab.more)
             }
         } else {
-            OnboardingView()
+            OnboardingView(checkingICloud: checkingICloud)
+                .animation(.default, value: checkingICloud)
+        }
+    }
+
+    /// No babies yet may only mean iCloud hasn't downloaded them (new iPhone,
+    /// reinstall). Say so, so nobody adds their baby a second time.
+    private var checkingICloud: Bool {
+        guard !store.persistence.inMemory, !cloudImportDone, sync.lastError == nil else { return false }
+        switch sync.account {
+        case .unknown: return true // still asking iCloud about the account
+        case .available: return AppSettings.awaitingFirstCloudImport
+        case .noAccount, .restricted, .temporarilyUnavailable: return false
         }
     }
 }
@@ -111,6 +126,8 @@ struct BabySwitcher: View {
 }
 
 struct OnboardingView: View {
+    /// iCloud may still be bringing in babies from another device.
+    var checkingICloud = false
     @State private var showingForm = false
     @AppStorage(SettingsKey.unitSystem, store: SharedContainer.defaults) private var unitSystem: UnitSystem = AppSettings.unitSystem
 
@@ -124,6 +141,10 @@ struct OnboardingView: View {
                 Text("Welcome to Tinytide")
                     .font(.largeTitle.bold())
                     .multilineTextAlignment(.center)
+
+                if checkingICloud {
+                    checkingICloudCard
+                }
 
                 // What the app does, so the main features are known from day one
                 // instead of found by accident.
@@ -154,7 +175,7 @@ struct OnboardingView: View {
         }
         .safeAreaInset(edge: .bottom) {
             VStack(spacing: 12) {
-                Button {
+                let add = Button {
                     showingForm = true
                 } label: {
                     Text("Add Your Baby")
@@ -162,7 +183,13 @@ struct OnboardingView: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                 }
-                .buttonStyle(.borderedProminent)
+                // Still possible while checking iCloud (a new user is waiting for
+                // nothing), but no longer the obvious next step.
+                if checkingICloud {
+                    add.buttonStyle(.bordered)
+                } else {
+                    add.buttonStyle(.borderedProminent)
+                }
                 Text("Invited by a family member? Open their invitation link and the shared baby will appear here.")
                     .font(.footnote)
                     .multilineTextAlignment(.center)
@@ -174,6 +201,24 @@ struct OnboardingView: View {
         .sheet(isPresented: $showingForm) {
             NavigationStack { BabyFormView(baby: nil) }
         }
+    }
+
+    private var checkingICloudCard: some View {
+        HStack(alignment: .top, spacing: 14) {
+            ProgressView()
+                .frame(width: 36)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Checking iCloud…").font(.headline)
+                Text("If you've used Tinytide before, your babies will appear here in a moment.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .padding(.horizontal)
+        .accessibilityElement(children: .combine)
     }
 
     private func feature(_ systemImage: String, _ color: Color, _ title: String, _ text: String) -> some View {
