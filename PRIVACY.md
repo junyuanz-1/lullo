@@ -1,6 +1,6 @@
 # Tinytide Privacy Policy / 摇摇隐私政策
 
-_Last updated: October 11, 2026_
+_Last updated: October 12, 2026_
 
 [English](#english) · [简体中文](#简体中文)
 
@@ -25,13 +25,18 @@ iCloud sharing makes that baby's entries available to the people you invite.
 You can see who has access and stop sharing at any time in
 **More → Family & Caregivers**.
 
-**Exports:** backup and CSV files are created only when you ask, and go only
-where you send them.
+**Exports and backups:** backup and CSV files you export are created only when
+you ask, and go only where you send them. Tinytide also keeps up to 10
+automatic daily backups in its own storage on your iPhone, so mistakes can be
+undone. They never leave your device, except as part of your iPhone's own
+iCloud or computer backup, and you can delete them in
+**More → Automatic Backups**.
 
 **Notifications:** reminders are scheduled locally on your device.
 
-**Tips:** optional tips are processed entirely by Apple through In-App
-Purchase. Tinytide never receives your payment details.
+**Purchases:** the optional Tinytide Supporter subscription and tips are
+processed entirely by Apple through In-App Purchase. Tinytide never receives
+your payment details.
 
 **Children's privacy:** Tinytide is used by parents and caregivers to record
 information about their children. It does not collect any of that information.
@@ -57,11 +62,11 @@ Account Storage → Tinytide** on your iPhone.
 
 **与家人共享：** 如果你选择共享某个宝宝，Apple 的 iCloud 共享会让你邀请的人看到该宝宝的记录。你可以随时在 **更多 → 家人与看护人** 中查看谁有访问权限，或停止共享。
 
-**导出：** 备份文件和 CSV 文件只在你主动导出时生成，并且只会发送到你选择的地方。
+**导出与备份：** 你导出的备份文件和 CSV 文件只在你主动导出时生成，并且只会发送到你选择的地方。摇摇还会在 iPhone 上 App 自己的存储空间里保留最多 10 份每日自动备份，方便撤销误操作。这些备份不会离开你的设备（iPhone 自身的 iCloud 或电脑备份除外），你可以在 **更多 → 自动备份** 中删除它们。
 
 **通知：** 提醒都在你的设备上本地生成和安排。
 
-**打赏：** 打赏完全自愿，全程由 Apple 通过 App 内购买处理，摇摇不会接触到你的任何支付信息。
+**购买：** 可选的“摇摇支持者”订阅和打赏全程由 Apple 通过 App 内购买处理，摇摇不会接触到你的任何支付信息。
 
 **儿童隐私：** 摇摇供家长和看护人记录孩子的情况，但不会收集任何这些信息。
 

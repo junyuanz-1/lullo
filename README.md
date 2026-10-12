@@ -222,6 +222,12 @@ python3 scripts/check_localizations.py
 - `App/PrivacyInfo.xcprivacy`、`Widgets/PrivacyInfo.xcprivacy`：苹果要求的隐私清单。声明 App 不追踪用户、不收集数据，只因为保存设置而使用 UserDefaults。
 - 在 App Store Connect 的 **App 隐私** 问卷中，可以选择"不收集数据"。
 
+## 上架 App Store
+
+- [`docs/release/README.md`](docs/release/README.md)：上架清单（Apple 后台设置、内购项目、测试、每次发版的步骤），完成一项勾一项。
+- `fastlane/metadata/`：9 种语言的 App Store 文案和给审核员的说明；`bundle exec fastlane upload_metadata` 上传，见 [`fastlane/README.md`](fastlane/README.md)。
+- 这些文档都不在 Xcode 工程里，不会被打包进 App；CI 中的 `scripts/check_store_metadata.py` 会检查字数限制和这一点。
+
 ## 许可证
 
 本项目为**专有软件，保留所有权利**，详见 [`LICENSE`](LICENSE)。"Tinytide"、"摇摇"及其图标为版权所有者的商标。第三方数据和工具的声明见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
